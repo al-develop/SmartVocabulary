@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SmartVocabulary.UI
+namespace SmartVocabulary.UI.SettingsPages
 {
     /// <summary>
-    /// Interaktionslogik für SettingsWindow.xaml
+    /// Interaktionslogik für LanguageAddingView.xaml
     /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class LanguageAddingView : UserControl
     {
-        public SettingsWindow()
+        public LanguageAddingView()
         {
             InitializeComponent();
-            SettingsWindowViewModel viewmodel;
-            viewmodel = new SettingsWindowViewModel();            
-            this.DataContext = viewmodel;
-            if (viewmodel.CloseAction == null)
-                viewmodel.CloseAction = new Action(this.Close);
         }
     }
 }

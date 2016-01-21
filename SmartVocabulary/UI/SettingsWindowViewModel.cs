@@ -19,11 +19,66 @@ namespace SmartVocabulary.UI
     {
         #region Data
         private readonly XmlManager _settingsManager;
-        private SettingsWindow _window;
+        public Action CloseAction { get; set; }
         #endregion
 
         #region Properties
+        #region Visbility
+        private bool _rowPageVisibility;
+        private bool _languagePageVisibility;
+
+        public bool LanguagePageVisibility
+        {
+            get { return _languagePageVisibility; }
+            set { NotifyPropertyChanged(ref _languagePageVisibility, value, () => LanguagePageVisibility); }
+        }
+        public bool RowPageVisbility
+        {
+            get { return _rowPageVisibility; }
+            set { NotifyPropertyChanged(ref _rowPageVisibility, value, () => RowPageVisbility); }
+        }
+        #endregion Visbility
+
+        #region SettingsSelection
+        private ObservableCollection<string> _settingsAreas;
+        private string _selectedArea;
+        private string _searchString;
+
+        public string SearchString
+        {
+            get { return _searchString; }
+            set 
+            { 
+                NotifyPropertyChanged(ref _searchString, value, () => SearchString);
+            }
+        }
+        public string SelectedArea
+        {
+            get { return _selectedArea; }
+            set
+            {
+                NotifyPropertyChanged(ref _selectedArea, value, () => SelectedArea);
+                AreaSelectionChanged();
+            }
+        }
+        public ObservableCollection<string> SettingsAreas
+        {
+            get { return _settingsAreas; }
+            set { NotifyPropertyChanged(ref _settingsAreas, value, () => SettingsAreas); }
+        }
+        #endregion SettingsSelection
+
+        #region RowAlternation
         private string _selectedAlternationColor;
+
+        public string SelectedAlternationColor
+        {
+            get { return _selectedAlternationColor; }
+            set { NotifyPropertyChanged(ref _selectedAlternationColor, value, () => SelectedAlternationColor); }
+        }
+        #endregion RowAlternation
+
+        #region LanguageSelection
         private ObservableCollection<string> _added;
         private ObservableCollection<string> _availableLanguages;
         private string _selectedAvailable;
@@ -42,52 +97,81 @@ namespace SmartVocabulary.UI
         public ObservableCollection<string> AvailableLanguages
         {
             get { return _availableLanguages; }
-            set 
-            { 
-                NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages); 
+            set
+            {
+                NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
             }
         }
         public ObservableCollection<string> Added
         {
             get { return _added; }
-            set 
+            set
             {
                 NotifyPropertyChanged(ref _added, value, () => Added);
             }
         }
-        public string SelectedAlternationColor
-        {
-            get { return _selectedAlternationColor; }
-            set { NotifyPropertyChanged(ref _selectedAlternationColor, value, () => SelectedAlternationColor); }
-        }
+        #endregion LanguageSelection
         #endregion
 
-        public SettingsWindowViewModel(SettingsWindow window)
+        public SettingsWindowViewModel()
         {
             _settingsManager = new XmlManager();
-            _window = window;
 
             this.Added = new ObservableCollection<string>();
             this.AvailableLanguages = new ObservableCollection<string>();
+            this.SettingsAreas = new ObservableCollection<string>();
 
+            this.SettingAreasRegistration();
             this.CommandRegistration();
+
+            this.SelectedArea = this.SettingsAreas.FirstOrDefault();
+
             this.LoadCulutures();
             this.LoadSettings();
         }
 
         #region Commands
-
         private void CommandRegistration()
         {
             this.SaveCommand = new BaseCommand(this.Save);
             this.AddCommand = new BaseCommand(this.AddLanguage);
             this.RemoveCommand = new BaseCommand(this.RemoveLanguage);
+            this.CloseCommand = new BaseCommand(this.Close);
+            this.SearchSettingCommand = new BaseCommand(this.SearchSetting);
+            this.ClearSearchCommand = new BaseCommand(this.ClearSearch);
         }
 
-        // Cancel doesn't require a Command, because it's hadled in the Code Behind
+        public ICommand CloseCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand AddCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
+        public ICommand SearchSettingCommand { get; set; }
+        public ICommand ClearSearchCommand { get; set; }
+
+        private void Close(object param)
+        {
+            this.CloseAction.Invoke();
+        }
+
+        private void SearchSetting(object param)
+        {
+            List<string> temp = new List<string>();
+            temp = this.SettingsAreas.Where(w => w.ToLower().Contains(this.SearchString)).ToList();
+
+
+            this.SettingsAreas.Clear();
+            foreach (var t in temp)
+            {
+                this.SettingsAreas.Add(t);
+            }
+        }
+
+        private void ClearSearch(object param)
+        {
+            this.SearchString = String.Empty;
+            this.SettingsAreas.Clear();
+            this.SettingAreasRegistration();
+        }
 
         private void AddLanguage(object param)
         {
@@ -118,10 +202,11 @@ namespace SmartVocabulary.UI
             else
                 this._settingsManager.SaveSettings(settings);
 
-            _window.Close();
+            CloseAction.Invoke();
         }
         #endregion
 
+        #region Methods
         private void LoadSettings()
         {
             var load = this._settingsManager.LoadSettings();
@@ -140,5 +225,34 @@ namespace SmartVocabulary.UI
                 this.AvailableLanguages.Add(culture.NativeName);
             }
         }
+
+        private void SettingAreasRegistration()
+        {
+            this.SettingsAreas.Add("Row Appearance");
+            this.SettingsAreas.Add("Languages");
+        }
+
+        private void AreaSelectionChanged()
+        {
+            if (String.IsNullOrEmpty(SelectedArea))
+                return;
+
+            switch (SelectedArea.ToLower())
+            {
+                case "languages":
+                    this.LanguagePageVisibility = true;
+                    this.RowPageVisbility = false;
+                    break;
+
+                case "row appearance":
+                    this.LanguagePageVisibility = false;
+                    this.RowPageVisbility = true;
+                    break;
+
+                default:
+                    return;
+            }
+        }
+        #endregion Methods
     }
 }

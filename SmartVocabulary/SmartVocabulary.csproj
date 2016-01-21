@@ -106,6 +106,12 @@
     <Compile Include="UI\ExportWizardWindow.xaml.cs">
       <DependentUpon>ExportWizardWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\SettingsPages\LanguageAddingView.xaml.cs">
+      <DependentUpon>LanguageAddingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SettingsPages\RowAlternationView.xaml.cs">
+      <DependentUpon>RowAlternationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -136,6 +142,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ExportWizardWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SettingsPages\LanguageAddingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SettingsPages\RowAlternationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
