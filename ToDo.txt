@@ -1,0 +1,15 @@
+* SettingsWindow:
+	- Drag&Drop für Sprachauswahl
+	- ContextMenu MenuItem Command Bindings
+	- Sprachen speichern und Laden
+
+* DataAccess:
+	- CreateTable Methode schreiben um anhand der angegeben Sprache neue Tabellen zu erstellen
+	- Speichern und Löschen SQL schreiben
+
+* MainWindow:
+	- DataGrid Paging erstellen
+	- Scueh anhand gegebener Filter erstellen
+
+* Entities:
+	- AutoIncrement ID testen dun gegebenenfalls korregieren

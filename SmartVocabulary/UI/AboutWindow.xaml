@@ -1,0 +1,50 @@
+﻿<Window x:Class="SmartVocabulary.UI.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About/Help"
+        Icon="pack://application:,,,/Resources/Icons/About.png"
+        Height="480"
+        Width="500">
+     <GroupBox Header="Help"
+              Margin="5"
+              Padding="10">
+        <StackPanel>
+            <Image Height="32"
+                   HorizontalAlignment="Left"
+                   Margin="20,10,20,0" 
+                   Source="pack://application:,,,/Resources/Icons/About.png"/>
+            <TextBlock Text="" />
+            <TextBlock Text="If any Help needed or any Bug was found, please send an E-Mail to:" />
+            <TextBlock Text="al.pankratz@hotmail.de" TextDecorations="Underline" Width="128" HorizontalAlignment="Left" Margin="50,0,0,0"/>
+            <TextBlock Text="" />
+            <TextBlock Text="Please don't forget to add a detailed description about your Problem. If possible, please add a Screenshort, or a guideline how I could reconstruct the Error to your Mail."
+                       TextWrapping="Wrap" />
+            <TextBlock Text="" />
+            <TextBlock Text="" />
+            <TextBlock Text="About the Program:" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="The Icon are free of charge, from "/>
+                <TextBlock>                
+                    <Hyperlink NavigateUri="www.iconpharm.com" x:Name="txtIconLink" RequestNavigate="txtIconLink_RequestNavigate">
+                        www.iconpharm.com
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock Text="Used 3rd Party Libraries are:" />
+            <TextBlock Text="        - Spreadsheet Light" />
+            <TextBlock Text="        - OpenXML 2.0" />
+            <TextBlock Text="        - WPF Toolkit" />
+            <TextBlock Text="        - PDF Sharp" />
+            <TextBlock Text="" />
+            <TextBlock Text="Everything else is comepletely programmed by Al Pankratz" />
+            <TextBlock Text="Donations are accepted gratefully" />
+            <Button x:Name="btnClose"
+                    HorizontalAlignment="Left"
+                    Margin="0,10,10,0"
+                    Content="Close"
+                    Width="100"
+                    Height="25"
+                    Click="btnClose_Click" />
+        </StackPanel>
+    </GroupBox>
+</Window>

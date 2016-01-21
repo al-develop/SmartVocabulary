@@ -1,0 +1,186 @@
+﻿<RibbonWindow x:Class="SmartVocabulary.MainWindow"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:ribbon="clr-namespace:System.Windows.Controls.Ribbon.Primitives;assembly=System.Windows.Controls.Ribbon"
+              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+              xmlns:system="clr-namespace:System;assembly=mscorlib"
+              xmlns:vocableEnum="clr-namespace:SmartVocabulary.Entites"
+              Title="Smart Vocabulary"
+              MinWidth="700"
+              MinHeight="300"
+              Width="1100"
+              Height="595">
+    <RibbonWindow.Resources>
+        <ObjectDataProvider x:Key="dataFromEnum"
+                            MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="vocableEnum:VocableKind" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </RibbonWindow.Resources>
+    <Grid>
+        <DockPanel>
+            <Ribbon DockPanel.Dock="Top"
+                    Background="WhiteSmoke">
+                <Ribbon.QuickAccessToolBar>
+                    <RibbonQuickAccessToolBar Visibility="Collapsed" />
+                </Ribbon.QuickAccessToolBar>
+                <Ribbon.HelpPaneContent>
+                    <RibbonButton SmallImageSource="pack://application:,,,/Resources/Icons/About.png"
+                                  Command="{Binding OpenAboutCommand}" />
+                </Ribbon.HelpPaneContent>
+                <Ribbon.ApplicationMenu>
+                    <RibbonApplicationMenu Background="LightGray">
+                        <RibbonApplicationMenuItem Header="Exit"
+                                                   Command="{Binding RibbonCloseCommand}"
+                                                   ImageSource="pack://application:,,,/Resources/Icons/Exit.png" />
+                        <RibbonApplicationMenuItem Header="Restart"
+                                                   Command="{Binding RibbonRestartCommand}"
+                                                   ImageSource="pack://application:,,,/Resources/Icons/Restart.png" />
+                    </RibbonApplicationMenu>
+                </Ribbon.ApplicationMenu>
+                <RibbonTab Header="Start">
+                    <RibbonGroup Header="Basic">
+                        <RibbonButton Label="New Entry"
+                                      Command="{Binding AddNewCommand}"
+                                      LargeImageSource="pack://application:,,,/Resources/Icons/Add File.png" />
+                        <RibbonButton Label="Edit Selected"
+                                      Command="{Binding EditSelectedCommand}"
+                                      LargeImageSource="pack://application:,,,/Resources/Icons/Edit.png" />
+                        <RibbonButton Label="Delete Selected"
+                                      Command="{Binding RemoveCommand}"
+                                      LargeImageSource="pack://application:,,,/Resources/Icons/Delete.png" />
+                    </RibbonGroup>
+                    <RibbonGroup Header="Export / Import">
+                        <RibbonButton Label="Export"
+                                      LargeImageSource="pack://application:,,,/Resources/Icons/Export.png"
+                                      Command="{Binding ExportCommand}" />
+                        <RibbonButton Label="Import"
+                                      Command="{Binding ImportCommand}"
+                                      LargeImageSource="pack://application:,,,/Resources/Icons/Import.png" />
+                    </RibbonGroup>
+                    <RibbonGroup Header="Settings">
+                        <RibbonButton Label="Open Settings"
+                                      Command="{Binding RibbonOpenSettingsCommand}"
+                                      LargeImageSource="pack://application:,,,/Resources/Icons/Settings.png" />
+                        <StackPanel>
+                            
+                        <TextBlock Text="Available Languages" />
+                            <ListView Width="150"
+                                      Height="45"
+                                      ItemsSource="{Binding AvailableLanguages}"
+                                      SelectedItem="{Binding SelectedLanguage}" />
+                        </StackPanel>
+                    </RibbonGroup>
+                </RibbonTab>
+            </Ribbon>
+
+            <Expander DockPanel.Dock="Top"
+                      Grid.Row="0"
+                      Header="Search"
+                      Margin="10,5,10,5">
+                <GroupBox>
+                    <Grid>
+                        <xceed:WatermarkTextBox Margin="10,10,70,0"
+                                                VerticalAlignment="Top"
+                                                Height="25"
+                                                Watermark="Search..." />
+                        <Button  Height="25"
+                                 Width="25"
+                                 VerticalAlignment="Top"
+                                 HorizontalAlignment="Right"
+                                 Margin="0,10,40,40">
+                            <Image Source="pack://application:,,,/Resources/Icons/Search.26.png" />
+                        </Button>
+                        <Button  Height="25"
+                                 Width="25"
+                                 VerticalAlignment="Top"
+                                 HorizontalAlignment="Right"
+                                 Margin="0,10,10,40">
+                            <Image Source="pack://application:,,,/Resources/Icons/Delete.png" />
+                        </Button>
+
+                        <RadioButton Content="ID"
+                                     Width="30"
+                                     Margin="10,47,0,18"
+                                     HorizontalAlignment="Left" />
+                        <RadioButton Content="Native"
+                                     Width="56"
+                                     Margin="55,47,0,18"
+                                     HorizontalAlignment="Left" />
+                        <RadioButton Content="Translation"
+                                     Width="83"
+                                     Margin="120,47,0,18"
+                                     HorizontalAlignment="Left" />
+                    </Grid>
+                </GroupBox>
+            </Expander>
+
+            <DataGrid DockPanel.Dock="Top"
+                      Grid.Row="1"
+                      CanUserAddRows="True"
+                      CanUserDeleteRows="True"
+                      CanUserReorderColumns="True"
+                      CanUserResizeColumns="True"
+                      CanUserSortColumns="True"
+                      AutoGenerateColumns="False"
+                      SelectionMode="Single"
+                      Name="grdVocableGrid"
+                      AlternatingRowBackground="{Binding AlternationRowColor}"
+                      Margin="10,5,10,35"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      SelectedItem="{Binding SelectedVocable}"
+                      AlternationCount="2"
+                      ItemsSource="{Binding Vocables}">
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Delete"
+                                Command="{Binding RemoveCommand}" />
+                    <KeyBinding Key="Enter"
+                                Command="{Binding AddNewCommand}" />
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID"
+                                        Binding="{Binding ID, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="45"
+                                        IsReadOnly="True" />
+                    <DataGridTextColumn Header="Native"
+                                        Binding="{Binding Native, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*" />
+                    <DataGridTextColumn Header="Translation"
+                                        Binding="{Binding Translation, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*" />
+                    <DataGridTextColumn Header="Definition"
+                                        Binding="{Binding Definition, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"
+                                        MinWidth="180" />
+                    <DataGridComboBoxColumn Header="Kind"
+                                            Width="*"
+                                            MinWidth="80"
+                                            ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                                            SelectedItemBinding="{Binding Kind, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="Synonym"
+                                        Binding="{Binding Synonym, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"
+                                        MinWidth="180" />
+                    <DataGridTextColumn Header="Opposite"
+                                        Binding="{Binding Opposite, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"
+                                        MinWidth="180" />
+                    <DataGridTextColumn Header="Example"
+                                        Binding="{Binding Example, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*"
+                                        MinWidth="180" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <StatusBar DockPanel.Dock="Bottom"
+                   Height="25"
+                   VerticalAlignment="Bottom">
+            <StatusBarItem Content="Notification: " />
+            <StatusBarItem Content="{Binding Notification}" />
+        </StatusBar>
+    </Grid>
+</RibbonWindow>
