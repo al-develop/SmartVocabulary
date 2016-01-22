@@ -8,8 +8,8 @@ namespace SmartVocabulary.Entites
 {
     public class Vocable 
     {
-        private int _id;
-        public int ID { get { return _id; } }
+        private  int _id;
+        public  int ID { get { return _id; } }
 
         public Vocable()
         {

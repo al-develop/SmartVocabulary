@@ -99,10 +99,10 @@
     <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\AddNewWindow.xaml.cs">
-      <DependentUpon>AddNewWindow.xaml</DependentUpon>
+    <Compile Include="UI\EntryDetailViewModel.cs" />
+    <Compile Include="UI\EntryDetailWindow.xaml.cs">
+      <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\AddNewWindowViewModel.cs" />
     <Compile Include="UI\ExportWizardWindow.xaml.cs">
       <DependentUpon>ExportWizardWindow.xaml</DependentUpon>
     </Compile>
@@ -127,7 +127,6 @@
     </Compile>
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="Data\DatabaseAccess.cs" />
-    <Compile Include="Entites\BaseEntity.cs" />
     <Compile Include="Entites\Vocable.cs" />
     <Compile Include="Entites\VocableKind.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -138,7 +137,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\AddNewWindow.xaml">
+    <Page Include="UI\EntryDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

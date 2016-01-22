@@ -85,13 +85,6 @@ namespace SmartVocabulary
         }
 
         #region Commands
-        public ICommand OpenAboutCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
-        public ICommand AddNewCommand { get; set; }
-        public ICommand RibbonCloseCommand { get; set; }
-        public ICommand RibbonRestartCommand { get; set; }
-        public ICommand RibbonOpenSettingsCommand { get; set; }
-
         private void CommandRegistration()
         {
             this.OpenAboutCommand = new BaseCommand(this.OpenAbout);
@@ -101,6 +94,36 @@ namespace SmartVocabulary
             this.RibbonCloseCommand = new BaseCommand(this.Close);
             this.RibbonRestartCommand = new BaseCommand(this.Restart);
             this.RibbonOpenSettingsCommand = new BaseCommand(this.OpenSettings);
+        }
+
+        public ICommand OpenAboutCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
+        public ICommand AddNewCommand { get; set; }
+        
+        public ICommand RibbonCloseCommand { get; set; }
+        public ICommand RibbonRestartCommand { get; set; }
+        public ICommand RibbonOpenSettingsCommand { get; set; }
+        public ICommand RibbonAddNewCommand { get; set; }
+        public ICommand RibbonEditCommand { get; set; }
+        public ICommand RibbonRemoveCommand { get; set; }
+
+        private void RibbonRemove(object param)
+        {
+            this.Remove(param);
+        }
+
+        private void RibbonEdit(object param)
+        {
+            var editWindow = new EntryDetailWindow();
+            editWindow.Initialize(this._logic, this.SelectedVocable);
+            editWindow.Show();
+        }
+
+        private void RibbonAddNew(object param)
+        {
+            var editWindow = new EntryDetailWindow();
+            editWindow.Initialize(this._logic, null);
+            editWindow.Show();
         }
 
         private void Remove(object param)
@@ -113,8 +136,8 @@ namespace SmartVocabulary
 
             if (this.Vocables.LastOrDefault() != null && this.Vocables.Last().ID == this.SelectedVocable.ID)
             {
-                this._logic.SaveVocable(this.Vocables.LastOrDefault());
-                this.SelectedVocable = null;
+                //this._logic.SaveVocable(this.Vocables.LastOrDefault());
+                //this.SelectedVocable = null;
                 //this.Vocables = new ObservableCollection<Vocable>();
                 this.Vocables.Add(new Vocable());
             }
