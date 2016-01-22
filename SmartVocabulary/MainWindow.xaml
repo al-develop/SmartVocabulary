@@ -6,6 +6,7 @@
               xmlns:system="clr-namespace:System;assembly=mscorlib"
               xmlns:vocableEnum="clr-namespace:SmartVocabulary.Entites"
               Title="Smart Vocabulary"
+              ResizeMode="CanResizeWithGrip"
               MinWidth="700"
               MinHeight="300"
               Width="1100"
@@ -31,13 +32,19 @@
                                   Command="{Binding OpenAboutCommand}" />
                 </Ribbon.HelpPaneContent>
                 <Ribbon.ApplicationMenu>
-                    <RibbonApplicationMenu Background="LightGray">
-                        <RibbonApplicationMenuItem Header="Exit"
-                                                   Command="{Binding RibbonCloseCommand}"
-                                                   ImageSource="pack://application:,,,/Resources/Icons/Exit.png" />
+                    <RibbonApplicationMenu Background="LightGray" MaxWidth="100">
+                        <RibbonApplicationMenuItem Header="Settings"
+                                                   Command="{Binding RibbonOpenSettingsCommand}"
+                                                   ImageSource="pack://application:,,,/Resources/Icons/Settings.png" />
+                        <RibbonApplicationMenuItem Header="About &amp; Help"
+                                                   Command="{Binding OpenAboutCommand}"
+                                                   ImageSource="pack://application:,,,/Resources/Icons/About.png" />
                         <RibbonApplicationMenuItem Header="Restart"
                                                    Command="{Binding RibbonRestartCommand}"
                                                    ImageSource="pack://application:,,,/Resources/Icons/Restart.png" />
+                        <RibbonApplicationMenuItem Header="Exit"
+                                                   Command="{Binding RibbonCloseCommand}"
+                                                   ImageSource="pack://application:,,,/Resources/Icons/Exit.png" />
                     </RibbonApplicationMenu>
                 </Ribbon.ApplicationMenu>
                 <RibbonTab Header="Start">

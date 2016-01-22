@@ -16,10 +16,7 @@
             <Setter Property="Background"
                     Value="WhiteSmoke" />
         </Style>
-        <Style TargetType="Window">
-            <Setter Property="ResizeMode"
-                    Value="CanResizeWithGrip" />
-        </Style>
+        
         <converter:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Application.Resources>
 </Application>

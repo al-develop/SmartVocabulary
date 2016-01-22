@@ -10,112 +10,21 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using BaseMvvm;
+using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Manager;
 
 namespace SmartVocabulary.UI
 {
-    public class SettingsWindowViewModel : ViewModelBase
+    /// <summary>
+    /// This ViewModel-Class contains Methods and Logic of SettingsWindow.
+    /// Properties and Data are in SettingsWindowViewModel.Properties.cs
+    /// </summary>
+    public partial class SettingsWindowViewModel : ViewModelBase
     {
-        #region Data
-        private readonly XmlManager _settingsManager;
-        public Action CloseAction { get; set; }
-        #endregion
-
-        #region Properties
-        #region Visbility
-        private bool _rowPageVisibility;
-        private bool _languagePageVisibility;
-
-        public bool LanguagePageVisibility
-        {
-            get { return _languagePageVisibility; }
-            set { NotifyPropertyChanged(ref _languagePageVisibility, value, () => LanguagePageVisibility); }
-        }
-        public bool RowPageVisbility
-        {
-            get { return _rowPageVisibility; }
-            set { NotifyPropertyChanged(ref _rowPageVisibility, value, () => RowPageVisbility); }
-        }
-        #endregion Visbility
-
-        #region SettingsSelection
-        private ObservableCollection<string> _settingsAreas;
-        private string _selectedArea;
-        private string _searchString;
-
-        public string SearchString
-        {
-            get { return _searchString; }
-            set 
-            { 
-                NotifyPropertyChanged(ref _searchString, value, () => SearchString);
-            }
-        }
-        public string SelectedArea
-        {
-            get { return _selectedArea; }
-            set
-            {
-                NotifyPropertyChanged(ref _selectedArea, value, () => SelectedArea);
-                AreaSelectionChanged();
-            }
-        }
-        public ObservableCollection<string> SettingsAreas
-        {
-            get { return _settingsAreas; }
-            set { NotifyPropertyChanged(ref _settingsAreas, value, () => SettingsAreas); }
-        }
-        #endregion SettingsSelection
-
-        #region RowAlternation
-        private string _selectedAlternationColor;
-
-        public string SelectedAlternationColor
-        {
-            get { return _selectedAlternationColor; }
-            set { NotifyPropertyChanged(ref _selectedAlternationColor, value, () => SelectedAlternationColor); }
-        }
-        #endregion RowAlternation
-
-        #region LanguageSelection
-        private ObservableCollection<string> _added;
-        private ObservableCollection<string> _availableLanguages;
-        private string _selectedAvailable;
-        private string _selectedAdded;
-
-        public string SelectedAdded
-        {
-            get { return _selectedAdded; }
-            set { NotifyPropertyChanged(ref _selectedAdded, value, () => SelectedAdded); }
-        }
-        public string SelectedAvailable
-        {
-            get { return _selectedAvailable; }
-            set { NotifyPropertyChanged(ref _selectedAvailable, value, () => SelectedAvailable); }
-        }
-        public ObservableCollection<string> AvailableLanguages
-        {
-            get { return _availableLanguages; }
-            set
-            {
-                NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
-            }
-        }
-        public ObservableCollection<string> Added
-        {
-            get { return _added; }
-            set
-            {
-                NotifyPropertyChanged(ref _added, value, () => Added);
-            }
-        }
-        #endregion LanguageSelection
-        #endregion
-
         public SettingsWindowViewModel()
         {
-            _settingsManager = new XmlManager();
+            this._settingsManager = new XmlManager();
 
             this.Added = new ObservableCollection<string>();
             this.AvailableLanguages = new ObservableCollection<string>();
@@ -204,12 +113,12 @@ namespace SmartVocabulary.UI
 
             CloseAction.Invoke();
         }
-        #endregion
+        #endregion Commands
 
         #region Methods
         private void LoadSettings()
         {
-            var load = this._settingsManager.LoadSettings();
+            Result<Settings> load = this._settingsManager.LoadSettings();
             if (load.Status == Common.Status.Success)
             {
                 this.SelectedAlternationColor = load.Data.AlternationColor;
@@ -220,7 +129,7 @@ namespace SmartVocabulary.UI
         private void LoadCulutures()
         {
             CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
-            foreach (var culture in cultures)
+            foreach (CultureInfo culture in cultures)
             {
                 this.AvailableLanguages.Add(culture.NativeName);
             }
@@ -241,12 +150,12 @@ namespace SmartVocabulary.UI
             {
                 case "languages":
                     this.LanguagePageVisibility = true;
-                    this.RowPageVisbility = false;
+                    this.RowPageVisibility = false;
                     break;
 
                 case "row appearance":
                     this.LanguagePageVisibility = false;
-                    this.RowPageVisbility = true;
+                    this.RowPageVisibility = true;
                     break;
 
                 default:

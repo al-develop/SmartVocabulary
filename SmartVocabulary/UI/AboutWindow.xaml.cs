@@ -34,5 +34,10 @@ namespace SmartVocabulary.UI
         {
             Process.Start(e.Uri.ToString());
         }
+
+        private void tbxMail_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+            this.tbxMail.SelectAll();
+        }
     }
 }

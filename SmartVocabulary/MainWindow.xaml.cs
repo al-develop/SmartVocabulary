@@ -21,12 +21,17 @@ namespace SmartVocabulary
     /// </summary>
     public partial class MainWindow : RibbonWindow
     {
-        MainWindowViewModel _viewModel;
         public MainWindow()
         {
-            InitializeComponent();
-            _viewModel = new MainWindowViewModel();
-            this.DataContext = _viewModel;
+            this.InitializeComponent();
+
+            // ViewModel Initializing
+            var viewModel = new MainWindowViewModel();
+            this.DataContext = viewModel;
+
+            // Event and UI Initializing
+            viewModel.CloseAction = new Action(this.Close);
+            viewModel.ApplicationLocation = Application.ResourceAssembly.Location;
         }
     }
 }

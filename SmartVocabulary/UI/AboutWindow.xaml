@@ -15,7 +15,7 @@
                    Source="pack://application:,,,/Resources/Icons/About.png"/>
             <TextBlock Text="" />
             <TextBlock Text="If any Help needed or any Bug was found, please send an E-Mail to:" />
-            <TextBlock Text="al.pankratz@hotmail.de" TextDecorations="Underline" Width="128" HorizontalAlignment="Left" Margin="50,0,0,0"/>
+            <TextBox   Text="al.pankratz@hotmail.de" TextDecorations="Underline" HorizontalAlignment="Left" Margin="50,0,0,0" IsReadOnly="True" x:Name="tbxMail" GotMouseCapture="tbxMail_GotMouseCapture"/>
             <TextBlock Text="" />
             <TextBlock Text="Please don't forget to add a detailed description about your Problem. If possible, please add a Screenshort, or a guideline how I could reconstruct the Error to your Mail."
                        TextWrapping="Wrap" />

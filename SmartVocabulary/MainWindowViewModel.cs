@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+//using System.Windows;
 using System.Windows.Input;
 using BaseMvvm;
 using SmartVocabulary.Common;
@@ -21,6 +21,8 @@ namespace SmartVocabulary
         #region Data
         private readonly VocableLogic _logic;
         private readonly XmlManager _settingsManager;
+        internal string ApplicationLocation;
+        internal Action CloseAction { get; set; }
         #endregion Data
 
         #region Properties
@@ -127,13 +129,15 @@ namespace SmartVocabulary
 
         private void Close(object param)
         {
-            Application.Current.Shutdown();
+            //Application.Current.Shutdown();
+            this.CloseAction.Invoke();
         }
 
         private void Restart(object param)
         {
-            Process.Start(Application.ResourceAssembly.Location);
-            Application.Current.Shutdown();
+            Process.Start(this.ApplicationLocation);
+            this.CloseAction.Invoke();
+            //Application.Current.Shutdown();
         }
 
         private void OpenSettings(object param)

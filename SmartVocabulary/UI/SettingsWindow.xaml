@@ -6,9 +6,12 @@
         xmlns:converter="clr-namespace:SmartVocabulary.Common"
         x:Name="settingsWindow"
         Title="Settings"
+        ResizeMode="CanResizeWithGrip"
         Icon="pack://application:,,,/Resources/Icons/Settings.png"
         MinHeight="427"
-        MinWidth="650">
+        MinWidth="650"
+        Height="427"
+        Width="650">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
