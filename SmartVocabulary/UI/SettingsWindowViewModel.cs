@@ -128,7 +128,7 @@ namespace SmartVocabulary.UI
 
         private void LoadCulutures()
         {
-            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+            var cultures = CultureHandler.GetDistinctedCultures();
             foreach (CultureInfo culture in cultures)
             {
                 this.AvailableLanguages.Add(culture.NativeName);

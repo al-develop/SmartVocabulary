@@ -32,13 +32,20 @@ namespace SmartVocabulary
         private string _alternationRowColor;
         private ObservableCollection<string> _availableLanguages;
         private string _selectedLanguage;
+        private bool _areLanguagesAvailable;
 
+        public bool AreLanguagesAvailable
+        {
+            get { return _areLanguagesAvailable; }
+            set { NotifyPropertyChanged(ref _areLanguagesAvailable, value, () => AreLanguagesAvailable); }
+        }
         public string SelectedLanguage
         {
             get { return _selectedLanguage; }
             set
             {
                 NotifyPropertyChanged(ref _selectedLanguage, value, () => SelectedLanguage);
+                EnableControls();
                 if (!String.IsNullOrEmpty(this.SelectedLanguage) && this.AvailableLanguages.Contains(this.SelectedLanguage))
                 {
                     this._settingsManager.UpdateSettings(new Settings()
@@ -51,7 +58,11 @@ namespace SmartVocabulary
         public ObservableCollection<string> AvailableLanguages
         {
             get { return _availableLanguages; }
-            set { NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages); }
+            set 
+            { 
+                NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
+                EnableControls();           
+            }
         }
         public string AlternationRowColor
         {
@@ -80,6 +91,7 @@ namespace SmartVocabulary
             this._logic = new VocableLogic();
             this._settingsManager = new XmlManager();
             this.LoadSettings();
+           
             this.Vocables = new ObservableCollection<Vocable>();
             this.CommandRegistration();
         }
@@ -136,7 +148,7 @@ namespace SmartVocabulary
 
             if (this.Vocables.LastOrDefault() != null && this.Vocables.Last().ID == this.SelectedVocable.ID)
             {
-                //this._logic.SaveVocable(this.Vocables.LastOrDefault());
+                this._logic.SaveVocable(this.Vocables.LastOrDefault());
                 //this.SelectedVocable = null;
                 //this.Vocables = new ObservableCollection<Vocable>();
                 this.Vocables.Add(new Vocable());
@@ -198,6 +210,17 @@ namespace SmartVocabulary
                 this.AlternationRowColor = "#DFEACE";
                 this.AvailableLanguages = new ObservableCollection<string>();
             }
+        }
+
+        private void EnableControls()
+        {
+            if (AvailableLanguages != null 
+                && AvailableLanguages.Count != 0
+                && this.SelectedLanguage != null
+                && AvailableLanguages.Contains(SelectedLanguage))
+                AreLanguagesAvailable = true;
+            else
+                AreLanguagesAvailable = false;
         }
     }
 }

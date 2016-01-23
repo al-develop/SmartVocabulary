@@ -86,8 +86,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\CultureHandler.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\Result.cs" />
+    <Compile Include="Data\DatabaseAccess.QueryGenerator.cs" />
     <Compile Include="Entites\ManagerEnumeration.cs" />
     <Compile Include="Entites\Settings.cs" />
     <Compile Include="Logic\Database\VocableLogic.cs" />

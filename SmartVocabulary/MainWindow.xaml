@@ -48,8 +48,8 @@
                     </RibbonApplicationMenu>
                 </Ribbon.ApplicationMenu>
                 <RibbonTab Header="Start">
-                    <RibbonGroup Header="Basic">
-                        <RibbonButton Label="New Entry"
+                    <RibbonGroup Header="Basic" IsEnabled="{Binding AreLanguagesAvailable}">
+                        <RibbonButton Label="New Entry" 
                                       Command="{Binding AddNewCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Add File.png" />
                         <RibbonButton Label="Edit Selected"
@@ -59,7 +59,7 @@
                                       Command="{Binding RemoveCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Delete.png" />
                     </RibbonGroup>
-                    <RibbonGroup Header="Export / Import">
+                    <RibbonGroup Header="Export / Import" IsEnabled="{Binding AreLanguagesAvailable}">
                         <RibbonButton Label="Export"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Export.png"
                                       Command="{Binding ExportCommand}" />
@@ -76,6 +76,7 @@
                         <TextBlock Text="Available Languages" />
                             <ListView Width="150"
                                       Height="45"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                       ItemsSource="{Binding AvailableLanguages}"
                                       SelectedItem="{Binding SelectedLanguage}" />
                         </StackPanel>
@@ -83,7 +84,7 @@
                 </RibbonTab>
             </Ribbon>
 
-            <Expander DockPanel.Dock="Top"
+            <Expander DockPanel.Dock="Top" IsEnabled="{Binding AreLanguagesAvailable}"
                       Grid.Row="0"
                       Header="Search"
                       Margin="10,5,10,5">
@@ -124,7 +125,7 @@
                 </GroupBox>
             </Expander>
 
-            <DataGrid DockPanel.Dock="Top"
+            <DataGrid DockPanel.Dock="Top" IsEnabled="{Binding AreLanguagesAvailable}"
                       Grid.Row="1"
                       CanUserAddRows="True"
                       CanUserDeleteRows="True"
