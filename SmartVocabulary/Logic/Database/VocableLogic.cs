@@ -28,24 +28,16 @@ namespace SmartVocabulary.Logic.Database
             return null;
         }
 
-        public Result SaveVocable(Vocable entry)
+        public Result<int> SaveVocable(Vocable entry, string language)
         {
-            LogWriter.Instance.WriteLine("Excecute Method: \"SaveVocable\" from class \"VocableLogic\"");
-            Result saveResult = this._access.SaveVocable(entry);
-            //if (saveResult.Status != Status.Success)
-            //{
-            //    string log = String.Format("Error occured in Method: \"SaveVocable\" in class \"VocableLogic\". Error message:{0}{1}", Environment.NewLine, saveResult.Message);
-            //    LogWriter.Instance.WriteLine(log);
-            //}
+            Result<int> saveResult = this._access.SaveVocable(entry, language);
+            if (saveResult.Status != Status.Success)
+            {
+                string log = String.Format("Error occured in Method: \"SaveVocable\" in class \"VocableLogic\". Error message:{0}{1}", Environment.NewLine, saveResult.Message);
+                LogWriter.Instance.WriteLine(log);
+            }
 
-            //using(System.IO.FileStream stream = new System.IO.FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\temp\\temp.xml", System.IO.FileMode.OpenOrCreate))
-            //{
-            //    var serializer = new System.Xml.Serialization.XmlSerializer(typeof(Vocable));
-            //    serializer.Serialize(stream, entry);
-            //}
-
-            //return saveResult;
-            return new Result();
+            return saveResult;
         }
     }
 }

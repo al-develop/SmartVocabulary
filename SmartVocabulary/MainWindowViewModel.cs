@@ -146,12 +146,24 @@ namespace SmartVocabulary
         private void AddNew(object param)
         {
 
-            if (this.Vocables.LastOrDefault() != null && this.Vocables.Last().ID == this.SelectedVocable.ID)
+            if (this.Vocables.LastOrDefault() != null)
             {
-                this._logic.SaveVocable(this.Vocables.LastOrDefault());
-                //this.SelectedVocable = null;
-                //this.Vocables = new ObservableCollection<Vocable>();
+                Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
+                if(saveResult.Status != Status.Success)
+                {
+                    this.Notification = "Couldn't save the entry. Check LogFiles for more information";
+                    this.Vocables.RemoveAt
+                        (this.Vocables.IndexOf
+                            (this.Vocables.Last()));
+                }
+                else
+                {
+                    this.Notification = "Saved entry";
+                    this.Vocables.Last().ID = saveResult.Data;
+                }
+                this.SelectedVocable = null;
                 this.Vocables.Add(new Vocable());
+                this.Vocables.OrderBy(o => o.ID);
             }
         }
 

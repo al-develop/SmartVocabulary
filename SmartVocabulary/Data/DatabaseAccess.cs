@@ -57,7 +57,8 @@ namespace SmartVocabulary.Data
             {
                 foreach (CultureInfo culture in cultures)
                 {
-                    string query = GenerateCreateTableQuery(culture);
+                    string query = this.GenerateCreateTableQuery(culture);
+
                     await Task.Run(() => 
                     {                    
                         using (SQLiteCommand createCommand = new SQLiteCommand(query, this._connection))
@@ -86,30 +87,83 @@ namespace SmartVocabulary.Data
             return new Result("", Status.Success);
         }
 
-        public Result SaveVocable(Vocable vocable)
+        public Result<int> SaveVocable(Vocable vocable, string tableName)
         {
-                       
-            return new Result();
+            int result = 0;
+            try
+            {
+                SQLiteCommand com = new SQLiteCommand();
+                using (SQLiteCommand command = new SQLiteCommand(GenerateInsertQuery(tableName)))
+                {
+                    command.Parameters.AddWithValue("@native", vocable.Native);
+                    command.Parameters.AddWithValue("@translation", vocable.Native);
+                    command.Parameters.AddWithValue("@definition ", vocable.Native);
+                    command.Parameters.AddWithValue("@kind", vocable.Native);
+                    command.Parameters.AddWithValue("@synonym", vocable.Native);
+                    command.Parameters.AddWithValue("@opposite", vocable.Native);
+                    command.Parameters.AddWithValue("@example", vocable.Native);
+
+                    this._connection.Open();
+                    result = (int)command.ExecuteScalar();
+                    this._connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWriter.Instance.WriteLine(String.Format("Error occured at SaveVocable in DataBaseAccess:\n{0}", ex.Message));
+                return new Result<int>(ex.Message, "", Status.Error, ex);
+            }
+            finally
+            {
+                if (this._connection.State != System.Data.ConnectionState.Closed)
+                    this._connection.Close();
+            }
+            return new Result<int>(result, "", Status.Success);
         }
 
         public Result<Vocable> GetVocableById(int id)
         {
-            if (_preLoadedList != null)
-            {
-                return new Result<Vocable>(_preLoadedList.First(f => f.ID == id));
-            }
-
+            
             return new Result<Vocable>();
         }
 
-        public Result<List<Vocable>> GetAllVocables()
+        public Result<List<Vocable>> GetAllVocables(string tableName)
         {
-            if (_preLoadedList != null)
+            var result = new List<Vocable>();
+            try 
+            { 
+                using(SQLiteCommand command = new SQLiteCommand(GenerateSelectAllQuery(tableName)))
+                {
+                    this._connection.Open();
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while(reader.Read())
+                    {
+                        result.Add(new Vocable()
+                        {
+                            ID = (int)reader["ID"],
+                            Native = reader["Native"].ToString(),
+                            Translation = reader["Translation"].ToString(),
+                            Definition = reader["Definition"].ToString(),
+                            Example = reader["Example"].ToString(),
+                            Kind = (VocableKind)Enum.Parse(typeof(VocableKind), reader["Kind"].ToString()),
+                            Opposite = reader["Opposite"].ToString(),
+                            Synonym = reader["Synonym"].ToString()
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
             {
-                return new Result<List<Vocable>>(_preLoadedList);
+                LogWriter.Instance.WriteLine(String.Format("Error occured at SaveVocable in DataBaseAccess:\n{0}", ex.Message));
+                return new Result<List<Vocable>>(ex.Message, "", Status.Error, ex);
+            }
+            finally
+            {
+                if (this._connection.State != System.Data.ConnectionState.Closed)
+                    this._connection.Close();
             }
 
-            return new Result<List<Vocable>>();
+            return new Result<List<Vocable>>(result, "", Status.Success);
         }
 
         #region IDisposable Member

@@ -52,6 +52,9 @@ namespace SmartVocabulary.Common
     /// <typeparam name="T">The type of the value which is returned</typeparam>
     public class Result<T> : Result
     {
+        private int result;
+        private string p;
+
         public T Data { get; set; }
 
         public Result()
@@ -99,6 +102,13 @@ namespace SmartVocabulary.Common
             this.Exception = exception;
             this.Data = data;
 
+        }
+
+        public Result(T data, string message, Common.Status status)
+        {
+            this.Data = data;
+            this.Message = message;
+            this.Status = status;
         }
     }
 
