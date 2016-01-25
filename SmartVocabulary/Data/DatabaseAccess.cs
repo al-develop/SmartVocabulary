@@ -93,15 +93,15 @@ namespace SmartVocabulary.Data
             try
             {
                 SQLiteCommand com = new SQLiteCommand();
-                using (SQLiteCommand command = new SQLiteCommand(GenerateInsertQuery(tableName)))
+                using (SQLiteCommand command = new SQLiteCommand(GenerateInsertQuery(tableName), this._connection))
                 {
                     command.Parameters.AddWithValue("@native", vocable.Native);
-                    command.Parameters.AddWithValue("@translation", vocable.Native);
-                    command.Parameters.AddWithValue("@definition ", vocable.Native);
-                    command.Parameters.AddWithValue("@kind", vocable.Native);
-                    command.Parameters.AddWithValue("@synonym", vocable.Native);
-                    command.Parameters.AddWithValue("@opposite", vocable.Native);
-                    command.Parameters.AddWithValue("@example", vocable.Native);
+                    command.Parameters.AddWithValue("@translation", vocable.Translation);
+                    command.Parameters.AddWithValue("@definition ", vocable.Definition);
+                    command.Parameters.AddWithValue("@kind", vocable.Kind.ToString());
+                    command.Parameters.AddWithValue("@synonym", vocable.Synonym);
+                    command.Parameters.AddWithValue("@opposite", vocable.Opposite);
+                    command.Parameters.AddWithValue("@example", vocable.Example);
 
                     this._connection.Open();
                     result = (int)command.ExecuteScalar();
@@ -132,7 +132,7 @@ namespace SmartVocabulary.Data
             var result = new List<Vocable>();
             try 
             { 
-                using(SQLiteCommand command = new SQLiteCommand(GenerateSelectAllQuery(tableName)))
+                using(SQLiteCommand command = new SQLiteCommand(GenerateSelectAllQuery(tableName), this._connection))
                 {
                     this._connection.Open();
                     SQLiteDataReader reader = command.ExecuteReader();

@@ -48,20 +48,24 @@ namespace SmartVocabulary
                 EnableControls();
                 if (!String.IsNullOrEmpty(this.SelectedLanguage) && this.AvailableLanguages.Contains(this.SelectedLanguage))
                 {
+                    // Update Settings, set the SelectedLaguage Field
                     this._settingsManager.UpdateSettings(new Settings()
                     {
                         SelectedLanguage = this.SelectedLanguage
                     });
+
+                    // Load Vocable List for this Language from DB
+                    this.LoadVocables();
                 }
             }
         }
         public ObservableCollection<string> AvailableLanguages
         {
             get { return _availableLanguages; }
-            set 
-            { 
+            set
+            {
                 NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
-                EnableControls();           
+                EnableControls();
             }
         }
         public string AlternationRowColor
@@ -90,9 +94,10 @@ namespace SmartVocabulary
         {
             this._logic = new VocableLogic();
             this._settingsManager = new XmlManager();
+
             this.LoadSettings();
-           
-            this.Vocables = new ObservableCollection<Vocable>();
+            this.LoadVocables();
+
             this.CommandRegistration();
         }
 
@@ -111,7 +116,7 @@ namespace SmartVocabulary
         public ICommand OpenAboutCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
-        
+
         public ICommand RibbonCloseCommand { get; set; }
         public ICommand RibbonRestartCommand { get; set; }
         public ICommand RibbonOpenSettingsCommand { get; set; }
@@ -149,7 +154,7 @@ namespace SmartVocabulary
             if (this.Vocables.LastOrDefault() != null)
             {
                 Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
-                if(saveResult.Status != Status.Success)
+                if (saveResult.Status != Status.Success)
                 {
                     this.Notification = "Couldn't save the entry. Check LogFiles for more information";
                     this.Vocables.RemoveAt
@@ -197,36 +202,67 @@ namespace SmartVocabulary
 
         private void LoadVocables()
         {
-            VocableLogic logic = new VocableLogic();
-            var result = logic.GetAllVocables();
-            if (result.Status != Status.Success)
+            try
             {
-                this.Notification = "Error occured on Loading Vocable List. Check Log for more Information";
-                return;
-            }
+                Mouse.OverrideCursor = Cursors.Wait;
 
-            this.Vocables = new ObservableCollection<Vocable>(result.Data);
+                // check if a language is selected
+                if (String.IsNullOrEmpty(this.SelectedLanguage))
+                {
+                    // check if there are any langauges available
+                    if (this.AvailableLanguages != null && this.AvailableLanguages.Count != 0)
+                    {
+                        this.SelectedLanguage = this.AvailableLanguages.First();
+                    }
+                    else
+                    {
+                        this.Vocables = new ObservableCollection<Vocable>();
+                        return;
+                    }
+                }
+                
+
+
+                var result = this._logic.GetAllVocables(this.SelectedLanguage);
+                if (result.Status != Status.Success)
+                {
+                    this.Notification = "Error on loading Vocables from Database. Check Log for more Information";
+                    return;
+                }
+
+                this.Vocables = new ObservableCollection<Vocable>(result.Data);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
         }
 
         private void LoadSettings()
         {
-            var load = this._settingsManager.LoadSettings();
-            if (load.Status == Common.Status.Success)
+            try
             {
-                this.AlternationRowColor = load.Data.AlternationColor;
-                this.AvailableLanguages = new ObservableCollection<string>(load.Data.AddedLanguages);
-                this.SelectedLanguage = load.Data.SelectedLanguage;
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                var load = this._settingsManager.LoadSettings();
+                if (load.Status == Common.Status.Success)
+                {
+                    this.AlternationRowColor = load.Data.AlternationColor;
+                    this.AvailableLanguages = new ObservableCollection<string>(load.Data.AddedLanguages);
+                    this.SelectedLanguage = load.Data.SelectedLanguage;
+                }
+                else
+                {
+                    this.AlternationRowColor = "#DFEACE";
+                    this.AvailableLanguages = new ObservableCollection<string>();
+                }
             }
-            else
-            {
-                this.AlternationRowColor = "#DFEACE";
-                this.AvailableLanguages = new ObservableCollection<string>();
-            }
+            finally { Mouse.OverrideCursor = Cursors.Arrow; }
         }
 
         private void EnableControls()
         {
-            if (AvailableLanguages != null 
+            if (AvailableLanguages != null
                 && AvailableLanguages.Count != 0
                 && this.SelectedLanguage != null
                 && AvailableLanguages.Contains(SelectedLanguage))

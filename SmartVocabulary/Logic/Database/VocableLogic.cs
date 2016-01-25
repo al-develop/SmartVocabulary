@@ -21,11 +21,16 @@ namespace SmartVocabulary.Logic.Database
             _access = new DatabaseAccess();
         }
 
-        public Result<IList<Vocable>> GetAllVocables()
+        public Result<List<Vocable>> GetAllVocables(string language)
         {
             LogWriter.Instance.WriteLine("Excecute Method: \"GetAllVocables\" from class \"VocableLogic\"");
-
-            return null;
+            Result<List<Vocable>> result = this._access.GetAllVocables(language);
+            if(result.Status != Status.Success)
+            {
+                string log = String.Format("Error occured in Method: \"GetAllVocables\" in class \"VocableLogic\". Error message:{0}{1}", Environment.NewLine, result.Message);
+                LogWriter.Instance.WriteLine(log);
+            }
+            return result;
         }
 
         public Result<int> SaveVocable(Vocable entry, string language)
