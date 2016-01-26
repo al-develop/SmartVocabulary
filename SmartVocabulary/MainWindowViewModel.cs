@@ -200,7 +200,7 @@ namespace SmartVocabulary
         }
         #endregion
 
-        private void LoadVocables()
+        private async void LoadVocables()
         {
             try
             {
@@ -221,9 +221,7 @@ namespace SmartVocabulary
                     }
                 }
                 
-
-
-                var result = this._logic.GetAllVocables(this.SelectedLanguage);
+                var result = await this._logic.GetAllVocablesAsync(this.SelectedLanguage);
                 if (result.Status != Status.Success)
                 {
                     this.Notification = "Error on loading Vocables from Database. Check Log for more Information";
@@ -238,13 +236,13 @@ namespace SmartVocabulary
             }
         }
 
-        private void LoadSettings()
+        private async void LoadSettings()
         {
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                var load = this._settingsManager.LoadSettings();
+                var load = await this._settingsManager.LoadSettingsAsync();
                 if (load.Status == Common.Status.Success)
                 {
                     this.AlternationRowColor = load.Data.AlternationColor;

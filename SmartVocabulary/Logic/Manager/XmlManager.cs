@@ -131,5 +131,10 @@ namespace SmartVocabulary.Logic.Manager
                 return new Result<Settings>(null, "Error occured on loading settings", Status.Error, ex);
             }
         }
+
+        public async Task<Result<Settings>> LoadSettingsAsync()
+        {
+            return await Task.Run(() => this.LoadSettings());
+        }
     }
 }

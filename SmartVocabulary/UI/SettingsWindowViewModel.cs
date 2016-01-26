@@ -116,9 +116,9 @@ namespace SmartVocabulary.UI
         #endregion Commands
 
         #region Methods
-        private void LoadSettings()
+        private async void LoadSettings()
         {
-            Result<Settings> load = this._settingsManager.LoadSettings();
+            Result<Settings> load = await this._settingsManager.LoadSettingsAsync();
             if (load.Status == Common.Status.Success)
             {
                 this.SelectedAlternationColor = load.Data.AlternationColor;
