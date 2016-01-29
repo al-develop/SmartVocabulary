@@ -14,10 +14,17 @@ namespace SmartVocabulary.UI
     {
         private readonly VocableLogic _logic;
         public Action CloseAction { get; set; }
+        private MainWindowViewModel _parent { get; set; }
 
         #region Properties
         private Vocable _entry;
+        private string _language;
 
+        public string Language
+        {
+            get { return _language; }
+            set { NotifyPropertyChanged(ref _language, value, () => Language); }
+        }
         public Vocable Entry
         {
             get { return _entry; }
@@ -25,22 +32,25 @@ namespace SmartVocabulary.UI
         }
         #endregion Properties
 
-        public EntryDetailViewModel(VocableLogic logic, Vocable entry = null)
+        public EntryDetailViewModel(VocableLogic logic, string selectedLanguage, MainWindowViewModel parent, Vocable entry = null)
         {
             this._logic = logic;
+            this._parent = parent;
 
-            if (entry != null)
+            if (entry == null)
                 Entry = new Vocable();
             else
                 Entry = entry;
 
+            this.Language = selectedLanguage;
             this.CommandRegistration();
         }
 
         #region Commands
         private void CommandRegistration()
         {
-
+            this.SaveCommand = new BaseCommand(this.Save);
+            this.CancelCommand = new BaseCommand(this.Cancel);
         }
 
         public ICommand SaveCommand { get; set; }
@@ -54,6 +64,13 @@ namespace SmartVocabulary.UI
         private void Save(object param)
         {
             // call DB like in MainViewModel
+            this._logic.SaveVocable(this.Entry, this.Language);
+
+            this._parent.SelectedVocable = null;
+            this._parent.RibbonRefreshCommand.Execute(param);
+            this._parent.Vocables.Add(new Vocable());
+            this._parent.Vocables.OrderBy(o => o.ID);
+
             this.CloseAction.Invoke();
         }
         #endregion Commands

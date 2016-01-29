@@ -25,13 +25,13 @@ namespace SmartVocabulary.Data
             createTable.Append(@"(
                         [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                         [Native] TEXT(50),
-                        [Definition] TEXT(100),
                         [Translation] TEXT(50),
+                        [Definition] TEXT(100),
                         [Kind] TEXT(15),
                         [Synonym] TEXT(50),
                         [Opposite] TEXT(50),
                         [Example] TEXT(200)
-                    )");
+                    );");
 
             return createTable.ToString().Replace('\r', ' ').Replace('\n', ' ');
         }

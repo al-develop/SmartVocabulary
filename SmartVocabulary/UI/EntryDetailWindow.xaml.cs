@@ -27,9 +27,9 @@ namespace SmartVocabulary.UI
             InitializeComponent();
         }
 
-        public void Initialize(VocableLogic logic, Vocable entry = null)
+        public void Initialize(VocableLogic logic, string selectedLanguage, MainWindowViewModel parent, Vocable entry = null)
         {
-            EntryDetailViewModel vm = new EntryDetailViewModel(logic, entry);
+            EntryDetailViewModel vm = new EntryDetailViewModel(logic, selectedLanguage, parent, entry);
             this.DataContext = vm;
             if (vm != null)
                 vm.CloseAction = new Action(this.Close);

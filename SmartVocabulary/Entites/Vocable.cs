@@ -21,5 +21,28 @@ namespace SmartVocabulary.Entites
         public string Synonym { get; set; }
         public string Opposite { get; set; }
         public string Example { get; set; }
+
+
+        public static VocableKind ConvertStringToKind(string param)
+        {
+            VocableKind kind;
+            bool success = Enum.TryParse<VocableKind>(param, out kind);
+
+            if (success)
+                return kind;
+            else
+                return VocableKind.Unknown;
+        }
+
+        public static int SetIdDynamic(object param)
+        {
+            int id = 0;
+            bool success = Int32.TryParse(param.ToString(), out id);
+
+            if (success)
+                return id;
+            else
+                return 0;
+        }
     }
 }

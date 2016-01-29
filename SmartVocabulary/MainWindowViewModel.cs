@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using System.Windows;
 using System.Windows.Input;
 using BaseMvvm;
 using SmartVocabulary.Common;
@@ -33,11 +33,10 @@ namespace SmartVocabulary
         private ObservableCollection<string> _availableLanguages;
         private string _selectedLanguage;
         private bool _areLanguagesAvailable;
-
-        public bool AreLanguagesAvailable
+        public bool IsUiEnabled
         {
             get { return _areLanguagesAvailable; }
-            set { NotifyPropertyChanged(ref _areLanguagesAvailable, value, () => AreLanguagesAvailable); }
+            set { NotifyPropertyChanged(ref _areLanguagesAvailable, value, () => IsUiEnabled); }
         }
         public string SelectedLanguage
         {
@@ -92,13 +91,19 @@ namespace SmartVocabulary
 
         public MainWindowViewModel()
         {
+            this.Notification = "Connection to Database...";
             this._logic = new VocableLogic();
-            this._settingsManager = new XmlManager();
 
-            this.LoadSettings();
+            this.Notification = "Loading Vocables...";
             this.LoadVocables();
 
+            this.Notification = "Loading Settings...";
+            this._settingsManager = new XmlManager();
+            this.LoadSettings();
+
             this.CommandRegistration();
+
+            this.Notification = "Ready";
         }
 
         #region Commands
@@ -111,6 +116,9 @@ namespace SmartVocabulary
             this.RibbonCloseCommand = new BaseCommand(this.Close);
             this.RibbonRestartCommand = new BaseCommand(this.Restart);
             this.RibbonOpenSettingsCommand = new BaseCommand(this.OpenSettings);
+            this.RibbonRefreshCommand = new BaseCommand(this.RibbonRefresh);
+            this.RibbonAddNewCommand = new BaseCommand(this.RibbonAddNew);
+            this.RibbonEditCommand = new BaseCommand(this.RibbonEdit);
         }
 
         public ICommand OpenAboutCommand { get; set; }
@@ -123,7 +131,12 @@ namespace SmartVocabulary
         public ICommand RibbonAddNewCommand { get; set; }
         public ICommand RibbonEditCommand { get; set; }
         public ICommand RibbonRemoveCommand { get; set; }
+        public ICommand RibbonRefreshCommand { get; set; }
 
+        private void RibbonRefresh(object param)
+        {
+            this.LoadVocables();
+        }
         private void RibbonRemove(object param)
         {
             this.Remove(param);
@@ -132,17 +145,17 @@ namespace SmartVocabulary
         private void RibbonEdit(object param)
         {
             var editWindow = new EntryDetailWindow();
-            editWindow.Initialize(this._logic, this.SelectedVocable);
+            editWindow.Initialize(this._logic, this.SelectedLanguage, this, this.SelectedVocable);
             editWindow.Show();
         }
 
         private void RibbonAddNew(object param)
         {
             var editWindow = new EntryDetailWindow();
-            editWindow.Initialize(this._logic, null);
+            editWindow.Initialize(this._logic, this.SelectedLanguage, this, null);
             editWindow.Show();
         }
-
+        
         private void Remove(object param)
         {
 
@@ -150,7 +163,6 @@ namespace SmartVocabulary
 
         private void AddNew(object param)
         {
-
             if (this.Vocables.LastOrDefault() != null)
             {
                 Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
@@ -161,12 +173,11 @@ namespace SmartVocabulary
                         (this.Vocables.IndexOf
                             (this.Vocables.Last()));
                 }
-                else
-                {
-                    this.Notification = "Saved entry";
-                    this.Vocables.Last().ID = saveResult.Data;
-                }
+
+                this.Notification = "Entry saved";
+                
                 this.SelectedVocable = null;
+                this.RibbonRefresh(param);
                 this.Vocables.Add(new Vocable());
                 this.Vocables.OrderBy(o => o.ID);
             }
@@ -200,7 +211,7 @@ namespace SmartVocabulary
         }
         #endregion
 
-        private async void LoadVocables()
+        private bool LoadVocables()
         {
             try
             {
@@ -217,15 +228,16 @@ namespace SmartVocabulary
                     else
                     {
                         this.Vocables = new ObservableCollection<Vocable>();
-                        return;
+                        return true;
                     }
                 }
-                
-                var result = await this._logic.GetAllVocablesAsync(this.SelectedLanguage);
+
+                //var result = await this._logic.GetAllVocablesAsync(this.SelectedLanguage);
+                var result = this._logic.GetAllVocables(this.SelectedLanguage);
                 if (result.Status != Status.Success)
                 {
-                    this.Notification = "Error on loading Vocables from Database. Check Log for more Information";
-                    return;
+                    this.Notification = "Error on loading Vocables from Database. Please try to refresh, or restart the application. More information can be found in the Log Files";
+                    return false;
                 }
 
                 this.Vocables = new ObservableCollection<Vocable>(result.Data);
@@ -234,6 +246,8 @@ namespace SmartVocabulary
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
             }
+
+            return true;
         }
 
         private async void LoadSettings()
@@ -264,9 +278,9 @@ namespace SmartVocabulary
                 && AvailableLanguages.Count != 0
                 && this.SelectedLanguage != null
                 && AvailableLanguages.Contains(SelectedLanguage))
-                AreLanguagesAvailable = true;
+                IsUiEnabled = true;
             else
-                AreLanguagesAvailable = false;
+                IsUiEnabled = false;
         }
     }
 }
