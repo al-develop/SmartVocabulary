@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartVocabulary.Common
 {
-    public sealed class LogWriter
+    public sealed class LogWriter : IDisposable
     {
         #region Singleton
         private static readonly Lazy<LogWriter> _instance = new Lazy<LogWriter>(() => new LogWriter());
@@ -74,5 +74,15 @@ namespace SmartVocabulary.Common
             {
             }//End of catch
         }
+
+        #region IDisposable Member
+
+        public void Dispose()
+        {            
+            this.logWriter.Close();
+            GC.Collect();
+        }
+
+        #endregion
     }
 }

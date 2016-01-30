@@ -13,7 +13,7 @@ namespace SmartVocabulary.Logic.Database
     /// <summary>
     /// Logic Layer. Work with DatabaseAccess class to get access to the Database
     /// </summary>
-    public class VocableLogic
+    public class VocableLogic : IDisposable
     {
         private readonly DatabaseAccess _access;
 
@@ -75,5 +75,14 @@ namespace SmartVocabulary.Logic.Database
 
             return deleteResult;
         }
+
+        #region IDisposable Member
+
+        public void Dispose()
+        {
+            this._access.Dispose();
+        }
+
+        #endregion
     }
 }

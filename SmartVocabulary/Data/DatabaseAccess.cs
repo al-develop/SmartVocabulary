@@ -247,7 +247,10 @@ namespace SmartVocabulary.Data
         #region IDisposable Member
         public void Dispose()
         {
-            this._connection.Close();
+            if (this._connection.State != ConnectionState.Closed)
+                this._connection.Close();
+
+            GC.Collect();
         }
         #endregion        
     }

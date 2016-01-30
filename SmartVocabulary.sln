@@ -5,16 +5,9 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartVocabulary", "SmartVocabulary\SmartVocabulary.csproj", "{D3ABBA9E-F6D7-4D0B-881D-8A1CCDD72F4E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartVocabulary.Testing", "SmartVocabulary.Testing\SmartVocabulary.Testing.csproj", "{62A37AAD-72E2-4EA4-B4CE-D9EA064AF301}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://pank-develop.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = SmartVocabulary\\SmartVocabulary.csproj
-		SccProjectName1 = SmartVocabulary
-		SccLocalPath1 = SmartVocabulary
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -24,6 +17,10 @@ Global
 		{D3ABBA9E-F6D7-4D0B-881D-8A1CCDD72F4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3ABBA9E-F6D7-4D0B-881D-8A1CCDD72F4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3ABBA9E-F6D7-4D0B-881D-8A1CCDD72F4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62A37AAD-72E2-4EA4-B4CE-D9EA064AF301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A37AAD-72E2-4EA4-B4CE-D9EA064AF301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A37AAD-72E2-4EA4-B4CE-D9EA064AF301}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62A37AAD-72E2-4EA4-B4CE-D9EA064AF301}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
