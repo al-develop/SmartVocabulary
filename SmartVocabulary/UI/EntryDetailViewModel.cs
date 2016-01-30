@@ -64,7 +64,15 @@ namespace SmartVocabulary.UI
         private void Save(object param)
         {
             // call DB like in MainViewModel
-            this._logic.SaveVocable(this.Entry, this.Language);
+            if (Entry.ID == 0)
+            {
+                // new vocable - call method to save
+                this._logic.SaveVocable(this.Entry, this.Language);
+            }
+            else
+            {
+                // vocable was eidted - call update method
+            }
 
             this._parent.SelectedVocable = null;
             this._parent.RibbonRefreshCommand.Execute(param);

@@ -155,7 +155,7 @@
                     <KeyBinding Key="Delete"
                                 Command="{Binding RemoveCommand}" />
                     <KeyBinding Key="Enter"
-                                Command="{Binding AddNewCommand}" />
+                                Command="{Binding EnterCommand}" />
                 </DataGrid.InputBindings>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID"

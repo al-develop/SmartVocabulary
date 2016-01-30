@@ -83,7 +83,7 @@ namespace SmartVocabulary.Data
 
         public Result<int> SaveVocable(Vocable vocable, string tableName)
         {
-            int result = 0;
+            //int result = 0;
             try
             {
                 SQLiteCommand com = new SQLiteCommand();
@@ -136,10 +136,68 @@ namespace SmartVocabulary.Data
             }
         }
 
-        public Result<Vocable> GetVocableById(int id)
+        public Result UpdateVocable(Vocable vocable, string tableName)
         {
+            try
+            {
+                SQLiteCommand com = new SQLiteCommand();
+                using (SQLiteCommand command = new SQLiteCommand(GenerateUpdateQuery(tableName), this._connection))
+                {
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "ID", ParameterName = "@id", Value = vocable.ID });
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Native", ParameterName = "@native", Value = vocable.Native });
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Translation", ParameterName = "@translation", Value = vocable.Translation });
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Definition", ParameterName = "@definition", Value = vocable.Definition });
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Kind", ParameterName = "@kind", Value = vocable.Kind.ToString() });
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Synonym", ParameterName = "@synonym", Value = vocable.Synonym });
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Opposite", ParameterName = "@opposite", Value = vocable.Opposite });
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Example", ParameterName = "@example", Value = vocable.Example });
 
-            return new Result<Vocable>();
+                    if (this._connection.State != ConnectionState.Open)
+                        this._connection.Open();
+
+                    command.ExecuteNonQuery();
+                    return new Result("", Status.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWriter.Instance.WriteLine(String.Format("Error occured at UpdateVocable in DataBaseAccess:\n{0}", ex.Message));
+                return new Result(ex.Message, Status.Error, ex);
+            }
+            finally
+            {
+                if (this._connection.State != System.Data.ConnectionState.Closed)
+                    this._connection.Close();
+            }
+        }
+
+        public Result DeleteVocable(Vocable vocable, string tableName)
+        {
+            try
+            {
+                SQLiteCommand com = new SQLiteCommand();
+                using (SQLiteCommand command = new SQLiteCommand(GenerateDeleteQuery(tableName), this._connection))
+                {
+                    command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "ID", ParameterName = "@id", Value = vocable.ID });
+
+                    if (this._connection.State != ConnectionState.Open)
+                        this._connection.Open();
+
+                    command.ExecuteNonQuery();
+
+                    return new Result("", Status.Success);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWriter.Instance.WriteLine(String.Format("Error occured at DeleteVocable in DataBaseAccess:\n{0}", ex.Message));
+                return new Result(ex.Message, Status.Error, ex);
+            }
+            finally
+            {
+                if (this._connection.State != System.Data.ConnectionState.Closed)
+                    this._connection.Close();
+            }
         }
 
         public Result<List<Vocable>> GetAllVocables(string tableName)
@@ -191,6 +249,6 @@ namespace SmartVocabulary.Data
         {
             this._connection.Close();
         }
-        #endregion
+        #endregion        
     }
 }

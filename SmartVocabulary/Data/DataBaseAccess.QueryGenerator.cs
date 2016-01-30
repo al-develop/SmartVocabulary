@@ -73,9 +73,56 @@ namespace SmartVocabulary.Data
             StringBuilder builder = new StringBuilder();
             builder.Append("SELECT * FROM ");
             builder.Append(GenerateTableName(tableName));
+
             return builder.ToString();
         }
 
+        private string GenerateDeleteQuery(string tableName)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("DELETE FROM ");
+            builder.Append(GenerateTableName(tableName));
+            builder.Append(" WHERE ID = @id");
+            return builder.ToString();
+        }
+
+        private string GenerateUpdateQuery(string tableName)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("UPDATE ");
+            builder.Append(GenerateTableName(tableName));
+            builder.Append(" SET");
+
+            // Columns
+            builder.Append("(");
+            builder.Append("Native, ");
+            builder.Append("Translation, ");
+            builder.Append("Definition, ");
+            builder.Append("Kind, ");
+            builder.Append("Synonym, ");
+            builder.Append("Opposite, ");
+            builder.Append("Example");
+            builder.Append(")");
+
+            // Values
+            builder.Append(" VALUES");
+            builder.Append("(");
+            builder.Append("@native, ");
+            builder.Append("@translation, ");
+            builder.Append("@definition, ");
+            builder.Append("@kind, ");
+            builder.Append("@synonym, ");
+            builder.Append("@opposite, ");
+            builder.Append("@example");
+            builder.Append(")");
+
+            // Condition
+            builder.Append(" WHERE ID = @id");
+
+            return builder.ToString();
+        }
+
+        #region Static methods to Generate table names
         private static string GenerateTableName(CultureInfo culture)
         {
             return culture.NativeName.Replace('(', '_')
@@ -89,6 +136,6 @@ namespace SmartVocabulary.Data
                             .Replace(')', '_')
                             .Replace(' ', '_');
         }
-
+        #endregion Static methods to Generate table names
     }
 }

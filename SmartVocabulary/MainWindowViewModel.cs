@@ -111,7 +111,7 @@ namespace SmartVocabulary
         {
             this.OpenAboutCommand = new BaseCommand(this.OpenAbout);
             this.RemoveCommand = new BaseCommand(this.Remove);
-            this.AddNewCommand = new BaseCommand(this.AddNew);
+            this.EnterCommand = new BaseCommand(this.Enter);
 
             this.RibbonCloseCommand = new BaseCommand(this.Close);
             this.RibbonRestartCommand = new BaseCommand(this.Restart);
@@ -123,7 +123,8 @@ namespace SmartVocabulary
 
         public ICommand OpenAboutCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
-        public ICommand AddNewCommand { get; set; }
+        public ICommand EnterCommand { get; set; }
+        //public ICommand AddNewCommand { get; set; }
 
         public ICommand RibbonCloseCommand { get; set; }
         public ICommand RibbonRestartCommand { get; set; }
@@ -132,6 +133,20 @@ namespace SmartVocabulary
         public ICommand RibbonEditCommand { get; set; }
         public ICommand RibbonRemoveCommand { get; set; }
         public ICommand RibbonRefreshCommand { get; set; }
+
+        private void Enter(object param)
+        {
+            if (this.SelectedVocable != null && this.SelectedVocable.ID != 0)
+            {
+                // edit
+                this.AddNew();
+            }
+            else if (this.Vocables.LastOrDefault() != null)
+            {
+                // new entry
+                this.Edit();
+            }
+        }
 
         private void RibbonRefresh(object param)
         {
@@ -155,31 +170,24 @@ namespace SmartVocabulary
             editWindow.Initialize(this._logic, this.SelectedLanguage, this, null);
             editWindow.Show();
         }
-        
+
         private void Remove(object param)
         {
-
-        }
-
-        private void AddNew(object param)
-        {
-            if (this.Vocables.LastOrDefault() != null)
+            if(this.Vocables.Contains(this.SelectedVocable))
             {
-                Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
-                if (saveResult.Status != Status.Success)
-                {
-                    this.Notification = "Couldn't save the entry. Check LogFiles for more information";
-                    this.Vocables.RemoveAt
-                        (this.Vocables.IndexOf
-                            (this.Vocables.Last()));
-                }
+                Result deleteResult = this._logic.DeleteVocable(this.SelectedVocable, this.SelectedLanguage);
 
-                this.Notification = "Entry saved";
-                
-                this.SelectedVocable = null;
-                this.RibbonRefresh(param);
-                this.Vocables.Add(new Vocable());
-                this.Vocables.OrderBy(o => o.ID);
+                if(deleteResult.Status == Status.Success)
+                {
+                    LogWriter.Instance.WriteLine("MainWindowViewModel: Deleting Vocable from DB successful");
+                    this.Vocables.Remove(this.SelectedVocable);
+                    this.Notification = "Removing Vocable successful";
+                }
+                else
+                {
+                    LogWriter.Instance.WriteLine("MainWindowViewModel: Deleting Vocable from DB failed");
+                    this.Notification = "Removing Vocable failed. Check Log Files for more information.";
+                }
             }
         }
 
@@ -200,7 +208,6 @@ namespace SmartVocabulary
         {
             Process.Start(this.ApplicationLocation);
             this.CloseAction.Invoke();
-            //Application.Current.Shutdown();
         }
 
         private void OpenSettings(object param)
@@ -281,6 +288,58 @@ namespace SmartVocabulary
                 IsUiEnabled = true;
             else
                 IsUiEnabled = false;
+        }
+
+        private void AddNew()
+        {
+            //if (this.Vocables.LastOrDefault() != null)
+            //{
+            //    Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
+            //    if (saveResult.Status != Status.Success)
+            //    {
+            //        this.Notification = "Couldn't save the entry. Check LogFiles for more information";
+            //        this.Vocables.RemoveAt
+            //            (this.Vocables.IndexOf
+            //                (this.Vocables.Last()));
+            //    }
+
+            //    this.Notification = "Entry saved";
+
+            //    this.SelectedVocable = null;
+            //    this.RibbonRefresh(param);
+            //    this.Vocables.Add(new Vocable());
+            //    this.Vocables.OrderBy(o => o.ID);
+            //}
+
+            Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
+            if (saveResult.Status != Status.Success)
+            {
+                this.Notification = "Couldn't save the entry. Check LogFiles for more information";
+                this.Vocables.RemoveAt
+                    (this.Vocables.IndexOf
+                        (this.Vocables.Last()));
+                return;
+            }
+
+            this.Notification = "Entry saved";
+
+            this.SelectedVocable = null;
+            this.RibbonRefresh(null);
+            this.Vocables.Add(new Vocable());
+            this.Vocables.OrderBy(o => o.ID);
+        }
+
+        private void Edit()
+        {
+            Result updateResult = this._logic.UpdateVocable(this.SelectedVocable, this.SelectedLanguage);
+            if(updateResult.Status != Status.Success)
+            {
+                this.Notification = "Couldn't update the entry. Check LogFiles for more information";
+                return;
+            }
+
+            this.Notification = "Update successful";
+            this.SelectedVocable = null;
         }
     }
 }

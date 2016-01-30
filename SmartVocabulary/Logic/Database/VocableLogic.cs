@@ -47,9 +47,33 @@ namespace SmartVocabulary.Logic.Database
             return saveResult;
         }
 
+        public Result UpdateVocable(Vocable entry, string language)
+        {
+            Result saveResult = this._access.UpdateVocable(entry, language);
+            if (saveResult.Status != Status.Success)
+            {
+                string log = String.Format("Error occured in Method: \"UpdateVocable\" in class \"VocableLogic\". Error message:{0}{1}", Environment.NewLine, saveResult.Message);
+                LogWriter.Instance.WriteLine(log);
+            }
+
+            return saveResult;
+        }
+
         public async Task<Result<List<Vocable>>> GetAllVocablesAsync(string language)
         {
             return await Task.Run(() => this.GetAllVocables(language));
+        }
+
+        public Result DeleteVocable(Vocable entry, string language)
+        {
+            Result deleteResult = this._access.DeleteVocable(entry, language);
+            if(deleteResult.Status != Status.Success)
+            {
+                string log = String.Format("Error occured in Method: \"DeleteVocable\" in class \"VocableLogic\". Error message:{0}{1}", Environment.NewLine, deleteResult.Message);
+                LogWriter.Instance.WriteLine(log);
+            }
+
+            return deleteResult;
         }
     }
 }
