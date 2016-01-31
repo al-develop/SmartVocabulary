@@ -155,8 +155,13 @@ namespace SmartVocabulary.UI
                         MessageBox.Show("Error occured while creating a new database. Check log file for more information", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+
                     if (this.DatabaseProgress <= this.DatabaseProgressMax)
+                    {
                         DatabaseProgress++;
+                        double percent = ((double)DatabaseProgress / (double)DatabaseProgressMax) * (double)100.0;
+                        DatabaseProgressInPercent = String.Format("{0} %", Math.Round(percent, 0, MidpointRounding.ToEven).ToString());
+                    }
                 }
 
                 for (int i = DatabaseProgressMax; i != 0; )
@@ -165,6 +170,7 @@ namespace SmartVocabulary.UI
                     i = i - 10;
                     await Task.Delay(5);
                 }
+                this.DatabaseProgressInPercent = "Creating done";
             }
             finally
             {
@@ -201,8 +207,13 @@ namespace SmartVocabulary.UI
                             MessageBox.Show(log.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
+
                         if (this.DatabaseProgress <= this.DatabaseProgressMax)
+                        {
                             DatabaseProgress++;
+                            int percent = (DatabaseProgress / DatabaseProgressMax) * 100;
+                            DatabaseProgressInPercent = String.Format("{0} %", percent.ToString());
+                        }
                     }
 
                     for (int i = DatabaseProgressMax; i != 0; )
@@ -211,6 +222,8 @@ namespace SmartVocabulary.UI
                         i = i - 10;
                         await Task.Delay(5);
                     }
+
+                    this.DatabaseProgressInPercent = "Reset done";
                 }
             }
             finally

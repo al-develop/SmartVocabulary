@@ -132,7 +132,7 @@ namespace SmartVocabulary
         public ICommand RibbonEditCommand { get; set; }
         public ICommand RibbonRemoveCommand { get; set; }
         public ICommand RibbonRefreshCommand { get; set; }
-
+        
         private void Enter(object param)
         {
             if (this.SelectedVocable != null && this.SelectedVocable.ID != 0)

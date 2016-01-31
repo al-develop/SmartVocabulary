@@ -124,7 +124,13 @@ namespace SmartVocabulary.UI
         private int _databaseProgressMax;
         private string _databasePath;
         private bool _areDatabaseOperationsEnabled;
+        private string _databaseProgressInPercent;
 
+        public string DatabaseProgressInPercent
+        {
+            get { return _databaseProgressInPercent; }
+            set { NotifyPropertyChanged(ref _databaseProgressInPercent, value, () => DatabaseProgressInPercent); }
+        }
         public bool AreDatabaseOperationsEnabled
         {
             get { return _areDatabaseOperationsEnabled; }

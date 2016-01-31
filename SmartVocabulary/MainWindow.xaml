@@ -173,11 +173,22 @@
                                         Binding="{Binding Definition, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"
                                         MinWidth="180" />
-                    <DataGridComboBoxColumn Header="Kind"
+                    <!--<DataGridComboBoxColumn Header="Kind"
                                             Width="*"
                                             MinWidth="80"
                                             ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
-                                            SelectedItemBinding="{Binding Kind, UpdateSourceTrigger=PropertyChanged}" />
+                                            SelectedItemBinding="{Binding Kind, UpdateSourceTrigger=PropertyChanged}" />-->
+                    <DataGridTemplateColumn Header="Kind"
+                                            Width="*"
+                                            MinWidth="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource dataFromEnum}}" HorizontalAlignment="Stretch"
+                                          SelectedItem="{Binding Kind, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Synonym"
                                         Binding="{Binding Synonym, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"
