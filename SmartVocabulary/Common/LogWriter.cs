@@ -30,55 +30,58 @@ namespace SmartVocabulary.Common
         string logXmlfilename = string.Empty;
         long LogFileSize = 2097152;
 
-        public void WriteLine(string Msg)
+        public async void WriteLine(string Msg)
         {
-            try
+            await Task.Run(() =>
             {
-                if (string.IsNullOrEmpty(logfilename))
-                    logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + ".Log." + fileCount + ".txt";
-
-                if (!(Directory.Exists(logpath)))
-                    Directory.CreateDirectory(logpath);
-
-                while (true)
+                try
                 {
-                    if (!File.Exists(logfilename))
+                    if (string.IsNullOrEmpty(logfilename))
+                        logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + ".Log." + fileCount + ".txt";
+
+                    if (!(Directory.Exists(logpath)))
+                        Directory.CreateDirectory(logpath);
+
+                    while (true)
                     {
-                        logWriter = new StreamWriter(logfilename);
-                        break;
-                    }
-                    else
-                    {
-                        if (LogFileSize == 0)
-                            LogFileSize = 2097152;
-                        FileInfo fi = new FileInfo(logfilename);
-                        if (fi.Length > LogFileSize)
+                        if (!File.Exists(logfilename))
                         {
-                            fileCount++;
-                            logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + "_" + fileCount + ".txt";
-                            continue;
+                            logWriter = new StreamWriter(logfilename);
+                            break;
                         }
                         else
                         {
-                            logWriter = File.AppendText(logfilename);
-                            break;
+                            if (LogFileSize == 0)
+                                LogFileSize = 2097152;
+                            FileInfo fi = new FileInfo(logfilename);
+                            if (fi.Length > LogFileSize)
+                            {
+                                fileCount++;
+                                logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + "_" + fileCount + ".txt";
+                                continue;
+                            }
+                            else
+                            {
+                                logWriter = File.AppendText(logfilename);
+                                break;
+                            }
                         }
                     }
-                }
 
-                logWriter.WriteLine(DateTime.Now.ToString("g") + ": " + Msg);
-                logWriter.Flush();
-                logWriter.Close();
-            }//End of Try
-            catch (Exception ex)
-            {
-            }//End of catch
+                    logWriter.WriteLine(DateTime.Now.ToString("g") + ": " + Msg);
+                    logWriter.Flush();
+                    logWriter.Close();
+                }//End of Try
+                catch (Exception ex)
+                {
+                }//End of catch
+            });
         }
 
         #region IDisposable Member
 
         public void Dispose()
-        {            
+        {
             this.logWriter.Close();
             GC.Collect();
         }

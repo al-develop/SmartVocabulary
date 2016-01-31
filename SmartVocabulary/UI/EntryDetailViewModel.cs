@@ -68,16 +68,17 @@ namespace SmartVocabulary.UI
             {
                 // new vocable - call method to save
                 this._logic.SaveVocable(this.Entry, this.Language);
+
+                this._parent.SelectedVocable = null;
+                this._parent.RibbonRefreshCommand.Execute(param);
+                this._parent.Vocables.Add(new Vocable());
+                this._parent.Vocables.OrderBy(o => o.ID);
             }
             else
             {
                 // vocable was eidted - call update method
-            }
-
-            this._parent.SelectedVocable = null;
-            this._parent.RibbonRefreshCommand.Execute(param);
-            this._parent.Vocables.Add(new Vocable());
-            this._parent.Vocables.OrderBy(o => o.ID);
+                this._logic.UpdateVocable(this.Entry, this.Language);
+            }            
 
             this.CloseAction.Invoke();
         }

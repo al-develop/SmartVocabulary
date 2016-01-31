@@ -91,30 +91,28 @@ namespace SmartVocabulary.Data
             StringBuilder builder = new StringBuilder();
             builder.Append("UPDATE ");
             builder.Append(GenerateTableName(tableName));
-            builder.Append(" SET");
+            builder.Append(" SET ");
 
             // Columns
-            builder.Append("(");
-            builder.Append("Native, ");
-            builder.Append("Translation, ");
-            builder.Append("Definition, ");
-            builder.Append("Kind, ");
-            builder.Append("Synonym, ");
-            builder.Append("Opposite, ");
-            builder.Append("Example");
-            builder.Append(")");
+            builder.Append("Native = @native, ");
+            builder.Append("Translation = @translation, ");
+            builder.Append("Definition = @definition, ");
+            builder.Append("Kind = @kind, ");
+            builder.Append("Synonym = @synonym, ");
+            builder.Append("Opposite = @opposite, ");
+            builder.Append("Example = @example");
 
-            // Values
-            builder.Append(" VALUES");
-            builder.Append("(");
-            builder.Append("@native, ");
-            builder.Append("@translation, ");
-            builder.Append("@definition, ");
-            builder.Append("@kind, ");
-            builder.Append("@synonym, ");
-            builder.Append("@opposite, ");
-            builder.Append("@example");
-            builder.Append(")");
+            //// Values
+            //builder.Append(" VALUES");
+            //builder.Append("(");
+            //builder.Append("@native, ");
+            //builder.Append("@translation, ");
+            //builder.Append("@definition, ");
+            //builder.Append("@kind, ");
+            //builder.Append("@synonym, ");
+            //builder.Append("@opposite, ");
+            //builder.Append("@example");
+            //builder.Append(")");
 
             // Condition
             builder.Append(" WHERE ID = @id");

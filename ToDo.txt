@@ -1,15 +1,17 @@
 * SettingsWindow:
 	- Drag&Drop für Sprachauswahl
-	- ContextMenu MenuItem Command Bindings
-	- Sprachen speichern und Laden
+	- Neuer Unterpunkt "Database":
+		- DB bereinigen
+		- DB neu erstellen -->  mit Progress Bar. Dafür wird im Konstruktor von DB_Access keine DB merh 		  erstellt
+		- Warnung, dass der name nicht verändert werden darf
+		- 
 
 * DataAccess:
-	- CreateTable Methode schreiben um anhand der angegeben Sprache neue Tabellen zu erstellen
-	- Speichern und Löschen SQL schreiben
+	- CreateDatabase erstellen
 
 * MainWindow:
 	- DataGrid Paging erstellen
-	- Scueh anhand gegebener Filter erstellen
+	- Suche anhand gegebener Filter erstellen
 
 * Entities:
 	- AutoIncrement ID testen dun gegebenenfalls korregieren

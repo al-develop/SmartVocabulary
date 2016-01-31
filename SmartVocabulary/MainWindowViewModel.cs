@@ -113,6 +113,7 @@ namespace SmartVocabulary
             this.RemoveCommand = new BaseCommand(this.Remove);
             this.EnterCommand = new BaseCommand(this.Enter);
 
+            this.RibbonRemoveCommand = new BaseCommand(this.Remove);
             this.RibbonCloseCommand = new BaseCommand(this.Close);
             this.RibbonRestartCommand = new BaseCommand(this.Restart);
             this.RibbonOpenSettingsCommand = new BaseCommand(this.OpenSettings);
@@ -139,22 +140,18 @@ namespace SmartVocabulary
             if (this.SelectedVocable != null && this.SelectedVocable.ID != 0)
             {
                 // edit
-                this.AddNew();
+                this.Edit();
             }
             else if (this.Vocables.LastOrDefault() != null)
             {
                 // new entry
-                this.Edit();
+                this.AddNew();
             }
         }
 
         private void RibbonRefresh(object param)
         {
             this.LoadVocables();
-        }
-        private void RibbonRemove(object param)
-        {
-            this.Remove(param);
         }
 
         private void RibbonEdit(object param)
