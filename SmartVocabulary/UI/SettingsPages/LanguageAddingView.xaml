@@ -40,7 +40,7 @@
         <Button Grid.Column="1"
                 Width="25"
                 Height="25"
-                Command="{Binding AddCommand}"
+                Command="{Binding AddLanguageCommand}"
                 Content="&gt;"
                 Margin="5,0,5,5"
                 VerticalAlignment="Bottom" />
@@ -48,7 +48,7 @@
         <Button Grid.Column="1"
                 Width="25"
                 Height="25"
-                Command="{Binding RemoveCommand}"
+                Command="{Binding RemoveLanguageCommand}"
                 Content="&lt;"
                 Margin="5,10,5,0"
                 Grid.Row="1"

@@ -94,16 +94,15 @@ namespace SmartVocabulary
             this.Notification = "Connection to Database...";
             this._logic = new VocableLogic();
 
-            this.Notification = "Loading Vocables...";
-            this.LoadVocables();
-
             this.Notification = "Loading Settings...";
             this._settingsManager = new XmlManager();
             this.LoadSettings();
-
+            
+            this.Notification = "Loading Vocables...";
+            Result loadingResult = this.LoadVocables();
+            
+            this.Notification = loadingResult.Message;
             this.CommandRegistration();
-
-            this.Notification = "Ready";
         }
 
         #region Commands
@@ -125,7 +124,6 @@ namespace SmartVocabulary
         public ICommand OpenAboutCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand EnterCommand { get; set; }
-        //public ICommand AddNewCommand { get; set; }
 
         public ICommand RibbonCloseCommand { get; set; }
         public ICommand RibbonRestartCommand { get; set; }
@@ -215,33 +213,25 @@ namespace SmartVocabulary
         }
         #endregion
 
-        private bool LoadVocables()
+        private Result LoadVocables()
         {
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                // check if a language is selected
-                if (String.IsNullOrEmpty(this.SelectedLanguage))
+                // Validate if everything is ready for loading
+                var validation = ValidateBeforeLoadingVoc();
+                if (validation.Status == Status.Warning)
                 {
-                    // check if there are any langauges available
-                    if (this.AvailableLanguages != null && this.AvailableLanguages.Count != 0)
-                    {
-                        this.SelectedLanguage = this.AvailableLanguages.First();
-                    }
-                    else
-                    {
-                        this.Vocables = new ObservableCollection<Vocable>();
-                        return true;
-                    }
-                }
+                    return new Result(validation.Message, Status.Warning);
+                }                
 
-                //var result = await this._logic.GetAllVocablesAsync(this.SelectedLanguage);
+                // Get Data
                 var result = this._logic.GetAllVocables(this.SelectedLanguage);
                 if (result.Status != Status.Success)
                 {
-                    this.Notification = "Error on loading Vocables from Database. Please try to refresh, or restart the application. More information can be found in the Log Files";
-                    return false;
+                    string notification = "Error on loading Vocables from Database. Please try to refresh, or restart the application. More information can be found in the Log Files";
+                    return new Result(notification, Status.Error);
                 }
 
                 this.Vocables = new ObservableCollection<Vocable>(result.Data);
@@ -251,16 +241,62 @@ namespace SmartVocabulary
                 Mouse.OverrideCursor = Cursors.Arrow;
             }
 
-            return true;
+            return new Result("Ready", Status.Success);
         }
 
-        private async void LoadSettings()
+        private Result ValidateBeforeLoadingVoc()
+        {
+            // check if DB exists
+            Result dbExistence = this.CheckDatabaseExistence();
+            if (dbExistence.Status == Status.Warning)
+            {
+                this.Vocables = new ObservableCollection<Vocable>();
+                return new Result(String.Format("{0}. Create new DB in Settings", dbExistence.Message), Status.Warning);
+            }
+
+            // check if a language is selected
+            if (String.IsNullOrEmpty(this.SelectedLanguage))
+            {
+                // check if there are any langauges available
+                if (this.AvailableLanguages != null && this.AvailableLanguages.Count != 0)
+                {
+                    this.SelectedLanguage = this.AvailableLanguages.First();
+                }
+                else
+                {
+                    this.Vocables = new ObservableCollection<Vocable>();
+                    return new Result("No languages available.", Status.Warning);
+                }
+            }
+
+            // everything is alright:
+            return new Result("", Status.Success);
+        }
+
+        private Result CheckDatabaseExistence()
+        {
+            string saveDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            string savePath = String.Format("{0}\\{1}", saveDir, "smartVocDb.sqlite");
+
+            if(!Directory.Exists(saveDir))
+            {
+                return new Result("Database Directory does not exist", Status.Warning);
+            }
+            if (!File.Exists(savePath))
+            {
+                return new Result("Database file does not exist", Status.Warning);
+            }
+
+            return new Result("", Status.Success);
+        }
+
+        private void LoadSettings()
         {
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                var load = await this._settingsManager.LoadSettingsAsync();
+                var load = this._settingsManager.LoadSettings();
                 if (load.Status == Common.Status.Success)
                 {
                     this.AlternationRowColor = load.Data.AlternationColor;
@@ -289,26 +325,19 @@ namespace SmartVocabulary
 
         private void AddNew()
         {
-            //if (this.Vocables.LastOrDefault() != null)
-            //{
-            //    Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
-            //    if (saveResult.Status != Status.Success)
-            //    {
-            //        this.Notification = "Couldn't save the entry. Check LogFiles for more information";
-            //        this.Vocables.RemoveAt
-            //            (this.Vocables.IndexOf
-            //                (this.Vocables.Last()));
-            //    }
-
-            //    this.Notification = "Entry saved";
-
-            //    this.SelectedVocable = null;
-            //    this.RibbonRefresh(param);
-            //    this.Vocables.Add(new Vocable());
-            //    this.Vocables.OrderBy(o => o.ID);
-            //}
-
             Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
+            if(saveResult.Status == Status.Warning)
+            {
+                // SaveVocable in DBaccess only returns a warning if the DB does not exist
+                this.Notification = "Couldn't save the entry. Check if Database exists or create a new one in the Settings";
+                this.Vocables.RemoveAt
+                    (this.Vocables.IndexOf
+                        (this.Vocables.Last()));
+
+                this.Vocables.Add(new Vocable());
+                return;
+            }
+
             if (saveResult.Status != Status.Success)
             {
                 this.Notification = "Couldn't save the entry. Check LogFiles for more information";

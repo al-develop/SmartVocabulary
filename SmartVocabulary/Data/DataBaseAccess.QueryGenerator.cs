@@ -36,6 +36,26 @@ namespace SmartVocabulary.Data
             return createTable.ToString().Replace('\r', ' ').Replace('\n', ' ');
         }
 
+        private string GenerateCreateTableQuery(string tableName)
+        {
+            StringBuilder createTable = new StringBuilder();
+            createTable.Append("CREATE TABLE IF NOT EXISTS");
+            createTable.Append("\"" + GenerateTableName(tableName) + "\" "); // Result: "tableName" // notice the whitespace on the end
+            createTable.Append(@"(
+                        [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        [Native] TEXT(50),
+                        [Translation] TEXT(50),
+                        [Definition] TEXT(100),
+                        [Kind] TEXT(15),
+                        [Synonym] TEXT(50),
+                        [Opposite] TEXT(50),
+                        [Example] TEXT(200)
+                    );");
+
+            return createTable.ToString().Replace('\r', ' ').Replace('\n', ' ');
+        }
+
+
         private string GenerateInsertQuery(string tableName)
         {
             StringBuilder builder = new StringBuilder();
@@ -101,18 +121,6 @@ namespace SmartVocabulary.Data
             builder.Append("Synonym = @synonym, ");
             builder.Append("Opposite = @opposite, ");
             builder.Append("Example = @example");
-
-            //// Values
-            //builder.Append(" VALUES");
-            //builder.Append("(");
-            //builder.Append("@native, ");
-            //builder.Append("@translation, ");
-            //builder.Append("@definition, ");
-            //builder.Append("@kind, ");
-            //builder.Append("@synonym, ");
-            //builder.Append("@opposite, ");
-            //builder.Append("@example");
-            //builder.Append(")");
 
             // Condition
             builder.Append(" WHERE ID = @id");

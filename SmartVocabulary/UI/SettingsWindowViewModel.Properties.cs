@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BaseMvvm;
+using SmartVocabulary.Logic.Database;
 using SmartVocabulary.Logic.Manager;
 
 namespace SmartVocabulary.UI
@@ -17,14 +18,21 @@ namespace SmartVocabulary.UI
     {
         #region Data
         private readonly XmlManager _settingsManager;
+        private readonly DatabaseLogic _databaseLogic;
         public Action CloseAction { get; set; }
         #endregion
 
         #region Properties
-        #region Visbility
+        #region UI Visbility
         private bool _rowPageVisibility;
         private bool _languagePageVisibility;
+        private bool _databaseSettingsVisibility;
 
+        public bool DatabaseSettingsVisibility
+        {
+            get { return _databaseSettingsVisibility; }
+            set { NotifyPropertyChanged(ref _databaseSettingsVisibility, value, () => DatabaseSettingsVisibility); }
+        }
         public bool LanguagePageVisibility
         {
             get { return _languagePageVisibility; }
@@ -35,7 +43,7 @@ namespace SmartVocabulary.UI
             get { return _rowPageVisibility; }
             set { NotifyPropertyChanged(ref _rowPageVisibility, value, () => this.RowPageVisibility); }
         }
-        #endregion Visbility
+        #endregion UI Visbility
 
         #region SettingsSelection
         private ObservableCollection<string> _settingsAreas;
@@ -109,6 +117,46 @@ namespace SmartVocabulary.UI
             }
         }
         #endregion LanguageSelection
+
+        #region DatabaseSettings
+        private int _databaseProgress;
+        private bool _isDatabaseProgressVisible;
+        private int _databaseProgressMax;
+        private string _databasePath;
+        private bool _areDatabaseOperationsEnabled;
+
+        public bool AreDatabaseOperationsEnabled
+        {
+            get { return _areDatabaseOperationsEnabled; }
+            set { NotifyPropertyChanged(ref _areDatabaseOperationsEnabled, value, () => AreDatabaseOperationsEnabled); }
+        }
+        public string DatabasePath
+        {
+            get { return _databasePath; }
+            set
+            {
+                NotifyPropertyChanged(ref _databasePath, value, () => DatabasePath);
+                if (String.IsNullOrEmpty(DatabasePath))
+                    this.DatabasePath = "Database not available";
+            }
+        }
+        public int DatabaseProgressMax
+        {
+            get { return _databaseProgressMax; }
+            set { NotifyPropertyChanged(ref _databaseProgressMax, value, () => DatabaseProgressMax); }
+        }
+        public bool IsDatabaseProgressVisible
+        {
+            get { return _isDatabaseProgressVisible; }
+            set { NotifyPropertyChanged(ref _isDatabaseProgressVisible, value, () => IsDatabaseProgressVisible); }
+        }
+        public int DatabaseProgress
+        {
+            get { return _databaseProgress; }
+            set { NotifyPropertyChanged(ref _databaseProgress, value, () => DatabaseProgress); }
+        }
+        #endregion DatabaseSettings
+
         #endregion
     }
 }

@@ -5,6 +5,7 @@
               xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
               xmlns:system="clr-namespace:System;assembly=mscorlib"
               xmlns:vocableEnum="clr-namespace:SmartVocabulary.Entites"
+              Icon="pack://application:,,,/Resources/Icons/AppIcon.png"
               Title="Smart Vocabulary"
               ResizeMode="CanResizeWithGrip"
               MinWidth="700"
@@ -35,7 +36,7 @@
                 <Ribbon.ApplicationMenu>
                     <RibbonApplicationMenu Background="LightGray"
                                            MaxWidth="100">
-                        <RibbonApplicationMenuItem Header="Settings"
+                        <RibbonApplicationMenuItem Header="Settings" 
                                                    Command="{Binding RibbonOpenSettingsCommand}"
                                                    ImageSource="pack://application:,,,/Resources/Icons/Settings.png" />
                         <RibbonApplicationMenuItem Header="About &amp; Help"
@@ -65,7 +66,7 @@
                                       Command="{Binding RibbonRefreshCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Restart.png" />
                     </RibbonGroup>
-                    <RibbonGroup Header="Export / Import"
+                    <RibbonGroup Header="Export / Import" Visibility="Collapsed"
                                  IsEnabled="{Binding IsUiEnabled}">
                         <RibbonButton Label="Export"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Export.png"

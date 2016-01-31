@@ -38,6 +38,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Book32x32.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BaseMvvm">
       <HintPath>I:\DEVELOPING\1.Libraries\BaseMvvm.dll</HintPath>
@@ -92,6 +95,7 @@
     <Compile Include="Data\DatabaseAccess.QueryGenerator.cs" />
     <Compile Include="Entites\ManagerEnumeration.cs" />
     <Compile Include="Entites\Settings.cs" />
+    <Compile Include="Logic\Database\DatabaseLogic.cs" />
     <Compile Include="Logic\Database\VocableLogic.cs" />
     <Compile Include="Logic\Factory\IManager.cs" />
     <Compile Include="Logic\Factory\ManagerFactory.cs" />
@@ -107,6 +111,9 @@
     </Compile>
     <Compile Include="UI\ExportWizardWindow.xaml.cs">
       <DependentUpon>ExportWizardWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SettingsPages\DatabaseSettingsView.xaml.cs">
+      <DependentUpon>DatabaseSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SettingsPages\LanguageAddingView.xaml.cs">
       <DependentUpon>LanguageAddingView.xaml</DependentUpon>
@@ -144,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ExportWizardWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SettingsPages\DatabaseSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -190,7 +201,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\SQL\" />
+    <Resource Include="Book32x32.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\excelpreview.png" />
@@ -225,6 +236,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\AppIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets')" />

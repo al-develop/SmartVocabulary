@@ -29,19 +29,72 @@ namespace SmartVocabulary.Data
             this._connectionString = String.Format("Data Source={0};Version=3", _savePath);
             _connection = new SQLiteConnection(_connectionString);
 
-            if (!Directory.Exists(_saveDir))
-                Directory.CreateDirectory(_saveDir);
-            if (!File.Exists(_savePath))
-                SQLiteConnection.CreateFile(_savePath);
+            //if (!Directory.Exists(_saveDir))
+            //    Directory.CreateDirectory(_saveDir);
+            //if (!File.Exists(_savePath))
+            //    SQLiteConnection.CreateFile(_savePath);
 
+            // 31.01.2016 OBSOLETE: The Database should not be cerated in the Constructor anymore
+            // as for now, it's created from the Settings
+            //
             // The Method to create Tables should be called every time in the Constructor
             // It can happen, that the DB schema was changed (tables got deleted etc)
             // So, to keep it all working as it should, the tables are getting created every time, when this class is initalized
             // The "Create" - SQL Command checks already, if the table exists or not. (Query: CREATE IF NOT EXISTS)
-            this.CreateTables();
+            //this.CreateTables();
         }
 
-        private async void CreateTables()
+
+        public async Task<Result> CreateNewDatabaseAsync()
+        {
+            await Task.Run(() => this.CreateNewDatabaseFile());
+            return await this.CreateTablesAsync();
+        }
+
+        public async Task<Result> CreateTableAsync(string tableName)
+        {
+            try
+            {
+                string query = GenerateCreateTableQuery(tableName);
+                await Task.Run(() =>
+                {
+                    using (SQLiteCommand createCommand = new SQLiteCommand(query, this._connection))
+                    {
+                        if (this._connection.State != ConnectionState.Open)
+                            this._connection.Open();
+
+                        createCommand.ExecuteNonQuery();
+                    }
+                });
+
+                return new Result("", Status.Success);
+            }
+            catch (Exception ex)
+            {
+                StringBuilder errorBuilder = new StringBuilder();
+                errorBuilder.Append("Error occured on creating the Database Tables");
+                errorBuilder.Append(Environment.NewLine);
+                errorBuilder.Append(tableName);
+                errorBuilder.Append(Environment.NewLine);
+                errorBuilder.Append(ex.Message);
+
+                LogWriter.Instance.WriteLine(errorBuilder.ToString());
+                return new Result(errorBuilder.ToString(), Status.Error, ex);
+            }
+            finally
+            {
+                if (this._connection.State != ConnectionState.Closed)
+                    this._connection.Close();
+            }
+
+        }
+
+
+        /// <summary>
+        /// Creates tables if they don't exist yet asynchronously
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Result> CreateTablesAsync()
         {
             List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
             int counterForFailure = 0;  // if an error occures, it's easier to find the object which causes the error whotud a counter
@@ -56,12 +109,15 @@ namespace SmartVocabulary.Data
                         {
                             if (this._connection.State != ConnectionState.Open)
                                 this._connection.Open();
-                                                       
-                            createCommand.ExecuteNonQuery();                            
+
+                            createCommand.ExecuteNonQuery();
                         }
                     });
-                }
+
                     counterForFailure++;
+                }
+
+                return new Result("", Status.Success);
             }
             catch (Exception ex)
             {
@@ -73,6 +129,7 @@ namespace SmartVocabulary.Data
                 errorBuilder.Append(ex.Message);
 
                 LogWriter.Instance.WriteLine(errorBuilder.ToString());
+                return new Result(errorBuilder.ToString(), Status.Error, ex);
             }
             finally
             {
@@ -81,12 +138,27 @@ namespace SmartVocabulary.Data
             }
         }
 
+        /// <summary>
+        /// if directory or file does not exists, it will be created here
+        /// </summary>
+        public void CreateNewDatabaseFile()
+        {
+            if (!Directory.Exists(_saveDir))
+                Directory.CreateDirectory(_saveDir);
+            if (!File.Exists(_savePath))
+                SQLiteConnection.CreateFile(_savePath);
+        }
+
+        #region Vocable
         public Result<int> SaveVocable(Vocable vocable, string tableName)
         {
-            //int result = 0;
+            if (!Directory.Exists(_saveDir))
+                return new Result<int>(null, "Database Directory does not exists", Status.Warning);
+            if (!File.Exists(_savePath))
+                return new Result<int>(null, "Database File does not exists", Status.Warning);
+
             try
             {
-                SQLiteCommand com = new SQLiteCommand();
                 using (SQLiteCommand command = new SQLiteCommand(GenerateInsertQuery(tableName), this._connection))
                 {
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Native", ParameterName = "@native", Value = vocable.Native });
@@ -101,27 +173,8 @@ namespace SmartVocabulary.Data
                         this._connection.Open();
 
                     command.ExecuteNonQuery();
-                    //SQLiteCommand selectID = new SQLiteCommand(String.Format("SELECT ID FROM {0}",tableName), this._connection);
-                    //var reader = selectID.ExecuteReader();
-                    //var results = new List<object>();
-                    //int i = 0;
-                    //while(reader.Read())
-                    //{
-                    //    results.Add(reader[i]);
-                    //    i++;
-                    //}
 
-
-                    //if (this._connection.State != ConnectionState.Closed)
-                    //    this._connection.Close();
-                    //return null;
-                    //bool isSuccess = Int32.TryParse(resultSet.ToString(), out result);
-
-                    //if (isSuccess)
                     return new Result<int>(-1, "", Status.Success);
-                    //else
-                    //    return new Result<int>(-1, "resultSet returned invalid result - DatabaseAccess.SaveVocable()", Status.Error);
-
                 }
             }
             catch (Exception ex)
@@ -140,7 +193,7 @@ namespace SmartVocabulary.Data
         {
             try
             {
-                SQLiteCommand com = new SQLiteCommand();
+
                 using (SQLiteCommand command = new SQLiteCommand(GenerateUpdateQuery(tableName), this._connection))
                 {
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "ID", ParameterName = "@id", Value = vocable.ID });
@@ -175,7 +228,7 @@ namespace SmartVocabulary.Data
         {
             try
             {
-                SQLiteCommand com = new SQLiteCommand();
+
                 using (SQLiteCommand command = new SQLiteCommand(GenerateDeleteQuery(tableName), this._connection))
                 {
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "ID", ParameterName = "@id", Value = vocable.ID });
@@ -243,6 +296,7 @@ namespace SmartVocabulary.Data
 
             return new Result<List<Vocable>>(result, "", Status.Success);
         }
+        #endregion Vocable
 
         #region IDisposable Member
         public void Dispose()
@@ -252,6 +306,6 @@ namespace SmartVocabulary.Data
 
             GC.Collect();
         }
-        #endregion        
+        #endregion
     }
 }

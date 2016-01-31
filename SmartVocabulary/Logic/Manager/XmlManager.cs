@@ -100,6 +100,9 @@ namespace SmartVocabulary.Logic.Manager
              */
 
             Settings updateSettings = this.LoadSettings().Data;
+            if (updateSettings == null)
+                return new Result("Couldn't load old settings", Status.Error);
+
             if (settings.AddedLanguages != null)
                 updateSettings.AddedLanguages = settings.AddedLanguages;
 
