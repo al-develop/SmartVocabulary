@@ -23,6 +23,7 @@ namespace SmartVocabulary.UI
         public AboutWindow()
         {
             InitializeComponent();
+            txtAssemblyVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
