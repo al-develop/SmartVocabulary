@@ -15,9 +15,9 @@ namespace SmartVocabulary.Logic.Manager
     {
         #region IManager Member
 
-        public Result Export(IList<Vocable> VocableCollection, string savePath)
+        public Result Export(IList<Vocable> vocableCollection, string savePath)
         {
-            if (VocableCollection == null)
+            if (vocableCollection == null)
             {
                 LogWriter.Instance.WriteLine("Xml Export: Vocable Collection is empty");
                 return new Result("Xml Export: Vocable Collection is empty", "", Status.Error);
@@ -26,7 +26,7 @@ namespace SmartVocabulary.Logic.Manager
             using (FileStream stream = new FileStream(savePath, FileMode.Create))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(IList<Vocable>));
-                serializer.Serialize(stream, VocableCollection);
+                serializer.Serialize(stream, vocableCollection);
             }
 
 

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartVocabulary.Common
 {
@@ -104,7 +100,7 @@ namespace SmartVocabulary.Common
 
         }
 
-        public Result(T data, string message, Common.Status status)
+        public Result(T data, string message, Status status)
         {
             this.Data = data;
             this.Message = message;

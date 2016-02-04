@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartVocabulary.Common
 {
@@ -34,5 +31,21 @@ namespace SmartVocabulary.Common
                            .ToList();
         }
 
+
+        /// <summary>
+        /// Loads a List of System.String, containing NativeNames of all CultureInfos in lower case
+        /// </summary>
+        /// <returns>A List of System.String, containing NativeNames of all CultureInfos in lower case</returns>
+        public static List<string> GetCulturesAsLowerCaseStringCollectionByFilter()
+        {
+            List<CultureInfo> cultures = GetCultures();
+            List<string> result = new List<string>();
+            foreach (var culture in cultures)
+            {
+                result.Add(culture.NativeName.ToLower());
+            }
+
+            return result;
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace SmartVocabulary.Data
         {
             try
             {
-                string query = GenerateCreateTableQuery(tableName);
+                string query = this.GenerateCreateTableQuery(tableName);
                 await Task.Run(() =>
                 {
                     using (SQLiteCommand createCommand = new SQLiteCommand(query, this._connection))
@@ -102,7 +102,7 @@ namespace SmartVocabulary.Data
             {
                 foreach (CultureInfo culture in cultures)
                 {
-                    string query = GenerateCreateTableQuery(culture);
+                    string query = this.GenerateCreateTableQuery(culture);
                     await Task.Run(() =>
                     {
                         using (SQLiteCommand createCommand = new SQLiteCommand(query, this._connection))
@@ -159,7 +159,7 @@ namespace SmartVocabulary.Data
 
             try
             {
-                using (SQLiteCommand command = new SQLiteCommand(GenerateInsertQuery(tableName), this._connection))
+                using (SQLiteCommand command = new SQLiteCommand(this.GenerateInsertQuery(tableName), this._connection))
                 {
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Native", ParameterName = "@native", Value = vocable.Native });
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Translation", ParameterName = "@translation", Value = vocable.Translation });
@@ -194,7 +194,7 @@ namespace SmartVocabulary.Data
             try
             {
 
-                using (SQLiteCommand command = new SQLiteCommand(GenerateUpdateQuery(tableName), this._connection))
+                using (SQLiteCommand command = new SQLiteCommand(this.GenerateUpdateQuery(tableName), this._connection))
                 {
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "ID", ParameterName = "@id", Value = vocable.ID });
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "Native", ParameterName = "@native", Value = vocable.Native });
@@ -229,7 +229,7 @@ namespace SmartVocabulary.Data
             try
             {
 
-                using (SQLiteCommand command = new SQLiteCommand(GenerateDeleteQuery(tableName), this._connection))
+                using (SQLiteCommand command = new SQLiteCommand(this.GenerateDeleteQuery(tableName), this._connection))
                 {
                     command.Parameters.Add(new SQLiteParameter() { Command = command, DbType = DbType.String, SourceColumn = "ID", ParameterName = "@id", Value = vocable.ID });
 
@@ -258,7 +258,7 @@ namespace SmartVocabulary.Data
             var result = new List<Vocable>();
             try
             {
-                using (SQLiteCommand command = new SQLiteCommand(GenerateSelectAllQuery(tableName), this._connection))
+                using (SQLiteCommand command = new SQLiteCommand(this.GenerateSelectAllQuery(tableName), this._connection))
                 {
                     if (this._connection.State != ConnectionState.Open)
                         this._connection.Open();

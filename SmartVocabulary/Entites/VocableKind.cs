@@ -30,10 +30,11 @@ namespace SmartVocabulary.Entites
         Conjunction,
         Pronoun ,
         Sentence , 
+        Phrase ,
         Adverb ,
         Preposition,
         Determiner ,
         Exclamation,
-        Unknown,
+        Unknown
     }
 }

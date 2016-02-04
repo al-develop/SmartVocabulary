@@ -10,7 +10,7 @@ namespace SmartVocabulary.Logic.Factory
 {
     public interface IManager
     {        
-        Result Export(IList<Vocable> VocableCollection, string savePath);
+        Result Export(IList<Vocable> vocableCollection, string savePath);
         Result<IList<Vocable>> Import(string sourcePath);
     }
 }

@@ -17,7 +17,7 @@ namespace SmartVocabulary.Logic.Manager
         #endregion
         #region IManager Member
 
-        public Result Export(IList<Vocable> VocableCollection, string savePath)
+        public Result Export(IList<Vocable> vocableCollection, string savePath)
         {
             throw new NotImplementedException();
         }

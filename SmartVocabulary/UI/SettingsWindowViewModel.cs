@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using BaseMvvm;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
@@ -21,7 +20,7 @@ namespace SmartVocabulary.UI
     /// This ViewModel-Class contains Methods and Logic of SettingsWindow.
     /// Properties and Data are in SettingsWindowViewModel.Properties.cs
     /// </summary>
-    public partial class SettingsWindowViewModel : ViewModelBase
+    public partial class SettingsWindowViewModel
     {
         public SettingsWindowViewModel()
         {
@@ -53,8 +52,8 @@ namespace SmartVocabulary.UI
             this.SaveCommand = new BaseCommand(this.Save);
             this.AddLanguageCommand = new BaseCommand(this.AddLanguage);
             this.RemoveLanguageCommand = new BaseCommand(this.RemoveLanguage);
+            this.ClearLanguageSearchCommand = new BaseCommand(this.ClearLanguageSearch);
             this.CloseCommand = new BaseCommand(this.Close);
-            this.SearchSettingCommand = new BaseCommand(this.SearchSetting);
             this.ClearSearchCommand = new BaseCommand(this.ClearSearch);
             this.CreateNewDatabaseCommand = new BaseCommand(this.CreateNewDatabase);
             this.ResetDatabaseCommand = new BaseCommand(this.ResetDatabase);
@@ -64,12 +63,12 @@ namespace SmartVocabulary.UI
         // Common
         public ICommand CloseCommand { get; set; }
         public ICommand SaveCommand { get; set; }
-        public ICommand SearchSettingCommand { get; set; }
         public ICommand ClearSearchCommand { get; set; }
 
         // Language
         public ICommand AddLanguageCommand { get; set; }
         public ICommand RemoveLanguageCommand { get; set; }
+        public ICommand ClearLanguageSearchCommand { get; set; }
 
         // Database
         public ICommand CreateNewDatabaseCommand { get; set; }
@@ -95,20 +94,7 @@ namespace SmartVocabulary.UI
             else
                 this._settingsManager.SaveSettings(settings);
 
-            CloseAction.Invoke();
-        }
-
-        private void SearchSetting(object param)
-        {
-            List<string> temp = new List<string>();
-            temp = this.SettingsAreas.Where(w => w.ToLower().Contains(this.SearchString)).ToList();
-
-
-            this.SettingsAreas.Clear();
-            foreach (var t in temp)
-            {
-                this.SettingsAreas.Add(t);
-            }
+            this.CloseAction.Invoke();
         }
 
         private void ClearSearch(object param)
@@ -135,6 +121,13 @@ namespace SmartVocabulary.UI
                 this.Added.Remove(this.SelectedAdded);
             }
         }
+
+        private void ClearLanguageSearch(object param)
+        {
+            this.LanguageSearchText = string.Empty;
+            this.AvailableLanguages.Clear();
+            this.LoadCultures();
+        }
         #endregion Language Commands
 
         #region Database Commands
@@ -158,15 +151,15 @@ namespace SmartVocabulary.UI
 
                     if (this.DatabaseProgress <= this.DatabaseProgressMax)
                     {
-                        DatabaseProgress++;
-                        double percent = ((double)DatabaseProgress / (double)DatabaseProgressMax) * (double)100.0;
-                        DatabaseProgressInPercent = String.Format("{0} %", Math.Round(percent, 0, MidpointRounding.ToEven).ToString());
+                        this.DatabaseProgress++;
+                        double percent = (this.DatabaseProgress / (double)this.DatabaseProgressMax) * 100.0;
+                        this.DatabaseProgressInPercent = String.Format("{0} %", Math.Round(percent, 0, MidpointRounding.ToEven));
                     }
                 }
 
-                for (int i = DatabaseProgressMax; i != 0; )
+                for (int i = this.DatabaseProgressMax; i != 0; )
                 {
-                    DatabaseProgress = i;
+                    this.DatabaseProgress = i;
                     i = i - 10;
                     await Task.Delay(5);
                 }
@@ -210,15 +203,15 @@ namespace SmartVocabulary.UI
 
                         if (this.DatabaseProgress <= this.DatabaseProgressMax)
                         {
-                            DatabaseProgress++;
-                            int percent = (DatabaseProgress / DatabaseProgressMax) * 100;
-                            DatabaseProgressInPercent = String.Format("{0} %", percent.ToString());
+                            this.DatabaseProgress++;
+                            int percent = (this.DatabaseProgress / this.DatabaseProgressMax) * 100;
+                            this.DatabaseProgressInPercent = String.Format("{0} %", percent.ToString());
                         }
                     }
 
-                    for (int i = DatabaseProgressMax; i != 0; )
+                    for (int i = this.DatabaseProgressMax; i != 0; )
                     {
-                        DatabaseProgress = i;
+                        this.DatabaseProgress = i;
                         i = i - 10;
                         await Task.Delay(5);
                     }
@@ -268,7 +261,7 @@ namespace SmartVocabulary.UI
         private async void LoadSettings()
         {
             Result<Settings> load = await this._settingsManager.LoadSettingsAsync();
-            if (load.Status == Common.Status.Success)
+            if (load.Status == Status.Success)
             {
                 this.SelectedAlternationColor = load.Data.AlternationColor;
                 this.Added = new ObservableCollection<string>(load.Data.AddedLanguages);
@@ -277,7 +270,7 @@ namespace SmartVocabulary.UI
 
         private void LoadCultures()
         {
-            var cultures = CultureHandler.GetDistinctedCultures();
+            List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
             foreach (CultureInfo culture in cultures)
             {
                 this.AvailableLanguages.Add(culture.NativeName);
@@ -286,11 +279,9 @@ namespace SmartVocabulary.UI
 
         private void SettingAreasRegistration()
         {
-            this.SettingsAreas.Add("Row Appearance");
-            this.SettingsAreas.Add("Languages");
-            this.SettingsAreas.Add("Database Settings");
+            this.SettingsAreas = new ObservableCollection<string>(ConstantSettingAreas.GetAllSettingAreas());
         }
-
+         
         private void AreaSelectionChanged()
         {
             if (String.IsNullOrEmpty(SelectedArea))
@@ -339,6 +330,42 @@ namespace SmartVocabulary.UI
         {
             List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
             this.DatabaseProgressMax = cultures.Count;
+        }
+
+        private void FilterLanguages()
+        {
+            this.AvailableLanguages.Clear();
+            if (!String.IsNullOrWhiteSpace(this.LanguageSearchText))
+            {
+                var temp = CultureHandler.GetCulturesAsLowerCaseStringCollectionByFilter();
+                var filtered = new ObservableCollection<string>(temp.Where(w => w.StartsWith(this.LanguageSearchText.ToLower())));                
+                foreach (var f in filtered)
+                {
+                    this.AvailableLanguages.Add(f.First().ToString().ToUpper() + String.Join("", f.Skip(1)));
+                }
+            }
+            else
+            {
+                this.LoadCultures();
+            }
+        }
+
+        private void FilterSettings()
+        {
+            this.SettingsAreas.Clear();
+            if(!String.IsNullOrEmpty(this.SearchString))
+            {
+                var temp = ConstantSettingAreas.GetAllSettingAreas().Select(s => s.ToLower());
+                var filtered = new ObservableCollection<string>(temp.Where(w => w.StartsWith(this.SearchString.ToLower())));
+                foreach (var f in filtered)
+                {
+                    this.SettingsAreas.Add(f.First().ToString().ToUpper() + String.Join("", f.Skip(1)));
+                }
+            }
+            else
+            {
+                this.SettingAreasRegistration();
+            }
         }
         #endregion Methods
     }

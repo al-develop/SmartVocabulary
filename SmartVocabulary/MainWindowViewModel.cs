@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using BaseMvvm;
 using SmartVocabulary.Common;
@@ -22,7 +20,10 @@ namespace SmartVocabulary
         private readonly VocableLogic _logic;
         private readonly XmlManager _settingsManager;
         internal string ApplicationLocation;
-        internal Action CloseAction { get; set; }
+        internal Action CloseAction
+        {
+            get; set;
+        }
         #endregion Data
 
         #region Properties
@@ -35,16 +36,25 @@ namespace SmartVocabulary
         private bool _areLanguagesAvailable;
         public bool IsUiEnabled
         {
-            get { return _areLanguagesAvailable; }
-            set { NotifyPropertyChanged(ref _areLanguagesAvailable, value, () => IsUiEnabled); }
+            get
+            {
+                return this._areLanguagesAvailable;
+            }
+            set
+            {
+                this.NotifyPropertyChanged(ref this._areLanguagesAvailable, value, () => this.IsUiEnabled);
+            }
         }
         public string SelectedLanguage
         {
-            get { return _selectedLanguage; }
+            get
+            {
+                return this._selectedLanguage;
+            }
             set
             {
-                NotifyPropertyChanged(ref _selectedLanguage, value, () => SelectedLanguage);
-                EnableControls();
+                this.NotifyPropertyChanged(ref this._selectedLanguage, value, () => this.SelectedLanguage);
+                this.EnableControls();
                 if (!String.IsNullOrEmpty(this.SelectedLanguage) && this.AvailableLanguages.Contains(this.SelectedLanguage))
                 {
                     // Update Settings, set the SelectedLaguage Field
@@ -60,32 +70,59 @@ namespace SmartVocabulary
         }
         public ObservableCollection<string> AvailableLanguages
         {
-            get { return _availableLanguages; }
+            get
+            {
+                return _availableLanguages;
+            }
             set
             {
-                NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
+                this.NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
                 EnableControls();
             }
         }
         public string AlternationRowColor
         {
-            get { return _alternationRowColor; }
-            set { NotifyPropertyChanged(ref _alternationRowColor, value, () => AlternationRowColor); }
+            get
+            {
+                return _alternationRowColor;
+            }
+            set
+            {
+                this.NotifyPropertyChanged(ref _alternationRowColor, value, () => AlternationRowColor);
+            }
         }
         public string Notification
         {
-            get { return _notification; }
-            set { NotifyPropertyChanged(ref _notification, value, () => Notification); }
+            get
+            {
+                return _notification;
+            }
+            set
+            {
+                this.NotifyPropertyChanged(ref _notification, value, () => Notification);
+            }
         }
         public Vocable SelectedVocable
         {
-            get { return _selectedVocable; }
-            set { NotifyPropertyChanged(ref _selectedVocable, value, () => SelectedVocable); }
+            get
+            {
+                return _selectedVocable;
+            }
+            set
+            {
+                this.NotifyPropertyChanged(ref _selectedVocable, value, () => SelectedVocable);
+            }
         }
         public ObservableCollection<Vocable> Vocables
         {
-            get { return _vocables; }
-            set { NotifyPropertyChanged(ref _vocables, value, () => Vocables); }
+            get
+            {
+                return _vocables;
+            }
+            set
+            {
+                this.NotifyPropertyChanged(ref _vocables, value, () => Vocables);
+            }
         }
         #endregion Properties
 
@@ -97,10 +134,10 @@ namespace SmartVocabulary
             this.Notification = "Loading Settings...";
             this._settingsManager = new XmlManager();
             this.LoadSettings();
-            
+
             this.Notification = "Loading Vocables...";
             Result loadingResult = this.LoadVocables();
-            
+
             this.Notification = loadingResult.Message;
             this.CommandRegistration();
         }
@@ -121,18 +158,48 @@ namespace SmartVocabulary
             this.RibbonEditCommand = new BaseCommand(this.RibbonEdit);
         }
 
-        public ICommand OpenAboutCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
-        public ICommand EnterCommand { get; set; }
+        public ICommand OpenAboutCommand
+        {
+            get; set;
+        }
+        public ICommand RemoveCommand
+        {
+            get; set;
+        }
+        public ICommand EnterCommand
+        {
+            get; set;
+        }
 
-        public ICommand RibbonCloseCommand { get; set; }
-        public ICommand RibbonRestartCommand { get; set; }
-        public ICommand RibbonOpenSettingsCommand { get; set; }
-        public ICommand RibbonAddNewCommand { get; set; }
-        public ICommand RibbonEditCommand { get; set; }
-        public ICommand RibbonRemoveCommand { get; set; }
-        public ICommand RibbonRefreshCommand { get; set; }
-        
+        public ICommand RibbonCloseCommand
+        {
+            get; set;
+        }
+        public ICommand RibbonRestartCommand
+        {
+            get; set;
+        }
+        public ICommand RibbonOpenSettingsCommand
+        {
+            get; set;
+        }
+        public ICommand RibbonAddNewCommand
+        {
+            get; set;
+        }
+        public ICommand RibbonEditCommand
+        {
+            get; set;
+        }
+        public ICommand RibbonRemoveCommand
+        {
+            get; set;
+        }
+        public ICommand RibbonRefreshCommand
+        {
+            get; set;
+        }
+
         private void Enter(object param)
         {
             if (this.SelectedVocable != null && this.SelectedVocable.ID != 0)
@@ -162,17 +229,17 @@ namespace SmartVocabulary
         private void RibbonAddNew(object param)
         {
             var editWindow = new EntryDetailWindow();
-            editWindow.Initialize(this._logic, this.SelectedLanguage, this, null);
+            editWindow.Initialize(this._logic, this.SelectedLanguage, this);
             editWindow.Show();
         }
 
         private void Remove(object param)
         {
-            if(this.Vocables.Contains(this.SelectedVocable))
+            if (this.Vocables.Contains(this.SelectedVocable))
             {
                 Result deleteResult = this._logic.DeleteVocable(this.SelectedVocable, this.SelectedLanguage);
 
-                if(deleteResult.Status == Status.Success)
+                if (deleteResult.Status == Status.Success)
                 {
                     LogWriter.Instance.WriteLine("MainWindowViewModel: Deleting Vocable from DB successful");
                     this.Vocables.Remove(this.SelectedVocable);
@@ -188,8 +255,7 @@ namespace SmartVocabulary
 
         private void OpenAbout(object param)
         {
-            AboutWindow about = new AboutWindow();
-            about.Topmost = true;
+            var about = new AboutWindow { Topmost = true };
             about.ShowDialog();
         }
 
@@ -207,7 +273,7 @@ namespace SmartVocabulary
 
         private void OpenSettings(object param)
         {
-            SettingsWindow settings = new SettingsWindow();
+            var settings = new SettingsWindow();
             settings.ShowDialog();
             this.LoadSettings();
         }
@@ -220,17 +286,17 @@ namespace SmartVocabulary
                 Mouse.OverrideCursor = Cursors.Wait;
 
                 // Validate if everything is ready for loading
-                var validation = ValidateBeforeLoadingVoc();
+                Result validation = this.ValidateBeforeLoadingVoc();
                 if (validation.Status == Status.Warning)
                 {
                     return new Result(validation.Message, Status.Warning);
-                }                
+                }
 
                 // Get Data
-                var result = this._logic.GetAllVocables(this.SelectedLanguage);
+                Result<List<Vocable>> result = this._logic.GetAllVocables(this.SelectedLanguage);
                 if (result.Status != Status.Success)
                 {
-                    string notification = "Error on loading Vocables from Database. Please try to refresh, or restart the application. More information can be found in the Log Files";
+                    const string notification = "Error on loading Vocables from Database. Please try to refresh, or restart the application. More information can be found in the Log Files";
                     return new Result(notification, Status.Error);
                 }
 
@@ -278,16 +344,13 @@ namespace SmartVocabulary
             string saveDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
             string savePath = String.Format("{0}\\{1}", saveDir, "smartVocDb.sqlite");
 
-            if(!Directory.Exists(saveDir))
+            if (!Directory.Exists(saveDir))
             {
                 return new Result("Database Directory does not exist", Status.Warning);
             }
-            if (!File.Exists(savePath))
-            {
-                return new Result("Database file does not exist", Status.Warning);
-            }
-
-            return new Result("", Status.Success);
+            return !File.Exists(savePath) 
+                ? new Result("Database file does not exist", Status.Warning) 
+                : new Result("", Status.Success);
         }
 
         private void LoadSettings()
@@ -296,8 +359,8 @@ namespace SmartVocabulary
             {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                var load = this._settingsManager.LoadSettings();
-                if (load.Status == Common.Status.Success)
+                Result<Settings> load = this._settingsManager.LoadSettings();
+                if (load.Status == Status.Success)
                 {
                     this.AlternationRowColor = load.Data.AlternationColor;
                     this.AvailableLanguages = new ObservableCollection<string>(load.Data.AddedLanguages);
@@ -314,19 +377,19 @@ namespace SmartVocabulary
 
         private void EnableControls()
         {
-            if (AvailableLanguages != null
-                && AvailableLanguages.Count != 0
+            if (this.AvailableLanguages != null
+                && this.AvailableLanguages.Count != 0
                 && this.SelectedLanguage != null
-                && AvailableLanguages.Contains(SelectedLanguage))
-                IsUiEnabled = true;
+                && this.AvailableLanguages.Contains(this.SelectedLanguage))
+                this.IsUiEnabled = true;
             else
-                IsUiEnabled = false;
+                this.IsUiEnabled = false;
         }
 
         private void AddNew()
         {
             Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
-            if(saveResult.Status == Status.Warning)
+            if (saveResult.Status == Status.Warning)
             {
                 // SaveVocable in DBaccess only returns a warning if the DB does not exist
                 this.Notification = "Couldn't save the entry. Check if Database exists or create a new one in the Settings";
@@ -358,7 +421,7 @@ namespace SmartVocabulary
         private void Edit()
         {
             Result updateResult = this._logic.UpdateVocable(this.SelectedVocable, this.SelectedLanguage);
-            if(updateResult.Status != Status.Success)
+            if (updateResult.Status != Status.Success)
             {
                 this.Notification = "Couldn't update the entry. Check LogFiles for more information";
                 return;

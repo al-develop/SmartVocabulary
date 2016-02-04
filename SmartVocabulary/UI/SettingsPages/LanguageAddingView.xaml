@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xceed="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="69*" />
-            <RowDefinition Height="65*" />
+            <RowDefinition Height="49" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="168*" />
@@ -20,15 +21,32 @@
         <TextBlock Grid.Column="0"
                    Text="Available Languages"
                    Margin="0,0,10,0"
-                   VerticalAlignment="Top" />
+                   VerticalAlignment="Top"
+                   Height="16" />
+        <xceed:WatermarkTextBox Height="23"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="0,20,29,0"
+                                VerticalAlignment="Top"
+                                Watermark="Search Language"
+                                Text="{Binding LanguageSearchText, UpdateSourceTrigger=PropertyChanged}" />
+        <Button Height="24"
+                Width="24"
+                Command="{Binding ClearLanguageSearchCommand}"
+                Margin="0,19,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top">
+            <Image Source="pack://application:,,,/Resources/Icons/Delete.png" />
+        </Button>
+
         <ListView HorizontalAlignment="Stretch"
                   Grid.Column="0"
+                  Grid.Row="1"
                   x:Name="lsvAvailable"
                   ItemsSource="{Binding AvailableLanguages}"
                   SelectedItem="{Binding SelectedAvailable}"
                   VerticalAlignment="Stretch"
-                  Margin="0,21,0,0"
-                  Grid.RowSpan="2">
+                  Margin="0,5,0,0">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add Language"
@@ -38,34 +56,34 @@
         </ListView>
 
         <Button Grid.Column="1"
-                Width="25"
-                Height="25"
+                Grid.Row="1"
+                Height="24"
                 Command="{Binding AddLanguageCommand}"
                 Content="&gt;"
-                Margin="5,0,5,5"
-                VerticalAlignment="Bottom" />
+                Margin="5,83,5,114"
+                VerticalAlignment="Center" />
 
         <Button Grid.Column="1"
-                Width="25"
-                Height="25"
+                Height="24"
                 Command="{Binding RemoveLanguageCommand}"
                 Content="&lt;"
-                Margin="5,10,5,0"
+                Margin="5,121,5,76"
                 Grid.Row="1"
-                VerticalAlignment="Top" />
+                VerticalAlignment="Center" />
 
         <TextBlock Grid.Column="2"
                    Text="Added Languages"
                    Margin="0,0,10,0"
-                   VerticalAlignment="Top" />
+                   VerticalAlignment="Top"
+                   Height="16" />
         <ListView HorizontalAlignment="Stretch"
                   Grid.Column="2"
+                  Grid.Row="1"
                   x:Name="lsvAdded"
                   ItemsSource="{Binding Added}"
                   SelectedItem="{Binding SelectedAdded}"
                   VerticalAlignment="Stretch"
-                  Margin="0,21,0,0"
-                  Grid.RowSpan="2">
+                  Margin="0,5,0,0">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Remove Language"

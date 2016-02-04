@@ -56,6 +56,7 @@ namespace SmartVocabulary.UI
             set
             {
                 NotifyPropertyChanged(ref _searchString, value, () => SearchString);
+                this.FilterSettings();
             }
         }
         public string SelectedArea
@@ -89,7 +90,20 @@ namespace SmartVocabulary.UI
         private ObservableCollection<string> _availableLanguages;
         private string _selectedAvailable;
         private string _selectedAdded;
+        private string _languageSearchText;
 
+        public string LanguageSearchText
+        {
+            get { return _languageSearchText; }
+            set 
+            { 
+                NotifyPropertyChanged(ref _languageSearchText, value, () => LanguageSearchText);
+                // The Filter-Method checks if the string is null or empty, so it doesn't have to be chekced here
+                // if the string is null/empty, then all cultures have to be loaded - happens in the method as well
+                this.FilterLanguages();
+                
+            }
+        }
         public string SelectedAdded
         {
             get { return _selectedAdded; }

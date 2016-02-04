@@ -52,15 +52,9 @@
                    Grid.Row="0">
             <Grid DockPanel.Dock="Top">
                 <xceed:WatermarkTextBox Watermark="Search..."
-                                        Text="{Binding SearchString}"
-                                        Margin="0,0,60,0" />
-                <Button Height="25"
-                        Width="25"
-                        Command="{Binding SearchSettingCommand}"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,30,0">
-                    <Image Source="pack://application:,,,/Resources/Icons/Search.26.png" />
-                </Button>
+                                        Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"
+                                        Margin="0,0,30,0" />
+                
                 <Button Height="25"
                         Width="25"
                         Command="{Binding ClearSearchCommand}"

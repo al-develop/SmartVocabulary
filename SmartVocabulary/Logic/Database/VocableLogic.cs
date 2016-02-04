@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SmartVocabulary.Common;
 using SmartVocabulary.Data;
@@ -19,7 +16,7 @@ namespace SmartVocabulary.Logic.Database
 
         public VocableLogic()
         {
-            _access = new DatabaseAccess();
+            this._access = new DatabaseAccess();
         }
 
         public Result<List<Vocable>> GetAllVocables(string language)

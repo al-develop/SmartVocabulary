@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Factory;
@@ -14,7 +11,7 @@ namespace SmartVocabulary.Logic.Manager
     {
         #region IManager Member
         
-        public Result Export(IList<Vocable> VocableCollection, string savePath)
+        public Result Export(IList<Vocable> vocableCollection, string savePath)
         {
             SLDocument document = new SLDocument(savePath);
             document.AddWorksheet("Vocable Collection");
