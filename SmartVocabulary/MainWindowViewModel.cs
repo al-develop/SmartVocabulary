@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using BaseMvvm;
 using SmartVocabulary.Common;
@@ -22,8 +23,13 @@ namespace SmartVocabulary
         internal string ApplicationLocation;
         internal Action CloseAction
         {
-            get; set;
+            get;
+            set;
         }
+
+        // this collection if used for searching, to prevent DB access
+        // if the search string is empty, the Vocables collection gets over written by this one, which conains all vocables
+        private List<Vocable> AllVocablesCollection;
         #endregion Data
 
         #region Properties
@@ -34,6 +40,23 @@ namespace SmartVocabulary
         private ObservableCollection<string> _availableLanguages;
         private string _selectedLanguage;
         private bool _areLanguagesAvailable;
+        private string _searchText;
+        private VocableSearchFilterEnumeration _searchFilter;
+
+        public VocableSearchFilterEnumeration SearchFilter
+        {
+            get { return _searchFilter; }
+            set { NotifyPropertyChanged(ref _searchFilter, value, () => SearchFilter); }
+        }
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                NotifyPropertyChanged(ref _searchText, value, () => SearchText);
+                this.Search();
+            }
+        }
         public bool IsUiEnabled
         {
             get
@@ -148,6 +171,7 @@ namespace SmartVocabulary
             this.OpenAboutCommand = new BaseCommand(this.OpenAbout);
             this.RemoveCommand = new BaseCommand(this.Remove);
             this.EnterCommand = new BaseCommand(this.Enter);
+            this.ClearSearchFilterCommand = new BaseCommand(this.ClearSearchFilter);
 
             this.RibbonRemoveCommand = new BaseCommand(this.Remove);
             this.RibbonCloseCommand = new BaseCommand(this.Close);
@@ -160,44 +184,61 @@ namespace SmartVocabulary
 
         public ICommand OpenAboutCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand RemoveCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand EnterCommand
         {
-            get; set;
+            get;
+            set;
         }
+        public ICommand ClearSearchFilterCommand { get; set; }
 
         public ICommand RibbonCloseCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand RibbonRestartCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand RibbonOpenSettingsCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand RibbonAddNewCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand RibbonEditCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand RibbonRemoveCommand
         {
-            get; set;
+            get;
+            set;
         }
         public ICommand RibbonRefreshCommand
         {
-            get; set;
+            get;
+            set;
+        }
+
+
+        private void ClearSearchFilter(object param)
+        {
+            this.SearchText = string.Empty;
         }
 
         private void Enter(object param)
@@ -301,6 +342,9 @@ namespace SmartVocabulary
                 }
 
                 this.Vocables = new ObservableCollection<Vocable>(result.Data);
+
+                // this is the oly place, where this List is filled
+                this.AllVocablesCollection = new List<Vocable>(this.Vocables.ToList());
             }
             finally
             {
@@ -348,8 +392,8 @@ namespace SmartVocabulary
             {
                 return new Result("Database Directory does not exist", Status.Warning);
             }
-            return !File.Exists(savePath) 
-                ? new Result("Database file does not exist", Status.Warning) 
+            return !File.Exists(savePath)
+                ? new Result("Database file does not exist", Status.Warning)
                 : new Result("", Status.Success);
         }
 
@@ -429,6 +473,78 @@ namespace SmartVocabulary
 
             this.Notification = "Update successful";
             this.SelectedVocable = null;
+        }
+
+        private async void Search()
+        {
+            if (!String.IsNullOrEmpty(SearchText))
+            {
+                switch (SearchFilter)
+                {
+                    case VocableSearchFilterEnumeration.ID:
+                        await Task.Run(() =>
+                        {
+                            this.Vocables = new ObservableCollection<Vocable>(
+                                this.AllVocablesCollection
+                                    .Where(w => w.ID
+                                        .ToString()
+                                        .ToLower()
+                                        .StartsWith(SearchText.ToLower()))
+                                        .ToList());
+                        });
+                        break;
+
+                    case VocableSearchFilterEnumeration.Kind:
+                        await Task.Run(() =>
+                        {
+
+                            this.Vocables = new ObservableCollection<Vocable>(
+                                this.AllVocablesCollection
+                                    .Where(w => w.Kind
+                                        .ToString()
+                                        .ToLower()
+                                        .StartsWith(SearchText.ToLower()))
+                                        .ToList());
+                        });
+                        break;
+
+                    case VocableSearchFilterEnumeration.Native:
+                        await Task.Run(() =>
+                        {
+
+                            this.Vocables = new ObservableCollection<Vocable>(
+                                this.AllVocablesCollection
+                                    .Where(w => w.Native
+                                        .ToString()
+                                        .ToLower()
+                                        .StartsWith(SearchText.ToLower()))
+                                        .ToList());
+                        });
+                        break;
+
+                    case VocableSearchFilterEnumeration.Translation:
+                        await Task.Run(() =>
+                        {
+
+                            this.Vocables = new ObservableCollection<Vocable>(
+                                this.AllVocablesCollection
+                                    .Where(w => w.Translation
+                                        .ToString()
+                                        .ToLower()
+                                        .StartsWith(SearchText.ToLower()))
+                                        .ToList());
+                        });
+                        break;
+
+                    default:
+                        this.Vocables = new ObservableCollection<Vocable>(this.AllVocablesCollection);
+                        return;
+                }
+            }
+            else
+            {
+                this.Vocables = new ObservableCollection<Vocable>(this.AllVocablesCollection);
+            }
         }
     }
 }

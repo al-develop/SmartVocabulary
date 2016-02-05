@@ -92,10 +92,12 @@
     <Compile Include="Common\CultureHandler.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\Result.cs" />
+    <Compile Include="Common\VocableSearchFilterConverter.cs" />
     <Compile Include="Data\DatabaseAccess.QueryGenerator.cs" />
     <Compile Include="Entites\ConstantSettingAreas.cs" />
     <Compile Include="Entites\ManagerEnumeration.cs" />
     <Compile Include="Entites\Settings.cs" />
+    <Compile Include="Entites\VocableSearchFilterEnumeration.cs" />
     <Compile Include="Logic\Database\DatabaseLogic.cs" />
     <Compile Include="Logic\Database\VocableLogic.cs" />
     <Compile Include="Logic\Factory\IManager.cs" />
