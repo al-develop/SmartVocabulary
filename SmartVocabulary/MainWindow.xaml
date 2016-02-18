@@ -52,8 +52,8 @@
                                                    ImageSource="pack://application:,,,/Resources/Icons/Exit.png" />
                     </RibbonApplicationMenu>
                 </Ribbon.ApplicationMenu>
-                <RibbonTab Header="Start">
-                    <RibbonGroup Header="Basic"
+                <RibbonTab Header="HOME">
+                    <RibbonGroup Header="BASIC"
                                  IsEnabled="{Binding IsUiEnabled}">
                         <RibbonButton Label="New Entry"
                                       Command="{Binding RibbonAddNewCommand}"
@@ -68,7 +68,7 @@
                                       Command="{Binding RibbonRefreshCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Restart.png" />
                     </RibbonGroup>
-                    <RibbonGroup Header="Export / Import"
+                    <RibbonGroup Header="EXPORT / IMPORT"
                                  Visibility="Collapsed"
                                  IsEnabled="{Binding IsUiEnabled}">
                         <RibbonButton Label="Export"
@@ -78,7 +78,7 @@
                                       Command="{Binding ImportCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Import.png" />
                     </RibbonGroup>
-                    <RibbonGroup Header="Settings">
+                    <RibbonGroup Header="SETTINGS">
                         <RibbonButton Label="Open Settings"
                                       Command="{Binding RibbonOpenSettingsCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Settings.png" />
@@ -165,22 +165,17 @@
                                         Binding="{Binding ID, UpdateSourceTrigger=PropertyChanged}"
                                         Width="45"
                                         IsReadOnly="True" />
-                    <DataGridTextColumn Header="Native"
+                    <DataGridTextColumn Header="NATIVE"
                                         Binding="{Binding Native, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*" />
-                    <DataGridTextColumn Header="Translation"
+                    <DataGridTextColumn Header="TRANSLATION"
                                         Binding="{Binding Translation, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*" />
-                    <DataGridTextColumn Header="Definition"
+                    <DataGridTextColumn Header="DEFINITION"
                                         Binding="{Binding Definition, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"
                                         MinWidth="180" />
-                    <!--<DataGridComboBoxColumn Header="Kind"
-                                            Width="*"
-                                            MinWidth="80"
-                                            ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
-                                            SelectedItemBinding="{Binding Kind, UpdateSourceTrigger=PropertyChanged}" />-->
-                    <DataGridTemplateColumn Header="Kind"
+                    <DataGridTemplateColumn Header="KIND"
                                             Width="*"
                                             MinWidth="80">
                         <DataGridTemplateColumn.CellTemplate>
@@ -192,15 +187,15 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Synonym"
+                    <DataGridTextColumn Header="SYNONYM"
                                         Binding="{Binding Synonym, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"
                                         MinWidth="180" />
-                    <DataGridTextColumn Header="Opposite"
+                    <DataGridTextColumn Header="OPPOSITE"
                                         Binding="{Binding Opposite, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"
                                         MinWidth="180" />
-                    <DataGridTextColumn Header="Example"
+                    <DataGridTextColumn Header="EXAMPLE"
                                         Binding="{Binding Example, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"
                                         MinWidth="180" />
