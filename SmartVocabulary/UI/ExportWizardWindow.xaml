@@ -4,24 +4,75 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Icon="pack://application:,,,/Resources/Icons/Export.png"
         Title="ExportWizardWindow"
+        ResizeMode="NoResize"
         Height="400"
         Width="600">
     <Grid>
-        <Grid.Resources>
-            <xctk:Wizard x:Key="_wizard">
-                <xctk:WizardPage Title="Welcome to my Wizard"
-                                 Description="This Wizard will walk you though how to do something." />
-                <xctk:WizardPage PageType="Interior"
-                                 Title="Page 1"
-                                 Description="This is the first page in the process." />
-                <xctk:WizardPage PageType="Interior"
-                                 Title="Page 2"
-                                 Description="This is the second page in the process" />
-                <xctk:WizardPage PageType="Interior"
-                                 Title="Last Page"
-                                 Description="This is the last page in the process"
-                                 CanFinish="True" />
-            </xctk:Wizard>
-        </Grid.Resources>
+        <GroupBox Margin="10,10,10,0"
+                  Header="Export"
+                  VerticalAlignment="Top"
+                  Height="351">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left"
+                           Margin="10,10,0,0"
+                           TextWrapping="Wrap"
+                           Text="Export to"
+                           VerticalAlignment="Top" />
+                <TextBox Height="23"
+                         Margin="76,9,53,0"
+                         TextWrapping="Wrap"
+                         Text="TextBox"
+                         VerticalAlignment="Top" />
+                <Button Content="..."
+                        HorizontalAlignment="Left"
+                        Margin="514,10,0,0"
+                        VerticalAlignment="Top"
+                        Width="38"
+                        Height="22" />
+                <ComboBox HorizontalAlignment="Left"
+                          Margin="76,37,0,0"
+                          VerticalAlignment="Top"
+                          Width="476" />
+                <TextBlock HorizontalAlignment="Left"
+                           Margin="10,75,0,0"
+                           TextWrapping="Wrap"
+                           Text="Available Languages"
+                           VerticalAlignment="Top" />
+                <ListBox Height="186"
+                         Margin="10,0,357,45"
+                         VerticalAlignment="Bottom" />
+                <Button Content="Cancel"
+                        IsCancel="True"
+                        HorizontalAlignment="Left"
+                        Margin="477,299,0,0"
+                        VerticalAlignment="Top"
+                        Width="75" />
+                <Button Content="Begin Export"
+                        HorizontalAlignment="Left"
+                        Margin="397,299,0,0"
+                        VerticalAlignment="Top"
+                        Width="75" />
+                <TextBlock HorizontalAlignment="Left"
+                           Margin="10,37,0,0"
+                           TextWrapping="Wrap"
+                           Text="Export Kind"
+                           VerticalAlignment="Top" />
+                <TextBlock HorizontalAlignment="Left"
+                           Margin="223,75,0,0"
+                           TextWrapping="Wrap"
+                           Text="Preview"
+                           VerticalAlignment="Top" />
+                <Border HorizontalAlignment="Left"
+                        Height="186"
+                        Margin="223,98,0,0"
+                        VerticalAlignment="Top"
+                        Width="329"
+                        BorderBrush="Black"
+                        BorderThickness="1">
+                    <Image />
+                </Border>
+
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

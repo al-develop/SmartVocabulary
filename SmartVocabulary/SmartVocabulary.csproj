@@ -115,6 +115,7 @@
     <Compile Include="UI\ExportWizardWindow.xaml.cs">
       <DependentUpon>ExportWizardWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ExportWizardWindowViewModel.cs" />
     <Compile Include="UI\SettingsPages\DatabaseSettingsView.xaml.cs">
       <DependentUpon>DatabaseSettingsView.xaml</DependentUpon>
     </Compile>
