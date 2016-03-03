@@ -45,6 +45,9 @@
     <Reference Include="BaseMvvm">
       <HintPath>I:\DEVELOPING\1.Libraries\BaseMvvm.dll</HintPath>
     </Reference>
+    <Reference Include="OpenFolderDialog">
+      <HintPath>G:\Programming\1.Libraries\OpenFolderDialog\OpenFolderDialog.dll</HintPath>
+    </Reference>
     <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
       <Private>True</Private>
@@ -66,6 +69,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
+    <Reference Include="system.windows.controls.layout.toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Ribbon" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -76,9 +80,12 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
       <Private>True</Private>
@@ -90,11 +97,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\CultureHandler.cs" />
+    <Compile Include="Common\EnumDescriptionCoverter.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\Result.cs" />
     <Compile Include="Common\VocableSearchFilterConverter.cs" />
     <Compile Include="Data\DatabaseAccess.QueryGenerator.cs" />
     <Compile Include="Entites\ConstantSettingAreas.cs" />
+    <Compile Include="Entites\ExportKinds.cs" />
     <Compile Include="Entites\ManagerEnumeration.cs" />
     <Compile Include="Entites\Settings.cs" />
     <Compile Include="Entites\VocableSearchFilterEnumeration.cs" />
@@ -104,6 +113,7 @@
     <Compile Include="Logic\Factory\ManagerFactory.cs" />
     <Compile Include="Logic\Manager\ExcelManager.cs" />
     <Compile Include="Logic\Manager\PdfManager.cs" />
+    <Compile Include="Logic\Manager\TextManager.cs" />
     <Compile Include="Logic\Manager\XmlManager.cs" />
     <Compile Include="UI\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>

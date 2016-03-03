@@ -4,6 +4,7 @@
     {
         Excel, 
         PDF,
-        XML
+        XML,
+        Text
     }
 }

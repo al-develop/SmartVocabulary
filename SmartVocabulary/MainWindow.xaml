@@ -69,7 +69,6 @@
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Restart.png" />
                     </RibbonGroup>
                     <RibbonGroup Header="EXPORT / IMPORT"
-                                 Visibility="Collapsed"
                                  IsEnabled="{Binding IsUiEnabled}">
                         <RibbonButton Label="Export"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Export.png"

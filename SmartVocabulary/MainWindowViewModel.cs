@@ -21,12 +21,7 @@ namespace SmartVocabulary
         private readonly VocableLogic _logic;
         private readonly XmlManager _settingsManager;
         internal string ApplicationLocation;
-        internal Action CloseAction
-        {
-            get;
-            set;
-        }
-
+        internal Action CloseAction { get; set; }
         // this collection if used for searching, to prevent DB access
         // if the search string is empty, the Vocables collection gets over written by this one, which conains all vocables
         private List<Vocable> AllVocablesCollection;
@@ -180,61 +175,37 @@ namespace SmartVocabulary
             this.RibbonRefreshCommand = new BaseCommand(this.RibbonRefresh);
             this.RibbonAddNewCommand = new BaseCommand(this.RibbonAddNew);
             this.RibbonEditCommand = new BaseCommand(this.RibbonEdit);
+
+            this.ExportCommand = new BaseCommand(this.Export);
+            this.ImportCommand = new BaseCommand(this.Import);
         }
 
-        public ICommand OpenAboutCommand
-        {
-            get;
-            set;
-        }
-        public ICommand RemoveCommand
-        {
-            get;
-            set;
-        }
-        public ICommand EnterCommand
-        {
-            get;
-            set;
-        }
+        public ICommand OpenAboutCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
+        public ICommand EnterCommand { get; set; }
         public ICommand ClearSearchFilterCommand { get; set; }
 
-        public ICommand RibbonCloseCommand
+        public ICommand RibbonCloseCommand { get; set; }
+        public ICommand RibbonRestartCommand { get; set; }
+        public ICommand RibbonOpenSettingsCommand { get; set; }
+        public ICommand RibbonAddNewCommand { get; set; }
+        public ICommand RibbonEditCommand { get; set; }
+        public ICommand RibbonRemoveCommand { get; set; }
+        public ICommand RibbonRefreshCommand { get; set; }
+
+        public ICommand ExportCommand { get; set; }
+        public ICommand ImportCommand { get; set; }
+
+        private void Import(object param)
         {
-            get;
-            set;
-        }
-        public ICommand RibbonRestartCommand
-        {
-            get;
-            set;
-        }
-        public ICommand RibbonOpenSettingsCommand
-        {
-            get;
-            set;
-        }
-        public ICommand RibbonAddNewCommand
-        {
-            get;
-            set;
-        }
-        public ICommand RibbonEditCommand
-        {
-            get;
-            set;
-        }
-        public ICommand RibbonRemoveCommand
-        {
-            get;
-            set;
-        }
-        public ICommand RibbonRefreshCommand
-        {
-            get;
-            set;
+
         }
 
+        private void Export(object param)
+        {
+            ExportWizardWindow window = new ExportWizardWindow(this.AvailableLanguages.ToList());
+            window.Show();
+        }
 
         private void ClearSearchFilter(object param)
         {
@@ -302,7 +273,6 @@ namespace SmartVocabulary
 
         private void Close(object param)
         {
-            //Application.Current.Shutdown();
             this.CloseAction.Invoke();
         }
 
