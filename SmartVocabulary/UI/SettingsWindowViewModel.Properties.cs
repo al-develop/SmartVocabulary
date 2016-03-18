@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseMvvm;
+using DevExpress.Mvvm;
 using SmartVocabulary.Logic.Database;
 using SmartVocabulary.Logic.Manager;
 
@@ -31,17 +31,17 @@ namespace SmartVocabulary.UI
         public bool DatabaseSettingsVisibility
         {
             get { return _databaseSettingsVisibility; }
-            set { NotifyPropertyChanged(ref _databaseSettingsVisibility, value, () => DatabaseSettingsVisibility); }
+            set { SetProperty(ref _databaseSettingsVisibility, value, () => DatabaseSettingsVisibility); }
         }
         public bool LanguagePageVisibility
         {
             get { return _languagePageVisibility; }
-            set { NotifyPropertyChanged(ref _languagePageVisibility, value, () => LanguagePageVisibility); }
+            set { SetProperty(ref _languagePageVisibility, value, () => LanguagePageVisibility); }
         }
         public bool RowPageVisibility
         {
             get { return _rowPageVisibility; }
-            set { NotifyPropertyChanged(ref _rowPageVisibility, value, () => this.RowPageVisibility); }
+            set { SetProperty(ref _rowPageVisibility, value, () => this.RowPageVisibility); }
         }
         #endregion UI Visbility
 
@@ -55,7 +55,7 @@ namespace SmartVocabulary.UI
             get { return _searchString; }
             set
             {
-                NotifyPropertyChanged(ref _searchString, value, () => SearchString);
+                SetProperty(ref _searchString, value, () => SearchString);
                 this.FilterSettings();
             }
         }
@@ -64,14 +64,14 @@ namespace SmartVocabulary.UI
             get { return _selectedArea; }
             set
             {
-                NotifyPropertyChanged(ref _selectedArea, value, () => SelectedArea);
+                SetProperty(ref _selectedArea, value, () => SelectedArea);
                 AreaSelectionChanged();
             }
         }
         public ObservableCollection<string> SettingsAreas
         {
             get { return _settingsAreas; }
-            set { NotifyPropertyChanged(ref _settingsAreas, value, () => SettingsAreas); }
+            set { SetProperty(ref _settingsAreas, value, () => SettingsAreas); }
         }
         #endregion SettingsSelection
 
@@ -81,7 +81,7 @@ namespace SmartVocabulary.UI
         public string SelectedAlternationColor
         {
             get { return _selectedAlternationColor; }
-            set { NotifyPropertyChanged(ref _selectedAlternationColor, value, () => SelectedAlternationColor); }
+            set { SetProperty(ref _selectedAlternationColor, value, () => SelectedAlternationColor); }
         }
         #endregion RowAlternation
 
@@ -97,7 +97,7 @@ namespace SmartVocabulary.UI
             get { return _languageSearchText; }
             set 
             { 
-                NotifyPropertyChanged(ref _languageSearchText, value, () => LanguageSearchText);
+                SetProperty(ref _languageSearchText, value, () => LanguageSearchText);
                 // The Filter-Method checks if the string is null or empty, so it doesn't have to be chekced here
                 // if the string is null/empty, then all cultures have to be loaded - happens in the method as well
                 this.FilterLanguages();
@@ -107,19 +107,19 @@ namespace SmartVocabulary.UI
         public string SelectedAdded
         {
             get { return _selectedAdded; }
-            set { NotifyPropertyChanged(ref _selectedAdded, value, () => SelectedAdded); }
+            set { SetProperty(ref _selectedAdded, value, () => SelectedAdded); }
         }
         public string SelectedAvailable
         {
             get { return _selectedAvailable; }
-            set { NotifyPropertyChanged(ref _selectedAvailable, value, () => SelectedAvailable); }
+            set { SetProperty(ref _selectedAvailable, value, () => SelectedAvailable); }
         }
         public ObservableCollection<string> AvailableLanguages
         {
             get { return _availableLanguages; }
             set
             {
-                NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
+                SetProperty(ref _availableLanguages, value, () => AvailableLanguages);
             }
         }
         public ObservableCollection<string> Added
@@ -127,7 +127,7 @@ namespace SmartVocabulary.UI
             get { return _added; }
             set
             {
-                NotifyPropertyChanged(ref _added, value, () => Added);
+                SetProperty(ref _added, value, () => Added);
             }
         }
         #endregion LanguageSelection
@@ -143,19 +143,19 @@ namespace SmartVocabulary.UI
         public string DatabaseProgressInPercent
         {
             get { return _databaseProgressInPercent; }
-            set { NotifyPropertyChanged(ref _databaseProgressInPercent, value, () => DatabaseProgressInPercent); }
+            set { SetProperty(ref _databaseProgressInPercent, value, () => DatabaseProgressInPercent); }
         }
         public bool AreDatabaseOperationsEnabled
         {
             get { return _areDatabaseOperationsEnabled; }
-            set { NotifyPropertyChanged(ref _areDatabaseOperationsEnabled, value, () => AreDatabaseOperationsEnabled); }
+            set { SetProperty(ref _areDatabaseOperationsEnabled, value, () => AreDatabaseOperationsEnabled); }
         }
         public string DatabasePath
         {
             get { return _databasePath; }
             set
             {
-                NotifyPropertyChanged(ref _databasePath, value, () => DatabasePath);
+                SetProperty(ref _databasePath, value, () => DatabasePath);
                 if (String.IsNullOrEmpty(DatabasePath))
                     this.DatabasePath = "Database not available";
             }
@@ -163,17 +163,17 @@ namespace SmartVocabulary.UI
         public int DatabaseProgressMax
         {
             get { return _databaseProgressMax; }
-            set { NotifyPropertyChanged(ref _databaseProgressMax, value, () => DatabaseProgressMax); }
+            set { SetProperty(ref _databaseProgressMax, value, () => DatabaseProgressMax); }
         }
         public bool IsDatabaseProgressVisible
         {
             get { return _isDatabaseProgressVisible; }
-            set { NotifyPropertyChanged(ref _isDatabaseProgressVisible, value, () => IsDatabaseProgressVisible); }
+            set { SetProperty(ref _isDatabaseProgressVisible, value, () => IsDatabaseProgressVisible); }
         }
         public int DatabaseProgress
         {
             get { return _databaseProgress; }
-            set { NotifyPropertyChanged(ref _databaseProgress, value, () => DatabaseProgress); }
+            set { SetProperty(ref _databaseProgress, value, () => DatabaseProgress); }
         }
         #endregion DatabaseSettings
 

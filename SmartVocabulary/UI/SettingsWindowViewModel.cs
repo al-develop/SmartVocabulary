@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using BaseMvvm;
+using DevExpress.Mvvm;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Database;
@@ -49,15 +49,15 @@ namespace SmartVocabulary.UI
         #region Commands
         private void CommandRegistration()
         {
-            this.SaveCommand = new BaseCommand(this.Save);
-            this.AddLanguageCommand = new BaseCommand(this.AddLanguage);
-            this.RemoveLanguageCommand = new BaseCommand(this.RemoveLanguage);
-            this.ClearLanguageSearchCommand = new BaseCommand(this.ClearLanguageSearch);
-            this.CloseCommand = new BaseCommand(this.Close);
-            this.ClearSearchCommand = new BaseCommand(this.ClearSearch);
-            this.CreateNewDatabaseCommand = new BaseCommand(this.CreateNewDatabase);
-            this.ResetDatabaseCommand = new BaseCommand(this.ResetDatabase);
-            this.DeleteDatabaseCommand = new BaseCommand(this.DeleteDatabase);
+            this.SaveCommand = new DelegateCommand(this.Save);
+            this.AddLanguageCommand = new DelegateCommand(this.AddLanguage);
+            this.RemoveLanguageCommand = new DelegateCommand(this.RemoveLanguage);
+            this.ClearLanguageSearchCommand = new DelegateCommand(this.ClearLanguageSearch);
+            this.CloseCommand = new DelegateCommand(this.Close);
+            this.ClearSearchCommand = new DelegateCommand(this.ClearSearch);
+            this.CreateNewDataDelegateCommand = new DelegateCommand(this.CreateNewDatabase);
+            this.ResetDataDelegateCommand = new DelegateCommand(this.ResetDatabase);
+            this.DeleteDataDelegateCommand = new DelegateCommand(this.DeleteDatabase);
         }
 
         // Common
@@ -71,17 +71,17 @@ namespace SmartVocabulary.UI
         public ICommand ClearLanguageSearchCommand { get; set; }
 
         // Database
-        public ICommand CreateNewDatabaseCommand { get; set; }
-        public ICommand ResetDatabaseCommand { get; set; }
-        public ICommand DeleteDatabaseCommand { get; set; }
+        public ICommand CreateNewDataDelegateCommand { get; set; }
+        public ICommand ResetDataDelegateCommand { get; set; }
+        public ICommand DeleteDataDelegateCommand { get; set; }
 
         #region Common Commands
-        private void Close(object param)
+        private void Close()
         {
             this.CloseAction.Invoke();
         }
 
-        private void Save(object param)
+        private void Save()
         {
             Settings settings = new Settings()
             {
@@ -97,7 +97,7 @@ namespace SmartVocabulary.UI
             this.CloseAction.Invoke();
         }
 
-        private void ClearSearch(object param)
+        private void ClearSearch()
         {
             this.SearchString = String.Empty;
             this.SettingsAreas.Clear();
@@ -106,7 +106,7 @@ namespace SmartVocabulary.UI
         #endregion Common Commands
 
         #region Language Commands
-        private void AddLanguage(object param)
+        private void AddLanguage()
         {
             if (!this.Added.Contains(this.SelectedAvailable))
             {
@@ -114,7 +114,7 @@ namespace SmartVocabulary.UI
             }
         }
 
-        private void RemoveLanguage(object param)
+        private void RemoveLanguage()
         {
             if (this.Added.Contains(this.SelectedAdded))
             {
@@ -122,7 +122,7 @@ namespace SmartVocabulary.UI
             }
         }
 
-        private void ClearLanguageSearch(object param)
+        private void ClearLanguageSearch()
         {
             this.LanguageSearchText = string.Empty;
             this.AvailableLanguages.Clear();
@@ -131,7 +131,7 @@ namespace SmartVocabulary.UI
         #endregion Language Commands
 
         #region Database Commands
-        private async void CreateNewDatabase(object param)
+        private async void CreateNewDatabase()
         {
             try
             {
@@ -171,7 +171,7 @@ namespace SmartVocabulary.UI
             }
         }
 
-        private async void ResetDatabase(object param)
+        private async void ResetDatabase()
         {
             try
             {
@@ -225,7 +225,7 @@ namespace SmartVocabulary.UI
             }
         }
 
-        private void DeleteDatabase(object param)
+        private void DeleteDatabase()
         {
             try
             {

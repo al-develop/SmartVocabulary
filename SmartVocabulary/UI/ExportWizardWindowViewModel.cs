@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using BaseMvvm;
+using DevExpress.Mvvm;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Factory;
@@ -39,28 +39,28 @@ namespace SmartVocabulary.UI
         public bool CanExportBegin
         {
             get { return _canExportBegin; }
-            set { NotifyPropertyChanged(ref _canExportBegin, value, () => CanExportBegin); }
+            set { SetProperty(ref _canExportBegin, value, () => CanExportBegin); }
         }
         public ObservableCollection<string> SelectedLanguages
         {
             get { return _selectedLanguages; }
             set
             {
-                NotifyPropertyChanged(ref _selectedLanguages, value, () => SelectedLanguages);
+                SetProperty(ref _selectedLanguages, value, () => SelectedLanguages);
                 CheckIfExportIsPossible();
             }
         }
         public ObservableCollection<string> AvailableLanguages
         {
             get { return _availableLanguages; }
-            set { NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages); }
+            set { SetProperty(ref _availableLanguages, value, () => AvailableLanguages); }
         }
         public string SavePath
         {
             get { return _savePath; }
             set
             {
-                NotifyPropertyChanged(ref _savePath, value, () => SavePath);
+                SetProperty(ref _savePath, value, () => SavePath);
                 CheckIfExportIsPossible();
             }
         }
@@ -69,14 +69,13 @@ namespace SmartVocabulary.UI
             get { return _selectedExportKind; }
             set
             {
-                NotifyPropertyChanged(ref _selectedExportKind, value, () => SelectedExportKind);
+                SetProperty(ref _selectedExportKind, value, () => SelectedExportKind);
             }
         }
         #endregion
 
         public ExportWizardWindowViewModel(List<string> availableLanguages)
         {
-
             this.AvailableLanguages = new ObservableCollection<string>(availableLanguages);
             this.CanExportBegin = false;
         }
@@ -84,16 +83,16 @@ namespace SmartVocabulary.UI
         #region Commands
         private void CommandRegistration()
         {
-            SelectPathCommand = new BaseCommand(this.SelectPath);
-            CancelCommand = new BaseCommand(this.Cancel);
-            BeginExportCommand = new BaseCommand(this.BeginExport);
+            SelectPathCommand = new DelegateCommand(this.SelectPath);
+            CancelCommand = new DelegateCommand(this.Cancel);
+            BeginExportCommand = new DelegateCommand(this.BeginExport);
         }
 
         public ICommand SelectPathCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public ICommand BeginExportCommand { get; set; }
 
-        private void BeginExport(object param)
+        private void BeginExport()
         {
             var validationResult = this.ValidateBeforeExport();
             /* TODO: - use validation Result  to check if everything's alright
@@ -117,12 +116,12 @@ namespace SmartVocabulary.UI
 
         }
 
-        private void Cancel(object param)
+        private void Cancel()
         {
             this.CloseAction.Invoke();
         }
 
-        private void SelectPath(object param)
+        private void SelectPath()
         {
             var dialog = new OpenFolderDialog.FolderSelectDialog();
             dialog.Title = "Export Selection";

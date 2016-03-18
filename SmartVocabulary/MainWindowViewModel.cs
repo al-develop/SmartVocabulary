@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using BaseMvvm;
+using DevExpress.Mvvm;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Database;
@@ -41,37 +41,28 @@ namespace SmartVocabulary
         public VocableSearchFilterEnumeration SearchFilter
         {
             get { return _searchFilter; }
-            set { NotifyPropertyChanged(ref _searchFilter, value, () => SearchFilter); }
+            set { SetProperty(ref _searchFilter, value, () => SearchFilter); }
         }
         public string SearchText
         {
             get { return _searchText; }
             set
             {
-                NotifyPropertyChanged(ref _searchText, value, () => SearchText);
+                SetProperty(ref _searchText, value, () => SearchText);
                 this.Search();
             }
         }
         public bool IsUiEnabled
         {
-            get
-            {
-                return this._areLanguagesAvailable;
-            }
-            set
-            {
-                this.NotifyPropertyChanged(ref this._areLanguagesAvailable, value, () => this.IsUiEnabled);
-            }
+            get { return this._areLanguagesAvailable; }
+            set { this.SetProperty(ref this._areLanguagesAvailable, value, () => this.IsUiEnabled); }
         }
         public string SelectedLanguage
         {
-            get
-            {
-                return this._selectedLanguage;
-            }
+            get { return this._selectedLanguage; }
             set
             {
-                this.NotifyPropertyChanged(ref this._selectedLanguage, value, () => this.SelectedLanguage);
+                this.SetProperty(ref this._selectedLanguage, value, () => this.SelectedLanguage);
                 this.EnableControls();
                 if (!String.IsNullOrEmpty(this.SelectedLanguage) && this.AvailableLanguages.Contains(this.SelectedLanguage))
                 {
@@ -88,37 +79,22 @@ namespace SmartVocabulary
         }
         public ObservableCollection<string> AvailableLanguages
         {
-            get
-            {
-                return _availableLanguages;
-            }
+            get { return _availableLanguages; }
             set
             {
-                this.NotifyPropertyChanged(ref _availableLanguages, value, () => AvailableLanguages);
+                this.SetProperty(ref _availableLanguages, value, () => AvailableLanguages);
                 EnableControls();
             }
         }
         public string AlternationRowColor
         {
-            get
-            {
-                return _alternationRowColor;
-            }
-            set
-            {
-                this.NotifyPropertyChanged(ref _alternationRowColor, value, () => AlternationRowColor);
-            }
+            get { return _alternationRowColor; }
+            set { this.SetProperty(ref _alternationRowColor, value, () => AlternationRowColor); }
         }
         public string Notification
         {
-            get
-            {
-                return _notification;
-            }
-            set
-            {
-                this.NotifyPropertyChanged(ref _notification, value, () => Notification);
-            }
+            get { return _notification; }
+            set { this.SetProperty(ref _notification, value, () => Notification); }
         }
         public Vocable SelectedVocable
         {
@@ -128,7 +104,7 @@ namespace SmartVocabulary
             }
             set
             {
-                this.NotifyPropertyChanged(ref _selectedVocable, value, () => SelectedVocable);
+                this.SetProperty(ref _selectedVocable, value, () => SelectedVocable);
             }
         }
         public ObservableCollection<Vocable> Vocables
@@ -139,7 +115,7 @@ namespace SmartVocabulary
             }
             set
             {
-                this.NotifyPropertyChanged(ref _vocables, value, () => Vocables);
+                this.SetProperty(ref _vocables, value, () => Vocables);
             }
         }
         #endregion Properties
@@ -163,21 +139,21 @@ namespace SmartVocabulary
         #region Commands
         private void CommandRegistration()
         {
-            this.OpenAboutCommand = new BaseCommand(this.OpenAbout);
-            this.RemoveCommand = new BaseCommand(this.Remove);
-            this.EnterCommand = new BaseCommand(this.Enter);
-            this.ClearSearchFilterCommand = new BaseCommand(this.ClearSearchFilter);
+            this.OpenAboutCommand = new DelegateCommand(this.OpenAbout);
+            this.RemoveCommand = new DelegateCommand(this.Remove);
+            this.EnterCommand = new DelegateCommand(this.Enter);
+            this.ClearSearchFilterCommand = new DelegateCommand(this.ClearSearchFilter);
 
-            this.RibbonRemoveCommand = new BaseCommand(this.Remove);
-            this.RibbonCloseCommand = new BaseCommand(this.Close);
-            this.RibbonRestartCommand = new BaseCommand(this.Restart);
-            this.RibbonOpenSettingsCommand = new BaseCommand(this.OpenSettings);
-            this.RibbonRefreshCommand = new BaseCommand(this.RibbonRefresh);
-            this.RibbonAddNewCommand = new BaseCommand(this.RibbonAddNew);
-            this.RibbonEditCommand = new BaseCommand(this.RibbonEdit);
+            this.RibbonRemoveCommand = new DelegateCommand(this.Remove);
+            this.RibbonCloseCommand = new DelegateCommand(this.Close);
+            this.RibbonRestartCommand = new DelegateCommand(this.Restart);
+            this.RibbonOpenSettingsCommand = new DelegateCommand(this.OpenSettings);
+            this.RibbonRefreshCommand = new DelegateCommand(this.RibbonRefresh);
+            this.RibbonAddNewCommand = new DelegateCommand(this.RibbonAddNew);
+            this.RibbonEditCommand = new DelegateCommand(this.RibbonEdit);
 
-            this.ExportCommand = new BaseCommand(this.Export);
-            this.ImportCommand = new BaseCommand(this.Import);
+            this.ExportCommand = new DelegateCommand(this.Export);
+            this.ImportCommand = new DelegateCommand(this.Import);
         }
 
         public ICommand OpenAboutCommand { get; set; }
@@ -196,23 +172,23 @@ namespace SmartVocabulary
         public ICommand ExportCommand { get; set; }
         public ICommand ImportCommand { get; set; }
 
-        private void Import(object param)
+        private void Import()
         {
 
         }
 
-        private void Export(object param)
+        private void Export()
         {
             ExportWizardWindow window = new ExportWizardWindow(this.AvailableLanguages.ToList());
             window.Show();
         }
 
-        private void ClearSearchFilter(object param)
+        private void ClearSearchFilter()
         {
             this.SearchText = string.Empty;
         }
 
-        private void Enter(object param)
+        private void Enter()
         {
             if (this.SelectedVocable != null && this.SelectedVocable.ID != 0)
             {
@@ -226,26 +202,26 @@ namespace SmartVocabulary
             }
         }
 
-        private void RibbonRefresh(object param)
+        private void RibbonRefresh()
         {
             this.LoadVocables();
         }
 
-        private void RibbonEdit(object param)
+        private void RibbonEdit()
         {
             var editWindow = new EntryDetailWindow();
             editWindow.Initialize(this._logic, this.SelectedLanguage, this, this.SelectedVocable);
             editWindow.Show();
         }
 
-        private void RibbonAddNew(object param)
+        private void RibbonAddNew()
         {
             var editWindow = new EntryDetailWindow();
             editWindow.Initialize(this._logic, this.SelectedLanguage, this);
             editWindow.Show();
         }
 
-        private void Remove(object param)
+        private void Remove()
         {
             if (this.Vocables.Contains(this.SelectedVocable))
             {
@@ -265,24 +241,24 @@ namespace SmartVocabulary
             }
         }
 
-        private void OpenAbout(object param)
+        private void OpenAbout()
         {
             var about = new AboutWindow { Topmost = true };
             about.ShowDialog();
         }
 
-        private void Close(object param)
+        private void Close()
         {
             this.CloseAction.Invoke();
         }
 
-        private void Restart(object param)
+        private void Restart()
         {
             Process.Start(this.ApplicationLocation);
             this.CloseAction.Invoke();
         }
 
-        private void OpenSettings(object param)
+        private void OpenSettings()
         {
             var settings = new SettingsWindow();
             settings.ShowDialog();
@@ -427,7 +403,7 @@ namespace SmartVocabulary
             this.Notification = "Entry saved";
 
             this.SelectedVocable = null;
-            this.RibbonRefresh(null);
+            this.RibbonRefresh();
             this.Vocables.Add(new Vocable());
             this.Vocables.OrderBy(o => o.ID);
         }

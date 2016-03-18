@@ -12,8 +12,7 @@ namespace SmartVocabulary.Entites
         public string Synonym { get; set; }
         public string Opposite { get; set; }
         public string Example { get; set; }
-
-
+        
         public static VocableKind ConvertStringToKind(string param)
         {
             VocableKind kind;

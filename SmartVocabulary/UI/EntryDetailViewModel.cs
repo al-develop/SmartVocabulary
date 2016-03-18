@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using BaseMvvm;
+using DevExpress.Mvvm;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Database;
 
@@ -23,12 +23,12 @@ namespace SmartVocabulary.UI
         public string Language
         {
             get { return _language; }
-            set { NotifyPropertyChanged(ref _language, value, () => Language); }
+            set { SetProperty(ref _language, value, () => Language); }
         }
         public Vocable Entry
         {
             get { return _entry; }
-            set { NotifyPropertyChanged(ref _entry, value, () => Entry); }
+            set { SetProperty(ref _entry, value, () => Entry); }
         }
         #endregion Properties
 
@@ -49,19 +49,19 @@ namespace SmartVocabulary.UI
         #region Commands
         private void CommandRegistration()
         {
-            this.SaveCommand = new BaseCommand(this.Save);
-            this.CancelCommand = new BaseCommand(this.Cancel);
+            this.SaveCommand = new DelegateCommand(this.Save);
+            this.CancelCommand = new DelegateCommand(this.Cancel);
         }
 
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        private void Cancel(object param)
+        private void Cancel()
         {
             this.CloseAction.Invoke();
         }
 
-        private void Save(object param)
+        private void Save()
         {
             // call DB like in MainViewModel
             if (Entry.ID == 0)
@@ -70,7 +70,7 @@ namespace SmartVocabulary.UI
                 this._logic.SaveVocable(this.Entry, this.Language);
 
                 this._parent.SelectedVocable = null;
-                this._parent.RibbonRefreshCommand.Execute(param);
+                this._parent.RibbonRefreshCommand.Execute(null);
                 this._parent.Vocables.Add(new Vocable());
                 this._parent.Vocables.OrderBy(o => o.ID);
             }

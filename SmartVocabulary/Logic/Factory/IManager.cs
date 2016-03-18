@@ -9,8 +9,17 @@ using SmartVocabulary.Entites;
 namespace SmartVocabulary.Logic.Factory
 {
     public interface IManager
-    {        
-        Result Export(IList<Vocable> vocableCollection, string savePath);
+    {
+        /// <summary>
+        /// Method signature for export data
+        /// </summary>
+        /// <param name="vocableCollection">Contains the data which has to be exported
+        ///     <para type="Key">  string:           Language</para>
+        ///     <para type="Value">IListOfVocable:   Collection of data to the associated language</para>
+        /// </param>
+        /// <param name="savePath"></param>
+        /// <returns></returns>
+        Result Export(KeyValuePair<string, IList<Vocable>> vocableCollection, string savePath);
         Result<IList<Vocable>> Import(string sourcePath);
     }
 }

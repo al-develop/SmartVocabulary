@@ -42,8 +42,13 @@
     <ApplicationIcon>Book32x32.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BaseMvvm">
-      <HintPath>I:\DEVELOPING\1.Libraries\BaseMvvm.dll</HintPath>
+    <Reference Include="DevExpress.Mvvm, Version=15.2.0.0, Culture=neutral, PublicKeyToken=382ad28f6ae31f30, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpressMvvm.15.2.5.0\lib\net40-client\DevExpress.Mvvm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.UI, Version=15.2.0.0, Culture=neutral, PublicKeyToken=382ad28f6ae31f30, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpressMvvm.15.2.5.0\lib\net40-client\DevExpress.Mvvm.UI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="OpenFolderDialog">
       <HintPath>G:\Programming\1.Libraries\OpenFolderDialog\OpenFolderDialog.dll</HintPath>
