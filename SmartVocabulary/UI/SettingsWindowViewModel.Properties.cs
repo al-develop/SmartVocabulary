@@ -81,7 +81,11 @@ namespace SmartVocabulary.UI
         public string SelectedAlternationColor
         {
             get { return _selectedAlternationColor; }
-            set { SetProperty(ref _selectedAlternationColor, value, () => SelectedAlternationColor); }
+            set 
+            {
+                SetProperty(ref _selectedAlternationColor, value, () => SelectedAlternationColor); 
+                // TODO: Add default color
+            }
         }
         #endregion RowAlternation
 
@@ -139,7 +143,13 @@ namespace SmartVocabulary.UI
         private string _databasePath;
         private bool _areDatabaseOperationsEnabled;
         private string _databaseProgressInPercent;
+        private bool _isDatabaseExisting;
 
+        public bool IsDatabaseExisting
+        {
+            get { return _isDatabaseExisting; }
+            set { SetProperty(ref _isDatabaseExisting, value, () => IsDatabaseExisting); }
+        }
         public string DatabaseProgressInPercent
         {
             get { return _databaseProgressInPercent; }

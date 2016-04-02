@@ -21,8 +21,6 @@ namespace SmartVocabulary.Logic.Database
 
         public Result<List<Vocable>> GetAllVocables(string language)
         {
-            LogWriter.Instance.WriteLine("Excecute Method: \"GetAllVocables\" from class \"VocableLogic\"");
-            
             Result<List<Vocable>> result = this._access.GetAllVocables(language);
             if(result.Status != Status.Success)
             {

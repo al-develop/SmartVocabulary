@@ -81,7 +81,8 @@
                                 <Label.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Progress: " />
-                                        <TextBlock Text="{Binding DatabaseProgressInPercent}" Width="50" />
+                                        <TextBlock Text="{Binding DatabaseProgressInPercent}"
+                                                   Width="50" />
                                     </StackPanel>
                                 </Label.Content>
                             </Label>
@@ -152,12 +153,14 @@
                         ToolTip="Creates a new database, if it not exists" />
                 <Button Content="Reset existing database"
                         VerticalAlignment="Top"
+                        IsEnabled="{Binding IsDatabaseExisting}"
                         Command="{Binding ResetDatabaseCommand}"
                         Margin="0,10,0,0"
                         ToolTip="Clears the current database" />
                 <Button Content="Delete existing database"
                         VerticalAlignment="Top"
                         Margin="0,10,0,0"
+                        IsEnabled="{Binding IsDatabaseExisting}"
                         Command="{Binding DeleteDatabaseCommand}"
                         ToolTip="Deletes the current database and all entries" />
                 <ProgressBar VerticalAlignment="Top"

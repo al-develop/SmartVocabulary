@@ -5,14 +5,14 @@
         Icon="pack://application:,,,/Resources/Icons/About.png"
         Height="480"
         Width="500">
-     <GroupBox Header="Help"
+    <GroupBox Header="Help"
               Margin="5"
               Padding="10">
         <StackPanel>
             <Image Height="32"
                    HorizontalAlignment="Left"
-                   Margin="20,10,20,0" 
-                   Source="pack://application:,,,/Resources/Icons/About.png"/>
+                   Margin="20,10,20,0"
+                   Source="pack://application:,,,/Resources/Icons/About.png" />
             <Label Margin="0,10,0,0">
                 <Label.Content>
                     <StackPanel Orientation="Horizontal">
@@ -23,7 +23,13 @@
             </Label>
             <TextBlock Text="" />
             <TextBlock Text="If any help needed or any bug was found, please send an e-mail to:" />
-            <TextBox   Text="al.pankratz@hotmail.de" TextDecorations="Underline" HorizontalAlignment="Left" Margin="50,0,0,0" IsReadOnly="True" x:Name="tbxMail" GotMouseCapture="tbxMail_GotMouseCapture"/>
+            <TextBox   Text="al.pankratz@hotmail.de"
+                       TextDecorations="Underline"
+                       HorizontalAlignment="Left"
+                       Margin="50,0,0,0"
+                       IsReadOnly="True"
+                       x:Name="tbxMail"
+                       GotMouseCapture="tbxMail_GotMouseCapture" />
             <TextBlock Text="" />
             <TextBlock Text="Please don't forget to add a detailed description about your problem. If possible, please add a screenshort, or a guideline how I could reconstruct the error to your mail."
                        TextWrapping="Wrap" />
@@ -31,9 +37,11 @@
             <TextBlock Text="" />
             <TextBlock Text="About the program:" />
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="The icons are free of charge, from "/>
+                <TextBlock Text="The icons are free of charge, from " />
                 <TextBlock>                
-                    <Hyperlink NavigateUri="www.iconpharm.com" x:Name="txtIconLink" RequestNavigate="txtIconLink_RequestNavigate">
+                    <Hyperlink NavigateUri="www.iconpharm.com"
+                               x:Name="txtIconLink"
+                               RequestNavigate="txtIconLink_RequestNavigate">
                         www.iconpharm.com
                     </Hyperlink>
                 </TextBlock>
@@ -46,9 +54,26 @@
             <TextBlock Text="" />
             <TextBlock Text="Everything else is comepletely programmed by Al Pankratz" />
             <TextBlock Text="Donations are accepted gratefully" />
+            <Grid Margin="0,5,0,0">
+                <Button Height="25"
+                        x:Name="btnViewLicense"
+                        Content="View License"
+                        Width="100"
+                        HorizontalAlignment="Left"
+                        Margin="0,0,349,0"
+                        Click="btnViewLicense_Click" />
+                <Button Height="25"
+                        x:Name="btnViewReadme"
+                        Content="View Readme"
+                        Width="100"
+                        HorizontalAlignment="Left"
+                        Margin="110,0,51,0"
+                        Click="btnViewReadme_Click" />
+
+            </Grid>
             <Button x:Name="btnClose"
                     HorizontalAlignment="Left"
-                    Margin="0,10,10,0"
+                    Margin="0,5,10,0"
                     Content="Close"
                     Width="100"
                     Height="25"

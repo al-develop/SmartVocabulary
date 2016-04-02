@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PdfSharp.Pdf;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Factory;
@@ -17,12 +18,19 @@ namespace SmartVocabulary.Logic.Manager
         #endregion
         #region IManager Member
 
-        public Result Export(IList<Vocable> vocableCollection, string savePath)
+        public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
-            throw new NotImplementedException();
+            using (PdfDocument document = new PdfDocument())
+            {
+                PdfPage page = new PdfPage();
+
+                document.Save(savePath);
+            }
+
+            return null;
         }
 
-        public Result<IList<Vocable>> Import(string sourcePath)
+        public Result<List<VocableLanguageWrapper>> Import(string sourcePath)
         {
             throw new NotImplementedException("PDF Import not supported");
         }

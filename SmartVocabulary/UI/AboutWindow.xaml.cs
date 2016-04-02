@@ -40,5 +40,17 @@ namespace SmartVocabulary.UI
         {
             this.tbxMail.SelectAll();
         }
+
+        private void btnViewReadme_Click(object sender, RoutedEventArgs e)
+        {
+            string path = String.Format("{0}\\README.rtf", AppDomain.CurrentDomain.BaseDirectory);
+            Process.Start(path);
+        }
+
+        private void btnViewLicense_Click(object sender, RoutedEventArgs e)
+        {
+            string path = String.Format("{0}\\License.txt", AppDomain.CurrentDomain.BaseDirectory);
+            Process.Start(path);
+        }
     }
 }

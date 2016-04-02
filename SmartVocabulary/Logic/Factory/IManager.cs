@@ -19,7 +19,7 @@ namespace SmartVocabulary.Logic.Factory
         /// </param>
         /// <param name="savePath"></param>
         /// <returns></returns>
-        Result Export(KeyValuePair<string, IList<Vocable>> vocableCollection, string savePath);
-        Result<IList<Vocable>> Import(string sourcePath);
+        Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath);
+        Result<List<VocableLanguageWrapper>> Import(string sourcePath);
     }
 }

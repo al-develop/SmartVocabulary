@@ -30,17 +30,22 @@ namespace SmartVocabulary.UI
             this.Added = new ObservableCollection<string>();
             this.AvailableLanguages = new ObservableCollection<string>();
             this.SettingsAreas = new ObservableCollection<string>();
-            this.AreDatabaseOperationsEnabled = true;
+            this.AreDatabaseOperationsEnabled = true;            
+            this.IsDatabaseProgressVisible = false;
+            this.DatabaseProgress = 0;
+            this.GenerateDatabaseProgressMax();
+            this.GenerateDatabasePath();
+            
+            if(File.Exists(this.DatabasePath))
+                this.IsDatabaseExisting = true;
+            else
+                this.IsDatabaseExisting = false;
 
             this.SettingAreasRegistration();
             this.CommandRegistration();
 
             this.SelectedArea = this.SettingsAreas.FirstOrDefault();
 
-            this.IsDatabaseProgressVisible = false;
-            this.DatabaseProgress = 0;
-            this.GenerateDatabaseProgressMax();
-            this.GenerateDatabasePath();
 
             this.LoadCultures();
             this.LoadSettings();
@@ -53,11 +58,14 @@ namespace SmartVocabulary.UI
             this.AddLanguageCommand = new DelegateCommand(this.AddLanguage);
             this.RemoveLanguageCommand = new DelegateCommand(this.RemoveLanguage);
             this.ClearLanguageSearchCommand = new DelegateCommand(this.ClearLanguageSearch);
+
             this.CloseCommand = new DelegateCommand(this.Close);
+
             this.ClearSearchCommand = new DelegateCommand(this.ClearSearch);
-            this.CreateNewDataDelegateCommand = new DelegateCommand(this.CreateNewDatabase);
-            this.ResetDataDelegateCommand = new DelegateCommand(this.ResetDatabase);
-            this.DeleteDataDelegateCommand = new DelegateCommand(this.DeleteDatabase);
+
+            this.CreateNewDatabaseCommand = new DelegateCommand(this.CreateNewDatabase);
+            this.ResetDatabaseCommand = new DelegateCommand(this.ResetDatabase);
+            this.DeleteDatabaseCommand = new DelegateCommand(this.DeleteDatabase);
         }
 
         // Common
@@ -71,9 +79,9 @@ namespace SmartVocabulary.UI
         public ICommand ClearLanguageSearchCommand { get; set; }
 
         // Database
-        public ICommand CreateNewDataDelegateCommand { get; set; }
-        public ICommand ResetDataDelegateCommand { get; set; }
-        public ICommand DeleteDataDelegateCommand { get; set; }
+        public ICommand CreateNewDatabaseCommand { get; set; }
+        public ICommand ResetDatabaseCommand { get; set; }
+        public ICommand DeleteDatabaseCommand { get; set; }
 
         #region Common Commands
         private void Close()
@@ -134,7 +142,7 @@ namespace SmartVocabulary.UI
         private async void CreateNewDatabase()
         {
             try
-            {
+            {                
                 this.IsDatabaseProgressVisible = true;
                 this.AreDatabaseOperationsEnabled = false;
                 this._databaseLogic.CreateDatabaseFile();
@@ -164,6 +172,8 @@ namespace SmartVocabulary.UI
                     await Task.Delay(5);
                 }
                 this.DatabaseProgressInPercent = "Creating done";
+                this.GenerateDatabasePath();
+                this.IsDatabaseExisting = true;
             }
             finally
             {

@@ -97,7 +97,7 @@ namespace SmartVocabulary.Data
         public async Task<Result> CreateTablesAsync()
         {
             List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
-            int counterForFailure = 0;  // if an error occures, it's easier to find the object which causes the error whotud a counter
+            int counterForFailure = 0;  // if an error occures, it's easier to find the object which causes the error with a counter
             try
             {
                 foreach (CultureInfo culture in cultures)

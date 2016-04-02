@@ -243,7 +243,7 @@ namespace SmartVocabulary
 
         private void OpenAbout()
         {
-            var about = new AboutWindow { Topmost = true };
+            var about = new AboutWindow();
             about.ShowDialog();
         }
 

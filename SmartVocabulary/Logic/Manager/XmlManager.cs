@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
@@ -15,7 +16,7 @@ namespace SmartVocabulary.Logic.Manager
     {
         #region IManager Member
 
-        public Result Export(IList<Vocable> vocableCollection, string savePath)
+        public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
             if (vocableCollection == null)
             {
@@ -23,38 +24,38 @@ namespace SmartVocabulary.Logic.Manager
                 return new Result("Xml Export: Vocable Collection is empty", "", Status.Error);
             }
 
+
             using (FileStream stream = new FileStream(savePath, FileMode.Create))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(IList<Vocable>));
+                XmlSerializer serializer = new XmlSerializer(typeof(List<VocableLanguageWrapper>));
                 serializer.Serialize(stream, vocableCollection);
             }
-
 
             return new Result("Xml Export: Export successfull", "", Status.Success);
         }
 
-        public Result<IList<Vocable>> Import(string sourcePath)
+        public Result<List<VocableLanguageWrapper>> Import(string sourcePath)
         {
             if (!File.Exists(sourcePath))
             {
                 LogWriter.Instance.WriteLine("Xml Import: File does not exist");
-                return new Result<IList<Vocable>>("Xml Import: File does not exist", "", Status.Error);
+                return new Result<List<VocableLanguageWrapper>>("Xml Import: File does not exist", "", Status.Error);
             }
 
-            var VocableCollection = new List<Vocable>();
+            var VocableCollection = new List<VocableLanguageWrapper>();
             using (FileStream stream = new FileStream(sourcePath, FileMode.Create))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<Vocable>));
-                VocableCollection = serializer.Deserialize(stream) as List<Vocable>;
+                XmlSerializer serializer = new XmlSerializer(typeof(List<VocableLanguageWrapper>));
+                VocableCollection = serializer.Deserialize(stream) as List<VocableLanguageWrapper>;
             }
 
             if (VocableCollection == null)
             {
                 LogWriter.Instance.WriteLine("Xml Import: Collection is null");
-                return new Result<IList<Vocable>>(null, "Xml Import: Collection is null", "", Status.Error);
+                return new Result<List<VocableLanguageWrapper>>(null, "Xml Import: Collection is null", "", Status.Error);
             }
 
-            return new Result<IList<Vocable>>(VocableCollection, "Xml Import: Import successfull", "", Status.Error);
+            return new Result<List<VocableLanguageWrapper>>(VocableCollection, "Xml Import: Import successfull", "", Status.Error);
         }
 
         #endregion

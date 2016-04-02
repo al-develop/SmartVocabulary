@@ -17,16 +17,16 @@ namespace SmartVocabulary.Data
         {
             StringBuilder createTable = new StringBuilder();
             createTable.Append("CREATE TABLE IF NOT EXISTS");
-            createTable.Append("\"" + GenerateTableName(culture) + "\" "); // Result: "tableName" // notice the whitespace on the end
+            createTable.Append("[" + GenerateTableName(culture) + "] "); // Result: [tableName] // notice the whitespace on the end
             createTable.Append(@"(
                         [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                        [Native] TEXT(50),
-                        [Translation] TEXT(50),
-                        [Definition] TEXT(100),
-                        [Kind] TEXT(15),
-                        [Synonym] TEXT(50),
-                        [Opposite] TEXT(50),
-                        [Example] TEXT(200)
+                        [Native] NVARCHAR,
+                        [Translation] NVARCHAR,
+                        [Definition] NVARCHAR,
+                        [Kind] NVARCHAR,
+                        [Synonym] NVARCHAR,
+                        [Opposite] NVARCHAR,
+                        [Example] NVARCHAR
                     );");
 
             return createTable.ToString().Replace('\r', ' ').Replace('\n', ' ');
@@ -36,16 +36,16 @@ namespace SmartVocabulary.Data
         {
             StringBuilder createTable = new StringBuilder();
             createTable.Append("CREATE TABLE IF NOT EXISTS");
-            createTable.Append("\"" + GenerateTableName(tableName) + "\" "); // Result: "tableName" // notice the whitespace on the end
+            createTable.Append("[" + GenerateTableName(tableName) + "] "); // Result: [tableName] // notice the whitespace on the end
             createTable.Append(@"(
                         [ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                        [Native] TEXT(50),
-                        [Translation] TEXT(50),
-                        [Definition] TEXT(100),
-                        [Kind] TEXT(15),
-                        [Synonym] TEXT(50),
-                        [Opposite] TEXT(50),
-                        [Example] TEXT(200)
+                        [Native] NVARCHAR,
+                        [Translation] NVARCHAR,
+                        [Definition] NVARCHAR,
+                        [Kind] NVARCHAR,
+                        [Synonym] NVARCHAR,
+                        [Opposite] NVARCHAR,
+                        [Example] NVARCHAR
                     );");
 
             return createTable.ToString().Replace('\r', ' ').Replace('\n', ' ');
