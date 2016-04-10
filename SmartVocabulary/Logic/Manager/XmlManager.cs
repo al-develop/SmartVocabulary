@@ -23,13 +23,76 @@ namespace SmartVocabulary.Logic.Manager
                 LogWriter.Instance.WriteLine("Xml Export: Vocable Collection is empty");
                 return new Result("Xml Export: Vocable Collection is empty", "", Status.Error);
             }
+            
+            //using (FileStream stream = new FileStream(savePath, FileMode.Create))
+            //{
+            //    XmlSerializer serializer = new XmlSerializer(typeof(List<VocableLanguageWrapper>));
+            //    serializer.Serialize(stream, vocableCollection);
+            //}
 
-
-            using (FileStream stream = new FileStream(savePath, FileMode.Create))
+            XDocument document = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("SmartVocabulary"));
+            using (var saveStream = new FileStream(savePath, FileMode.Create))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<VocableLanguageWrapper>));
-                serializer.Serialize(stream, vocableCollection);
-            }
+                foreach (var collection in vocableCollection)
+                {
+                    document.Element("SmartVocabulary")
+                        .Add(new XElement(collection.Language));
+
+                    int i = 0;
+                    foreach (var voc in collection.Vocables)
+                    {
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("ID", collection.Vocables
+                                                                  .Select(s => s.ID)
+                                                                  .ElementAt(i)));
+
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("Native", collection.Vocables
+                                                                      .Select(s => s.Native)
+                                                                      .ElementAt(i)));
+
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("Kind", collection.Vocables
+                                                                .Select(s => s.Kind)
+                                                                .ElementAt(i)));
+
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("Translation", collection.Vocables
+                                                                           .Select(s => s.Translation)
+                                                                           .ElementAt(i)));
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("Definition", collection.Vocables
+                                                                .Select(s => s.Definition)
+                                                                .ElementAt(i)));
+
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("Opposite", collection.Vocables
+                                                                .Select(s => s.Opposite)
+                                                                .ElementAt(i)));
+
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("Synonym", collection.Vocables
+                                                                .Select(s => s.Synonym)
+                                                                .ElementAt(i)));
+
+                        document.Element("SmartVocabulary")
+                                .Element(collection.Language)
+                                .Add(new XElement("Example", collection.Vocables
+                                                                .Select(s => s.Example)
+                                                                .ElementAt(i)));
+                        i++;
+                    }
+                }
+
+                document.Save(saveStream);
+            };
 
             return new Result("Xml Export: Export successfull", "", Status.Success);
         }

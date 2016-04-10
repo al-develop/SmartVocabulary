@@ -24,16 +24,16 @@ namespace SmartVocabulary.Entites
 
     public enum VocableKind
     {
-        Noun ,
-        Verb ,
-        Adjective ,
+        Noun,
+        Verb,
+        Adjective,
         Conjunction,
-        Pronoun ,
-        Sentence , 
-        Phrase ,
-        Adverb ,
+        Pronoun,
+        Sentence,
+        Phrase,
+        Adverb,
         Preposition,
-        Determiner ,
+        Determiner,
         Exclamation,
         Unknown
     }
