@@ -24,12 +24,6 @@ namespace SmartVocabulary.Logic.Manager
                 return new Result("Xml Export: Vocable Collection is empty", "", Status.Error);
             }
             
-            //using (FileStream stream = new FileStream(savePath, FileMode.Create))
-            //{
-            //    XmlSerializer serializer = new XmlSerializer(typeof(List<VocableLanguageWrapper>));
-            //    serializer.Serialize(stream, vocableCollection);
-            //}
-
             XDocument document = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("SmartVocabulary"));
             using (var saveStream = new FileStream(savePath, FileMode.Create))
             {
@@ -106,11 +100,13 @@ namespace SmartVocabulary.Logic.Manager
             }
 
             var VocableCollection = new List<VocableLanguageWrapper>();
-            using (FileStream stream = new FileStream(sourcePath, FileMode.Create))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<VocableLanguageWrapper>));
-                VocableCollection = serializer.Deserialize(stream) as List<VocableLanguageWrapper>;
-            }
+            //using (FileStream stream = new FileStream(sourcePath, FileMode.Create))
+            //{
+            //    XmlSerializer serializer = new XmlSerializer(typeof(List<VocableLanguageWrapper>));
+            //    VocableCollection = serializer.Deserialize(stream) as List<VocableLanguageWrapper>;
+            //}
+
+            //TODO: Create Import Logic with XDocument 
 
             if (VocableCollection == null)
             {
