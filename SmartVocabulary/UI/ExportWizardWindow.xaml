@@ -1,130 +1,48 @@
-﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Window x:Class="SmartVocabulary.UI.ExportWizardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:exportKinds="clr-namespace:SmartVocabulary.Entites"
         xmlns:converter="clr-namespace:SmartVocabulary.Common"
-        x:Class="SmartVocabulary.UI.ExportWizardWindow"
+        xmlns:pages="clr-namespace:SmartVocabulary.UI.ExportSettingsPages"
         Icon="pack://application:,,,/Resources/Icons/Export.png"
         Title="ExportWizardWindow"
         ResizeMode="NoResize"
         Height="400"
         Width="600">
     <Window.Resources>
-        <ObjectDataProvider MethodName="GetValues"
-                ObjectType="{x:Type sys:Enum}"
-                x:Key="ExportKinds">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="exportKinds:ExportKinds" />
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-
-        <converter:EnumDescriptionCoverter x:Key="enumConverter" />
-        <converter:InvertBooleanToVisibilityConverter x:Key="InvertBoolToVisibilityConverter" />
+        <Style TargetType="{x:Type Grid}">
+            <Style.Triggers>
+                <Trigger Property="IsVisible" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
-
+    
     <Grid>
-        <GroupBox Margin="10,10,10,0"
-                  Header="Export"
-                  VerticalAlignment="Top"
-                  Height="351">
-            <Grid>
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="10,13,0,0"
-                           TextWrapping="Wrap"
-                           Text="Export to"
-                           VerticalAlignment="Top" />
-                <TextBox Height="23"
-                         Margin="76,9,76,0"
-                         TextWrapping="Wrap"
-                         Text="{Binding SavePath, UpdateSourceTrigger=PropertyChanged}"
-                         VerticalAlignment="Top" />
-                <Button Content="Path"
-                        Command="{Binding SelectPathCommand}"
-                        HorizontalAlignment="Left"
-                        Margin="491,10,0,0"
-                        VerticalAlignment="Top"
-                        Width="61"
-                        Height="22" />
-
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="10,40,0,0"
-                           TextWrapping="Wrap"
-                           Text="Export Kind"
-                           VerticalAlignment="Top" />
-                <ComboBox HorizontalAlignment="Left"
-                          Margin="76,37,0,0"
-                          SelectedItem="{Binding SelectedExportKind}"
-                          ItemsSource="{Binding Source={StaticResource ExportKinds}}"
-                          VerticalAlignment="Top"
-                          Width="410">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource enumConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                <Button Content="Settings"
-                        Command="{Binding SetExportSettingsCommand}"                        
-                        IsEnabled="{Binding CanSetSettings}"
-                        HorizontalAlignment="Left"
-                        Margin="491,37,0,0"
-                        VerticalAlignment="Top"
-                        Width="61"
-                        Height="22">
-                    <Button.ToolTip>
-                        <TextBlock Text="Settings not available for XML export"
-                                   Visibility="{Binding CanSetSettings, Converter={StaticResource ResourceKey=InvertBoolToVisibilityConverter}}"/>                        
-                    </Button.ToolTip>
-                </Button>
-
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="10,75,0,0"
-                           TextWrapping="Wrap"
-                           Text="Available Languages"
-                           VerticalAlignment="Top" />
-                <ListBox Height="186" ItemsSource="{Binding AvailableLanguages}"
-                         Margin="10,0,357,45"
-                         VerticalAlignment="Bottom">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Command="{Binding AddLanguage}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="223,75,0,0"
-                           TextWrapping="Wrap"
-                           Text="Preview"
-                           VerticalAlignment="Top" />
-                <Border HorizontalAlignment="Left"
-                        Height="186"
-                        Margin="223,98,0,0"
-                        VerticalAlignment="Top"
-                        Width="329"
-                        BorderBrush="Black"
-                        BorderThickness="1">
-                    <Image />
-                </Border>
-
-
-                <Button Content="Begin Export"
-                        Command="{Binding BeginExportCommand}"
-                        IsEnabled="{Binding CanExportBegin}"
-                        IsDefault="True"
-                        HorizontalAlignment="Left"
-                        Margin="397,299,0,0"
-                        VerticalAlignment="Top"
-                        Width="75" />
-                <Button Content="Cancel"
-                        IsCancel="True"
-                        HorizontalAlignment="Left"
-                        Margin="477,299,0,0"
-                        VerticalAlignment="Top"
-                        Command="{Binding CancelCommand}"
-                        Width="75" />
-            </Grid>
-        </GroupBox>
+        <pages:ExportOverviewPage Visibility="{Binding OverviewPageVisibility, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        
+        <Button Content="Cancel"
+                IsCancel="True"
+                HorizontalAlignment="Left"
+                Margin="509,341,0,0"
+                VerticalAlignment="Top"
+                Command="{Binding CancelCommand}"
+                Width="75" />
     </Grid>
 </Window>

@@ -18,6 +18,6 @@
         </Style>
         
         <converter:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        
+                
     </Application.Resources>
 </Application>

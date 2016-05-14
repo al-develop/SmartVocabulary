@@ -11,6 +11,7 @@ using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Database;
 using SmartVocabulary.Logic.Manager;
+using SmartVocabulary.Logic.Setting;
 using SmartVocabulary.UI;
 
 namespace SmartVocabulary
@@ -19,7 +20,6 @@ namespace SmartVocabulary
     {
         #region Data
         private readonly VocableLogic _logic;
-        private readonly XmlManager _settingsManager;
         internal string ApplicationLocation;
         internal Action CloseAction { get; set; }
         // this collection if used for searching, to prevent DB access
@@ -67,7 +67,7 @@ namespace SmartVocabulary
                 if (!String.IsNullOrEmpty(this.SelectedLanguage) && this.AvailableLanguages.Contains(this.SelectedLanguage))
                 {
                     // Update Settings, set the SelectedLaguage Field
-                    this._settingsManager.UpdateSettings(new Settings()
+                    SettingsLogic.Instance.UpdateSettings(new Settings()
                     {
                         SelectedLanguage = this.SelectedLanguage
                     });
@@ -126,7 +126,6 @@ namespace SmartVocabulary
             this._logic = new VocableLogic();
 
             this.Notification = "Loading Settings...";
-            this._settingsManager = new XmlManager();
             this.LoadSettings();
 
             this.Notification = "Loading Vocables...";
@@ -179,7 +178,7 @@ namespace SmartVocabulary
 
         private void Export()
         {
-            ExportWizardWindow window = new ExportWizardWindow(this.AvailableLanguages.ToList());
+            ExportWizardWindow window = new ExportWizardWindow();
             window.Show();
         }
 
@@ -349,7 +348,7 @@ namespace SmartVocabulary
             {
                 Mouse.OverrideCursor = Cursors.Wait;
 
-                Result<Settings> load = this._settingsManager.LoadSettings();
+                Result<Settings> load = SettingsLogic.Instance.LoadSettings();
                 if (load.Status == Status.Success)
                 {
                     this.AlternationRowColor = load.Data.AlternationColor;

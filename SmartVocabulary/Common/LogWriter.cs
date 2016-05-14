@@ -8,14 +8,7 @@ namespace SmartVocabulary.Common
     {
         #region Singleton
         private static readonly Lazy<LogWriter> _instance = new Lazy<LogWriter>(() => new LogWriter());
-
-        public static LogWriter Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        public static LogWriter Instance => _instance.Value;
         #endregion
 
 

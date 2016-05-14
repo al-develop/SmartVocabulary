@@ -13,6 +13,7 @@ using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Database;
 using SmartVocabulary.Logic.Manager;
+using SmartVocabulary.Logic.Setting;
 
 namespace SmartVocabulary.UI
 {
@@ -24,7 +25,6 @@ namespace SmartVocabulary.UI
     {
         public SettingsWindowViewModel()
         {
-            this._settingsManager = new XmlManager();
             this._databaseLogic = new DatabaseLogic();
 
             this.Added = new ObservableCollection<string>();
@@ -98,9 +98,9 @@ namespace SmartVocabulary.UI
             };
 
             if (File.Exists(settings.SettingsPath))
-                this._settingsManager.UpdateSettings(settings);
+                SettingsLogic.Instance.UpdateSettings(settings);
             else
-                this._settingsManager.SaveSettings(settings);
+                SettingsLogic.Instance.SaveSettings(settings);
 
             this.CloseAction.Invoke();
         }
@@ -270,7 +270,7 @@ namespace SmartVocabulary.UI
         #region Methods
         private async void LoadSettings()
         {
-            Result<Settings> load = await this._settingsManager.LoadSettingsAsync();
+            Result<Settings> load = await SettingsLogic.Instance.LoadSettingsAsync();
             if (load.Status == Status.Success)
             {
                 this.SelectedAlternationColor = load.Data.AlternationColor;
