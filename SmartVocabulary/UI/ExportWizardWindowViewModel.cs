@@ -35,7 +35,13 @@ namespace SmartVocabulary.UI
         private ObservableCollection<string> _availableLanguages;
         private ObservableCollection<string> _selectedLanguages;
         private bool _canExportBegin;
+        private bool _canSetSettings;
 
+        public bool CanSetSettings
+        {
+            get { return _canSetSettings; }
+            set { SetProperty(ref _canSetSettings, value, () => CanSetSettings); }
+        }
         public bool CanExportBegin
         {
             get { return _canExportBegin; }
@@ -70,6 +76,10 @@ namespace SmartVocabulary.UI
             set
             {
                 SetProperty(ref _selectedExportKind, value, () => SelectedExportKind);
+                if(SelectedExportKind == ExportKinds.XML)
+                    CanSetSettings = false;
+                else
+                    CanSetSettings = true;
             }
         }
         #endregion
@@ -86,11 +96,18 @@ namespace SmartVocabulary.UI
             SelectPathCommand = new DelegateCommand(this.SelectPath);
             CancelCommand = new DelegateCommand(this.Cancel);
             BeginExportCommand = new DelegateCommand(this.BeginExport);
+            SetExportSettingsCommand = new DelegateCommand(this.SetExportSettings);
         }
 
         public ICommand SelectPathCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public ICommand BeginExportCommand { get; set; }
+        public ICommand SetExportSettingsCommand { get; set; }
+
+        private void SetExportSettings()
+        {
+
+        }
 
         private void BeginExport()
         {
@@ -105,7 +122,7 @@ namespace SmartVocabulary.UI
              * 
              */
 
-            if (validationResult.Status != Status.Success)
+            if(validationResult.Status != Status.Success)
             {
                 this.ShowMessageBox.Invoke(validationResult.Message, "Error while validation", "OK", "Error");
                 return;
@@ -125,7 +142,7 @@ namespace SmartVocabulary.UI
         {
             var dialog = new OpenFolderDialog.FolderSelectDialog();
             dialog.Title = "Export Selection";
-            if (dialog.ShowDialog() == false)
+            if(dialog.ShowDialog() == false)
             {
                 return;
             }
@@ -136,13 +153,13 @@ namespace SmartVocabulary.UI
 
         private void CheckIfExportIsPossible()
         {
-            if (String.IsNullOrEmpty(this.SavePath))
+            if(String.IsNullOrEmpty(this.SavePath))
             {
                 this.CanExportBegin = false;
                 return;
             }
 
-            if (this.SelectedLanguages == null
+            if(this.SelectedLanguages == null
                 || this.SelectedLanguages.Count == 0)
             {
                 this.CanExportBegin = false;
@@ -154,12 +171,12 @@ namespace SmartVocabulary.UI
 
         private Result ValidateBeforeExport()
         {
-            if (String.IsNullOrEmpty(this.SavePath))
+            if(String.IsNullOrEmpty(this.SavePath))
             {
                 return new Result("save path was null or empty", Status.Error);
             }
 
-            if (this.SelectedLanguages == null
+            if(this.SelectedLanguages == null
                 || this.SelectedLanguages.Count == 0)
             {
                 return new Result("no laguages for export selected", Status.Error);

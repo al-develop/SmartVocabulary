@@ -48,8 +48,8 @@ namespace SmartVocabulary.Common
     /// <typeparam name="T">The type of the value which is returned</typeparam>
     public class Result<T> : Result
     {
-        private int result;
-        private string p;
+        //private int result;
+        //private string p;
 
         public T Data { get; set; }
 

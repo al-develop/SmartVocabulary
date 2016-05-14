@@ -30,7 +30,7 @@ namespace SmartVocabulary.Logic.Manager
                 foreach (var collection in vocableCollection)
                 {
                     document.Element("SmartVocabulary")
-                        .Add(new XElement(collection.Language));
+                            .Add(new XElement(collection.Language));
 
                     int i = 0;
                     foreach (var voc in collection.Vocables)
@@ -107,6 +107,11 @@ namespace SmartVocabulary.Logic.Manager
             //}
 
             //TODO: Create Import Logic with XDocument 
+            
+            using (FileStream stream = new FileStream(sourcePath, FileMode.Create))
+            {
+                XDocument document = XDocument.Load(stream);
+            }
 
             if (VocableCollection == null)
             {

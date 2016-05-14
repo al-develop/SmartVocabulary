@@ -14,13 +14,15 @@
         <ObjectDataProvider MethodName="GetValues"
                 ObjectType="{x:Type sys:Enum}"
                 x:Key="ExportKinds">
-    <ObjectDataProvider.MethodParameters>
-        <x:Type TypeName="exportKinds:ExportKinds" />
-    </ObjectDataProvider.MethodParameters>
-</ObjectDataProvider>
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="exportKinds:ExportKinds" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
 
         <converter:EnumDescriptionCoverter x:Key="enumConverter" />
+        <converter:InvertBooleanToVisibilityConverter x:Key="InvertBoolToVisibilityConverter" />
     </Window.Resources>
+
     <Grid>
         <GroupBox Margin="10,10,10,0"
                   Header="Export"
@@ -33,29 +35,49 @@
                            Text="Export to"
                            VerticalAlignment="Top" />
                 <TextBox Height="23"
-                         Margin="76,9,53,0"
+                         Margin="76,9,76,0"
                          TextWrapping="Wrap"
                          Text="{Binding SavePath, UpdateSourceTrigger=PropertyChanged}"
                          VerticalAlignment="Top" />
-                <Button Content="..."
+                <Button Content="Path"
                         Command="{Binding SelectPathCommand}"
                         HorizontalAlignment="Left"
-                        Margin="514,10,0,0"
+                        Margin="491,10,0,0"
                         VerticalAlignment="Top"
-                        Width="38"
+                        Width="61"
                         Height="22" />
+
+                <TextBlock HorizontalAlignment="Left"
+                           Margin="10,40,0,0"
+                           TextWrapping="Wrap"
+                           Text="Export Kind"
+                           VerticalAlignment="Top" />
                 <ComboBox HorizontalAlignment="Left"
                           Margin="76,37,0,0"
                           SelectedItem="{Binding SelectedExportKind}"
                           ItemsSource="{Binding Source={StaticResource ExportKinds}}"
                           VerticalAlignment="Top"
-                          Width="476">
+                          Width="410">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource enumConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+                <Button Content="Settings"
+                        Command="{Binding SetExportSettingsCommand}"                        
+                        IsEnabled="{Binding CanSetSettings}"
+                        HorizontalAlignment="Left"
+                        Margin="491,37,0,0"
+                        VerticalAlignment="Top"
+                        Width="61"
+                        Height="22">
+                    <Button.ToolTip>
+                        <TextBlock Text="Settings not available for XML export"
+                                   Visibility="{Binding CanSetSettings, Converter={StaticResource ResourceKey=InvertBoolToVisibilityConverter}}"/>                        
+                    </Button.ToolTip>
+                </Button>
+
                 <TextBlock HorizontalAlignment="Left"
                            Margin="10,75,0,0"
                            TextWrapping="Wrap"
@@ -70,26 +92,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <Button Content="Cancel"
-                        IsCancel="True"
-                        HorizontalAlignment="Left"
-                        Margin="477,299,0,0"
-                        VerticalAlignment="Top"
-                        Command="{Binding CancelCommand}"
-                        Width="75" />
-                <Button Content="Begin Export"
-                        Command="{Binding BeginExportCommand}"
-                        IsEnabled="{Binding CanExportBegin}"
-                        IsDefault="True"
-                        HorizontalAlignment="Left"
-                        Margin="397,299,0,0"
-                        VerticalAlignment="Top"
-                        Width="75" />
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="10,40,0,0"
-                           TextWrapping="Wrap"
-                           Text="Export Kind"
-                           VerticalAlignment="Top" />
+
                 <TextBlock HorizontalAlignment="Left"
                            Margin="223,75,0,0"
                            TextWrapping="Wrap"
@@ -104,6 +107,23 @@
                         BorderThickness="1">
                     <Image />
                 </Border>
+
+
+                <Button Content="Begin Export"
+                        Command="{Binding BeginExportCommand}"
+                        IsEnabled="{Binding CanExportBegin}"
+                        IsDefault="True"
+                        HorizontalAlignment="Left"
+                        Margin="397,299,0,0"
+                        VerticalAlignment="Top"
+                        Width="75" />
+                <Button Content="Cancel"
+                        IsCancel="True"
+                        HorizontalAlignment="Left"
+                        Margin="477,299,0,0"
+                        VerticalAlignment="Top"
+                        Command="{Binding CancelCommand}"
+                        Width="75" />
             </Grid>
         </GroupBox>
     </Grid>

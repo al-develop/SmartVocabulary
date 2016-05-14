@@ -21,7 +21,7 @@ namespace SmartVocabulary.Common
 
         StreamWriter logWriter;
         int fileCount = 1;
-        int nfileCount = 1;
+        //int nfileCount = 1;
         static string logpath = String.Format("{0}//LOGS//", AppDomain.CurrentDomain.BaseDirectory);
         string logfilename = string.Empty;
         string logXmlfilename = string.Empty;
@@ -69,7 +69,7 @@ namespace SmartVocabulary.Common
                     logWriter.Flush();
                     logWriter.Close();
                 }//End of Try
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }//End of catch
             });

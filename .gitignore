@@ -154,3 +154,8 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+/TO DO's.txt
+/Tests.xlsx
+/smartVocDb.sqlite
+/Empty DB/Data
+/Beta

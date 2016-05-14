@@ -20,10 +20,9 @@ namespace SmartVocabulary.Logic.Manager
                 {
                     document.AddWorksheet(collectionMember.Language);
 
-                    var styles = GenerateExcelStyles();
                     foreach (Vocable currentVocable in collectionMember.Vocables)
                     {
-
+                        //document.SetCellValue("")
                     }
                 }
 
@@ -38,33 +37,13 @@ namespace SmartVocabulary.Logic.Manager
             throw new NotImplementedException();
         }
 
-        private IList<StyleContainer> GenerateExcelStyles()
+        #endregion 
+
+        #region Private
+        private void InsertIntoCell()
         {
-            List<StyleContainer> container = new List<StyleContainer>();
-            
-            SLStyle titleStyle = new SLStyle();
-            titleStyle.Font = new SLFont() {Bold = true, FontSize = 25 };
 
-
-            SLStyle titleBorderStyle = new SLStyle();
-            titleBorderStyle.Border = new SLBorder();
-            //titleBorderStyle.Border.SetBottomBorder(null, )
-           
-            /*
-             * In der Excel soll auf jeder Seite die Sprache als Überschrift stehen
-             * Darunter sind von den Feldern A1 bis H1 die jeweiligen Properties auf des Vocable Klasse als Spalten Namen
-             * Zur Übersicht sollte eine Alternation Color eingefügt werden
-             */
-
-            return container;
         }
-
-        private class StyleContainer
-        {
-            public string StyleName { get; set; }
-            public SLStyle Style { get; set; }
-        }
-
         #endregion
     }
 }

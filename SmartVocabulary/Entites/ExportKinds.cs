@@ -9,19 +9,19 @@ namespace SmartVocabulary.Entites
 {
     public enum ExportKinds
     {
-        [Description("XML")]
+        [Description("XML (*.xml)")]
         XML,
         
-        [Description("MS Excel")]
+        [Description("MS Excel (*.xlsx)")]
         MsExcel,
         
-        [Description("Open Office/Libre Office")]
+        [Description("Open Office/Libre Office (*.odt)")]
         ApacheOffice,
 
-        [Description("Text (UTF-8, separated by ';' )")]
+        [Description("UTF-8 Unicode Text (.txt)")]
         Text,
 
-        [Description("PDF")]
+        [Description("PDF (*.pdf)")]
         PDF
     }
 }
