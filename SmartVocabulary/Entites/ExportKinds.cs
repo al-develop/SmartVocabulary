@@ -11,10 +11,10 @@ namespace SmartVocabulary.Entites
     {
         [Description("XML (*.xml)")]
         XML,
-        
+
         [Description("MS Excel (*.xlsx)")]
         MsExcel,
-        
+
         [Description("Open Office/Libre Office (*.odt)")]
         ApacheOffice,
 
@@ -23,5 +23,32 @@ namespace SmartVocabulary.Entites
 
         [Description("PDF (*.pdf)")]
         PDF
+    }
+
+    public static class ExportKindsExtrahator
+    {
+        public static string GetExportKindExtension(ExportKinds kind)
+        {
+            switch(kind)
+            {
+                case ExportKinds.XML:
+                    return ".xml";
+
+                case ExportKinds.MsExcel:
+                    return ".xlsx";
+
+                case ExportKinds.ApacheOffice:
+                    return ".odt";
+
+                case ExportKinds.Text:
+                    return ".txt";
+
+                case ExportKinds.PDF:
+                    return ".pdf";
+
+                default:
+                    return null;
+            }
+        }
     }
 }

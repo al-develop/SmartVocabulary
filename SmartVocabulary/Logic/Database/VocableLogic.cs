@@ -8,7 +8,8 @@ using SmartVocabulary.Entites;
 namespace SmartVocabulary.Logic.Database
 {
     /// <summary>
-    /// Logic Layer. Work with DatabaseAccess class to get access to the Database
+    /// Logic Layer. Use this class to work with Data.
+    /// Work with DatabaseLogic class to get access to the Database
     /// </summary>
     public class VocableLogic : IDisposable
     {
@@ -54,10 +55,7 @@ namespace SmartVocabulary.Logic.Database
             return saveResult;
         }
 
-        public async Task<Result<List<Vocable>>> GetAllVocablesAsync(string language)
-        {
-            return await Task.Run(() => this.GetAllVocables(language));
-        }
+        public async Task<Result<List<Vocable>>> GetAllVocablesAsync(string language) => await Task.Run(() => this.GetAllVocables(language));
 
         public Result DeleteVocable(Vocable entry, string language)
         {

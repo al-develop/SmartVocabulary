@@ -7,6 +7,9 @@ using SmartVocabulary.Data;
 
 namespace SmartVocabulary.Logic.Database
 {
+    /// <summary>
+    /// Class for Controlling Database Work. 
+    /// </summary>
     public class DatabaseLogic : IDisposable
     {
         private readonly DatabaseAccess _access;
@@ -23,10 +26,7 @@ namespace SmartVocabulary.Logic.Database
             this._access.CreateNewDatabaseFile();
         }
 
-        public async Task<Result> CreateTable(string tableName)
-        {
-            return await this._access.CreateTableAsync(tableName);
-        }
+        public async Task<Result> CreateTable(string tableName) => await this._access.CreateTableAsync(tableName);
 
         public async Task<Result> CreateNewDatabaseAsync()
         {
