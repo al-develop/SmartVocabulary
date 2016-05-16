@@ -36,8 +36,8 @@
                          VerticalAlignment="Top" />
                 <Button Content="Path"
                         Command="{Binding SelectPathCommand}"
-                        HorizontalAlignment="Left"
-                        Margin="477,10,0,0"
+                        HorizontalAlignment="Right"
+                        Margin="0,10,0,0"
                         VerticalAlignment="Top"
                         Width="75"
                         Height="22" />
@@ -62,8 +62,8 @@
                 <Button Content="Settings"
                         Command="{Binding SetExportSettingsCommand}"                        
                         IsEnabled="{Binding CanSetSettings}"
-                        HorizontalAlignment="Left"
-                        Margin="477,37,0,0"
+                        HorizontalAlignment="Right"
+                        Margin="0,37,0,0"
                         VerticalAlignment="Top"
                         Width="75"
                         Height="22">
@@ -73,35 +73,38 @@
                     </Button.ToolTip>
                 </Button>
 
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="10,75,0,0"
+                <Grid Margin="0,75,0,35">
+                    <TextBlock HorizontalAlignment="Left"
+                           Margin="10,7,0,0"
                            TextWrapping="Wrap"
                            Text="Available Languages"
                            VerticalAlignment="Top" />
-                <ListBox Height="186" ItemsSource="{Binding AvailableLanguages}"
-                         Margin="10,0,357,45"
-                         VerticalAlignment="Bottom">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Command="{Binding AddLanguage}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    <ListBox Height="186" ItemsSource="{Binding AvailableLanguages}"
+                             Margin="10,30,0,3"
+                             VerticalAlignment="Stretch" 
+                             HorizontalAlignment="Left" 
+                             Width="185">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Command="{Binding AddLanguage}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="223,75,0,0"
+                    <TextBlock HorizontalAlignment="Right"
+                           Margin="0,7,288,0"
                            TextWrapping="Wrap"
                            Text="Preview"
                            VerticalAlignment="Top" />
-                <Border HorizontalAlignment="Left"
-                        Height="186"
-                        Margin="223,98,0,0"
-                        VerticalAlignment="Top"
-                        Width="329"
-                        BorderBrush="Black"
-                        BorderThickness="1">
-                    <Image />
-                </Border>
+                    <Border HorizontalAlignment="Stretch"
+                            Height="186"
+                            Margin="223,30,0,3"
+                            VerticalAlignment="Stretch"
+                            BorderBrush="Black"
+                            BorderThickness="1">
+                        <Image />
+                    </Border>
+                </Grid>
 
                 <Button Content="Begin Export"
                         Command="{Binding BeginExportCommand}"

@@ -42,6 +42,7 @@
     <ApplicationIcon>Book32x32.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v14.2, Version=14.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Mvvm, Version=15.2.0.0, Culture=neutral, PublicKeyToken=382ad28f6ae31f30, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpressMvvm.15.2.5.0\lib\net40-client\DevExpress.Mvvm.dll</HintPath>
       <Private>True</Private>
@@ -50,6 +51,8 @@
       <HintPath>..\packages\DevExpressMvvm.15.2.5.0\lib\net40-client\DevExpress.Mvvm.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v14.2, Version=14.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.LayoutControl.v14.2, Version=14.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="OpenFolderDialog">
       <HintPath>G:\Programming\1.Libraries\OpenFolderDialog\OpenFolderDialog.dll</HintPath>
     </Reference>
