@@ -13,6 +13,9 @@
         <xceed:ColorPicker Margin="0,20,0,0"
                            VerticalAlignment="Top"
                            SelectedColor="{Binding SelectedAlternationColor, UpdateSourceTrigger=PropertyChanged}"
-                           Height="23" />
+                           Height="23" 
+                           AvailableColorsHeader="{Binding SelectedAlternationColor, UpdateSourceTrigger=PropertyChanged}">
+            
+        </xceed:ColorPicker>
     </Grid>
 </UserControl>

@@ -17,7 +17,6 @@ namespace SmartVocabulary.UI
     public partial class SettingsWindowViewModel : ViewModelBase
     {
         #region Data
-        private readonly XmlManager _settingsManager;
         private readonly DatabaseLogic _databaseLogic;
         public Action CloseAction { get; set; }
         #endregion

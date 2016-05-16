@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SmartVocabulary.UI;
 
 namespace SmartVocabulary
 {
@@ -30,8 +31,32 @@ namespace SmartVocabulary
             this.DataContext = viewModel;
 
             // Event and UI Initializing
-            viewModel.CloseAction = new Action(this.Close);
             viewModel.ApplicationLocation = Application.ResourceAssembly.Location;
+
+            // Action Initiliazing
+            viewModel.CloseAction = new Action(this.Close);
+            viewModel.ShowExportWindowAction = new Action(this.ShowExportWindow);
+            viewModel.ShowSettingsWindowAction = new Action(this.ShowSettingsWindow);
+            viewModel.ShowAboutWindowAction = new Action(this.ShowAboutWindow);
+        }
+
+
+        private void ShowExportWindow()
+        {
+            var window = new ExportWizardWindow();
+            window.ShowDialog();
+        }
+
+        private void ShowSettingsWindow()
+        {
+            var settings = new SettingsWindow();
+            settings.ShowDialog();
+        }
+
+        private void ShowAboutWindow()
+        {
+            var about = new AboutWindow();
+            about.ShowDialog();
         }
     }
 }

@@ -107,6 +107,7 @@
     <Compile Include="Common\Result.cs" />
     <Compile Include="Common\VocableSearchFilterConverter.cs" />
     <Compile Include="Data\DatabaseAccess.QueryGenerator.cs" />
+    <Compile Include="Data\SettingsAccess.cs" />
     <Compile Include="Entites\ConstantSettingAreas.cs" />
     <Compile Include="Entites\ExportKinds.cs" />
     <Compile Include="Entites\VocableLanguageWrapper.cs" />

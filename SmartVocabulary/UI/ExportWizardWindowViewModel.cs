@@ -17,18 +17,18 @@ namespace SmartVocabulary.UI
     {
         public Action CloseAction;
         
-        private ObservableCollection<ViewModelBase> _settingsPages;
+        private ObservableCollection<ViewModelBase> _exportSettingsPages;
 
-        public ObservableCollection<ViewModelBase> SettingsPages
+        public ObservableCollection<ViewModelBase> ExportSettingsPages
         {
-            get { return _settingsPages; }
-            set { SetProperty(ref _settingsPages, value, () => SettingsPages); }
+            get { return _exportSettingsPages; }
+            set { SetProperty(ref _exportSettingsPages, value, () => ExportSettingsPages); }
         }
 
         public ExportWizardWindowViewModel()
         {
-            SettingsPages = new ObservableCollection<ViewModelBase>();
-            this.SettingsPages.Add(new ExportOverviewPageViewModel());
+            ExportSettingsPages = new ObservableCollection<ViewModelBase>();
+            this.ExportSettingsPages.Add(new ExportOverviewPageViewModel());
 
             CancelCommand = new DelegateCommand(Cancel);
         }

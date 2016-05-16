@@ -8,8 +8,10 @@
         xmlns:pages="clr-namespace:SmartVocabulary.UI.ExportSettingsPages"
         Icon="pack://application:,,,/Resources/Icons/Export.png"
         Title="ExportWizardWindow"
-        ResizeMode="NoResize"
-        Height="400"
+        ResizeMode="CanResizeWithGrip"
+        MinHeight="450"
+        MinWidth="600"
+        Height="450"
         Width="600">
     <Window.Resources>
         <Style TargetType="{x:Type Grid}">
@@ -35,13 +37,15 @@
     </Window.Resources>
     
     <Grid>
-        <pages:ExportOverviewPage Visibility="{Binding OverviewPageVisibility, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <pages:ExportOverviewPage Margin="0,0,0,45" Visibility="{Binding OverviewPageVisibility, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <Separator Margin="0,0,0,40" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
         
         <Button Content="Cancel"
                 IsCancel="True"
-                HorizontalAlignment="Left"
-                Margin="509,341,0,0"
-                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Margin="10"
+                VerticalAlignment="Bottom"
                 Command="{Binding CancelCommand}"
                 Width="75" />
     </Grid>
