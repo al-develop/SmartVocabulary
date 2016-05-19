@@ -15,3 +15,5 @@ It uses the .NET Framework 4.6 and C# 6.0 (Roslyn).
 - PdfSharp
 - Extended WPF Toolkit
 - System.Data.SQLite
+
+Icons are from iconpharm.com
