@@ -4,7 +4,7 @@ using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Factory;
 using SpreadsheetLight;
-using SpreadsheetLight.Drawing;
+using System.IO;
 
 namespace SmartVocabulary.Logic.Manager
 {
@@ -13,9 +13,10 @@ namespace SmartVocabulary.Logic.Manager
         #region IManager Member
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
-            using (SLDocument document = new SLDocument(savePath))
+            using(var stream = new FileStream(savePath, FileMode.OpenOrCreate))
+            using(SLDocument document = new SLDocument(stream))
             {
-                foreach (VocableLanguageWrapper collectionMember in vocableCollection)
+                foreach(VocableLanguageWrapper collectionMember in vocableCollection)
                 {
                     document.AddWorksheet(collectionMember.Language);
 
@@ -29,7 +30,7 @@ namespace SmartVocabulary.Logic.Manager
                     document.SetCellValue("H1", "EXAMPLE");
 
                     int row = 2;
-                    foreach (Vocable currentVocable in collectionMember.Vocables)
+                    foreach(Vocable currentVocable in collectionMember.Vocables)
                     {
                         document.SetCellValue("A" + row, currentVocable.ID);
                         document.SetCellValue("B" + row, currentVocable.Native);

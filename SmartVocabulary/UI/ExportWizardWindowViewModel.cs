@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,6 @@ namespace SmartVocabulary.UI
 {
     public class ExportWizardWindowViewModel : ViewModelBase
     {
-        public Action CloseAction;
 
         #region Data
         /// <summary>
@@ -29,7 +29,12 @@ namespace SmartVocabulary.UI
         /// string: name of MessageBoxButton. Must be convertible to MessageBoxButton Enum
         /// string: name of MessageBoxImage. Must be convertible to MessageBoxImage Enum
         /// </params>
-        public Action<string, string, string, string> ShowMessageBox;
+        /// <returns>
+        /// string: the pressed MessabeBoxButton
+        /// </returns>
+        public Func<string, string, string, string, string> ShowMessageBox;
+        public Action CloseAction;
+        public Func<bool, string> ShowFolderBrowseDialogAction;
 
         private IManager ExportManager { get; set; }
         #endregion Data
@@ -39,18 +44,12 @@ namespace SmartVocabulary.UI
         private string _savePath;
         private ObservableCollection<string> _availableLanguages;
         private bool _canExportBegin;
-        private bool _canSetSettings;
         private string _selectedLanguage;
-        
+
         public string SelectedLanguage
         {
             get { return _selectedLanguage; }
             set { SetProperty(ref _selectedLanguage, value, () => SelectedLanguage); }
-        }
-        public bool CanSetSettings
-        {
-            get { return _canSetSettings; }
-            set { SetProperty(ref _canSetSettings, value, () => CanSetSettings); }
         }
         public bool CanExportBegin
         {
@@ -81,10 +80,7 @@ namespace SmartVocabulary.UI
             set
             {
                 SetProperty(ref _selectedExportKind, value, () => SelectedExportKind);
-                if(SelectedExportKind == ExportKinds.XML)
-                    CanSetSettings = false;
-                else
-                    CanSetSettings = true;
+                this.UpdateSavePathExtension();
             }
         }
         #endregion
@@ -109,9 +105,9 @@ namespace SmartVocabulary.UI
         public ICommand SelectPathCommand { get; set; }
         public ICommand BeginExportCommand { get; set; }
         public ICommand CancelCommand { get; set; }
-        
+
         private void BeginExport()
-{
+        {
             var validationResult = this.ValidateBeforeExport();
             if(validationResult.Status != Status.Success)
             {
@@ -121,23 +117,38 @@ namespace SmartVocabulary.UI
 
             this.ExportManager = ManagerFactory.GetManager(this.SelectedExportKind);
             List<VocableLanguageWrapper> exportList = this.GenerateExportList();
-            string savePath = $"{this.SavePath}SmartVocabulary{ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind)}";
-            if(!File.Exists(savePath))
-                File.Create(savePath);
+            //string savePath = $"{this.SavePath}SmartVocabulary{ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind)}";
+            if(!File.Exists(this.SavePath))
+                File.Create(this.SavePath);
 
-            ExportManager.Export(exportList, savePath);
+            var result = (ExportManager.Export(exportList, this.SavePath));
+            if(result.Status != Status.Success)
+            {
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine($"Message\t\t:{result.Message}");
+                builder.AppendLine($"InnerMessage:\t{result.InnerMessage ?? string.Empty}");
+                builder.AppendLine($"Exception:\t\t{result.Exception ?? null}");
+
+                LogWriter.Instance.WriteLine(builder.ToString());
+                this.ShowMessageBox.Invoke(result.Message, "Error while exporting", "OK", "Error");
+                return;
+            }
+
+            string messageBoxResult = this.ShowMessageBox.Invoke("Export successful. Do you want to open the exported file?", "Success", "YesNo", "Success");
+            if(messageBoxResult.ToLower() == "yes")
+            {
+                Process.Start(this.SavePath);
+            }
         }
 
         private void SelectPath()
         {
-            var dialog = new OpenFolderDialog.FolderSelectDialog();
-            dialog.Title = "Export Selection";
-            if(dialog.ShowDialog() == false)
-            {
+            string result = this.ShowFolderBrowseDialogAction.Invoke(true);
+            if(String.IsNullOrEmpty(result))
                 return;
-            }
 
-            this.SavePath = dialog.FileName;
+            string extension = ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind);
+            this.SavePath = $"{result}SmartVocabulary_{DateTime.Now.ToShortDateString()}{extension}";
         }
 
         private void Cancel()
@@ -159,7 +170,7 @@ namespace SmartVocabulary.UI
             {
                 this.CanExportBegin = false;
                 return;
-            }            
+            }
 
             this.CanExportBegin = true;
         }
@@ -178,6 +189,16 @@ namespace SmartVocabulary.UI
             //}
 
             return new Result("", Status.Success);
+        }
+
+        private void UpdateSavePathExtension()
+        {
+            if(String.IsNullOrEmpty(this.SavePath))
+                return;
+
+            string extension = ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind);
+            this.SavePath = SavePath.Remove(SavePath.LastIndexOf('.'));
+            this.SavePath += extension;
         }
 
         private List<VocableLanguageWrapper> GenerateExportList()

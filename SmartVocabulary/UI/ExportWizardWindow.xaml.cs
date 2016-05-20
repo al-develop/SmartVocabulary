@@ -7,11 +7,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SmartVocabulary.Common;
+using MessageBox = System.Windows.MessageBox;
 
 namespace SmartVocabulary.UI
 {
@@ -26,11 +28,24 @@ namespace SmartVocabulary.UI
             var viewModel = new ExportWizardWindowViewModel();
 
             viewModel.CloseAction = new Action(this.Close);
-            viewModel.ShowMessageBox = new Action<string, string, string, string>(this.ShowMessageBox);
+            viewModel.ShowMessageBox = new Func<string, string, string, string, string>(this.ShowMessageBox);
+            viewModel.ShowFolderBrowseDialogAction = new Func<bool, string>(this.ShowFolderBrowseDialog);
             this.DataContext = viewModel;
         }
 
-        private void ShowMessageBox(string messageBoxText, string caption = "", string buttons = "OK", string image = "None")
+        /// <summary>
+        /// Method to be invocated through a Func from ViewModel. Parameter is just a placeholder
+        /// </summary>
+        /// <param name="param">placeholder, without any use</param>
+        /// <returns>the selected direction</returns>
+        private string ShowFolderBrowseDialog(bool param)
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.ShowDialog();
+            return dialog.SelectedPath ?? null;
+        }
+
+        private string ShowMessageBox(string messageBoxText, string caption = "", string buttons = "OK", string image = "None")
         {
             MessageBoxButton button;
             MessageBoxImage icon;
@@ -51,7 +66,8 @@ namespace SmartVocabulary.UI
                 throw new InvalidOperationException("ShowMessageBox Action took wrong param: image");
             }
 
-            MessageBox.Show(messageBoxText, caption, button, icon);
+            var result = MessageBox.Show(messageBoxText, caption, button, icon);
+            return result.ToString();           
         }
     }
 }
