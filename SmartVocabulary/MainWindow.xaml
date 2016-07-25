@@ -80,7 +80,7 @@
                                       Command="{Binding ImportCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Import.png" />
                     </RibbonGroup>
-                    <RibbonGroup Header="PRINT">
+                    <RibbonGroup Header="PRINT" Visibility="Collapsed">
                         <RibbonButton Label="Print"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/print-32.png"
                                       Command="{Binding RibbonOpenPrintCommand}" />
@@ -206,6 +206,22 @@
                                         Binding="{Binding Example, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*"
                                         MinWidth="180" />
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Image Source="pack://application:,,,/Resources/Icons/megafone.26.png"
+                                       Height="20" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding PlayTextToSpeechCommand}" Click="btnTextToSpeech_Click" x:Name="btnTextToSpeech">
+                                    <Image Source="pack://application:,,,/Resources/Icons/play.26.png"
+                                           Height="20" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

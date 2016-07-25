@@ -22,12 +22,13 @@ namespace SmartVocabulary
     /// </summary>
     public partial class MainWindow : RibbonWindow
     {
+        MainWindowViewModel viewModel;
         public MainWindow()
         {
             this.InitializeComponent();
 
             // ViewModel Initializing
-            var viewModel = new MainWindowViewModel();
+            viewModel = new MainWindowViewModel();
             this.DataContext = viewModel;
 
             // Event and UI Initializing
@@ -63,6 +64,11 @@ namespace SmartVocabulary
         {
             var about = new AboutWindow();
             about.ShowDialog();
+        }
+
+        private void btnTextToSpeech_Click(object sender, RoutedEventArgs e)
+        {
+            viewModel.PlayTextToSpeechCommand.Execute(null);
         }
     }
 }

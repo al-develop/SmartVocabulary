@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DevExpress.Mvvm;
 using SmartVocabulary.Logic.Database;
 using SmartVocabulary.Logic.Manager;
+using System.Speech.Synthesis;
 
 namespace SmartVocabulary.UI
 {
@@ -26,7 +27,13 @@ namespace SmartVocabulary.UI
         private bool _rowPageVisibility;
         private bool _languagePageVisibility;
         private bool _databaseSettingsVisibility;
+        private bool _textToSpeechVisibility;
 
+        public bool TextToSpeechVisibility
+        {
+            get { return _textToSpeechVisibility; }
+            set { SetProperty(ref _textToSpeechVisibility, value, () => TextToSpeechVisibility); }
+        }
         public bool DatabaseSettingsVisibility
         {
             get { return _databaseSettingsVisibility; }
@@ -186,6 +193,21 @@ namespace SmartVocabulary.UI
         }
         #endregion DatabaseSettings
 
+        #region TextToSpeechSettings
+        private VoiceGender _selectedVoiceGender;
+        private VoiceAge _selectedVoiceAges;
+
+        public VoiceAge SelectedVoiceAge
+        {
+            get { return _selectedVoiceAges; }
+            set { SetProperty(ref _selectedVoiceAges, value, () => SelectedVoiceAge); }
+        }
+        public VoiceGender SelectedVoiceGender
+        {
+            get { return _selectedVoiceGender; }
+            set { SetProperty(ref _selectedVoiceGender, value, () => SelectedVoiceGender); }
+        }
+        #endregion TextToSpeechSettings
         #endregion
     }
 }

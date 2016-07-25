@@ -94,7 +94,9 @@ namespace SmartVocabulary.UI
             Settings settings = new Settings()
             {
                 AlternationColor = this.SelectedAlternationColor,
-                AddedLanguages = this.Added.ToList()
+                AddedLanguages = this.Added.ToList(),
+                VoiceGender = this.SelectedVoiceGender,
+                VoiceAge = this.SelectedVoiceAge
             };
 
             if (File.Exists(settings.SettingsPath))
@@ -275,6 +277,8 @@ namespace SmartVocabulary.UI
             {
                 this.SelectedAlternationColor = load.Data.AlternationColor;
                 this.Added = new ObservableCollection<string>(load.Data.AddedLanguages);
+                this.SelectedVoiceAge = load.Data.VoiceAge;
+                this.SelectedVoiceGender = load.Data.VoiceGender;
             }
         }
 
@@ -303,18 +307,28 @@ namespace SmartVocabulary.UI
                     this.LanguagePageVisibility = true;
                     this.RowPageVisibility = false;
                     this.DatabaseSettingsVisibility = false;
+                    this.TextToSpeechVisibility = false;
                     break;
 
                 case "row appearance":
                     this.LanguagePageVisibility = false;
                     this.RowPageVisibility = true;
                     this.DatabaseSettingsVisibility = false;
+                    this.TextToSpeechVisibility = false;
                     break;
 
                 case "database settings":
                     this.LanguagePageVisibility = false;
                     this.RowPageVisibility = false;
                     this.DatabaseSettingsVisibility = true;
+                    this.TextToSpeechVisibility = false;
+                    break;
+
+                case "text to speech":
+                    this.LanguagePageVisibility = false;
+                    this.RowPageVisibility = false;
+                    this.DatabaseSettingsVisibility = false;
+                    this.TextToSpeechVisibility = true;
                     break;
 
                 default:

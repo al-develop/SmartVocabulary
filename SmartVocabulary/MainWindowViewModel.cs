@@ -10,9 +10,9 @@ using DevExpress.Mvvm;
 using SmartVocabulary.Common;
 using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Database;
-using SmartVocabulary.Logic.Manager;
 using SmartVocabulary.Logic.Setting;
 using SmartVocabulary.UI;
+using System.Speech.Synthesis;
 
 namespace SmartVocabulary
 {
@@ -32,6 +32,7 @@ namespace SmartVocabulary
         // this collection if used for searching, to prevent DB access
         // if the search string is empty, the Vocables collection gets over written by this one, which conains all vocables
         private List<Vocable> AllVocablesCollection;
+        private SpeechSynthesizer _speechSynthesizer;
         #endregion Data
 
         #region Properties
@@ -71,7 +72,7 @@ namespace SmartVocabulary
             {
                 this.SetProperty(ref this._selectedLanguage, value, () => this.SelectedLanguage);
                 this.EnableControls();
-                if(!String.IsNullOrEmpty(this.SelectedLanguage) && this.AvailableLanguages.Contains(this.SelectedLanguage))
+                if (!String.IsNullOrEmpty(this.SelectedLanguage) && this.AvailableLanguages.Contains(this.SelectedLanguage))
                 {
                     // Update Settings, set the SelectedLaguage Field
                     SettingsLogic.Instance.UpdateSettings(new Settings()
@@ -81,6 +82,9 @@ namespace SmartVocabulary
 
                     // Load Vocable List for this Language from DB
                     this.LoadVocables();
+
+                    // Initialize Text To Speech culture
+                    this.InitializeTextToSpeech();
                 }
             }
         }
@@ -149,6 +153,7 @@ namespace SmartVocabulary
             this.RemoveCommand = new DelegateCommand(this.Remove);
             this.EnterCommand = new DelegateCommand(this.Enter);
             this.ClearSearchFilterCommand = new DelegateCommand(this.ClearSearchFilter);
+            this.PlayTextToSpeechCommand = new DelegateCommand(this.PlayTextToSpeech);
 
             this.RibbonRemoveCommand = new DelegateCommand(this.Remove);
             this.RibbonCloseCommand = new DelegateCommand(this.Close);
@@ -167,6 +172,7 @@ namespace SmartVocabulary
         public ICommand RemoveCommand { get; set; }
         public ICommand EnterCommand { get; set; }
         public ICommand ClearSearchFilterCommand { get; set; }
+        public ICommand PlayTextToSpeechCommand { get; set; }
 
         public ICommand RibbonCloseCommand { get; set; }
         public ICommand RibbonRestartCommand { get; set; }
@@ -200,12 +206,12 @@ namespace SmartVocabulary
 
         private void Enter()
         {
-            if(this.SelectedVocable != null && this.SelectedVocable.ID != 0)
+            if (this.SelectedVocable != null && this.SelectedVocable.ID != 0)
             {
                 // edit
                 this.Edit();
             }
-            else if(this.Vocables.LastOrDefault() != null)
+            else if (this.Vocables.LastOrDefault() != null)
             {
                 // new entry
                 this.AddNew();
@@ -238,11 +244,11 @@ namespace SmartVocabulary
 
         private void Remove()
         {
-            if(this.Vocables.Contains(this.SelectedVocable))
+            if (this.Vocables.Contains(this.SelectedVocable))
             {
                 Result deleteResult = this._logic.DeleteVocable(this.SelectedVocable, this.SelectedLanguage);
 
-                if(deleteResult.Status == Status.Success)
+                if (deleteResult.Status == Status.Success)
                 {
                     LogWriter.Instance.WriteLine("MainWindowViewModel: Deleting Vocable from DB successful");
                     this.Vocables.Remove(this.SelectedVocable);
@@ -276,10 +282,27 @@ namespace SmartVocabulary
 
         private void OpenSettings()
         {
-            //var settings = new SettingsWindow();
-            //settings.ShowDialog();
             this.ShowSettingsWindowAction.Invoke();
             this.LoadSettings();
+        }
+
+        private void PlayTextToSpeech()
+        {
+            if (SelectedVocable == null)
+                return;
+
+            _speechSynthesizer.SpeakAsync(this.SelectedVocable.Native);
+            Task.Delay(120);
+            _speechSynthesizer.SpeakAsync(this.SelectedVocable.Translation);
+            Task.Delay(120);
+            _speechSynthesizer.SpeakAsync(this.SelectedVocable.Definition);
+            Task.Delay(120);
+            _speechSynthesizer.SpeakAsync(this.SelectedVocable.Synonym);
+            Task.Delay(120);
+            _speechSynthesizer.SpeakAsync(this.SelectedVocable.Opposite);
+            Task.Delay(120);
+            _speechSynthesizer.SpeakAsync(this.SelectedVocable.Example);
+
         }
         #endregion
 
@@ -292,14 +315,14 @@ namespace SmartVocabulary
 
                 // Validate if everything is ready for loading
                 Result validation = this.ValidateBeforeLoadingVoc();
-                if(validation.Status == Status.Warning)
+                if (validation.Status == Status.Warning)
                 {
                     return new Result(validation.Message, Status.Warning);
                 }
 
                 // Get Data
                 Result<List<Vocable>> result = this._logic.GetAllVocables(this.SelectedLanguage);
-                if(result.Status != Status.Success)
+                if (result.Status != Status.Success)
                 {
                     const string notification = "Error on loading Vocables from Database. Please try to refresh, or restart the application. More information can be found in the Log Files";
                     return new Result(notification, Status.Error);
@@ -322,17 +345,17 @@ namespace SmartVocabulary
         {
             // check if DB exists
             Result dbExistence = this.CheckDatabaseExistence();
-            if(dbExistence.Status == Status.Warning)
+            if (dbExistence.Status == Status.Warning)
             {
                 this.Vocables = new ObservableCollection<Vocable>();
                 return new Result(String.Format("{0}. Create new DB in Settings", dbExistence.Message), Status.Warning);
             }
 
             // check if a language is selected
-            if(String.IsNullOrEmpty(this.SelectedLanguage))
+            if (String.IsNullOrEmpty(this.SelectedLanguage))
             {
                 // check if there are any langauges available
-                if(this.AvailableLanguages != null && this.AvailableLanguages.Count != 0)
+                if (this.AvailableLanguages != null && this.AvailableLanguages.Count != 0)
                 {
                     this.SelectedLanguage = this.AvailableLanguages.First();
                 }
@@ -352,7 +375,7 @@ namespace SmartVocabulary
             string saveDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
             string savePath = String.Format("{0}\\{1}", saveDir, "smartVocDb.sqlite");
 
-            if(!Directory.Exists(saveDir))
+            if (!Directory.Exists(saveDir))
             {
                 return new Result("Database Directory does not exist", Status.Warning);
             }
@@ -368,17 +391,19 @@ namespace SmartVocabulary
                 Mouse.OverrideCursor = Cursors.Wait;
 
                 Result<Settings> load = SettingsLogic.Instance.LoadSettings();
-                if(load.Status == Status.Success)
+                if (load.Status == Status.Success)
                 {
                     this.AlternationRowColor = load.Data.AlternationColor;
                     this.AvailableLanguages = new ObservableCollection<string>(load.Data.AddedLanguages);
                     this.SelectedLanguage = load.Data.SelectedLanguage;
+                    InitializeTextToSpeech();
                 }
                 else
                 {
                     this.AlternationRowColor = "#DFEACE";
                     this.AvailableLanguages = new ObservableCollection<string>();
                 }
+
             }
             finally
             {
@@ -388,7 +413,7 @@ namespace SmartVocabulary
 
         private void EnableControls()
         {
-            if(this.AvailableLanguages != null
+            if (this.AvailableLanguages != null
                 && this.AvailableLanguages.Count != 0
                 && this.SelectedLanguage != null
                 && this.AvailableLanguages.Contains(this.SelectedLanguage))
@@ -400,7 +425,7 @@ namespace SmartVocabulary
         private void AddNew()
         {
             Result<int> saveResult = this._logic.SaveVocable(this.Vocables.LastOrDefault(), this.SelectedLanguage);
-            if(saveResult.Status == Status.Warning)
+            if (saveResult.Status == Status.Warning)
             {
                 // SaveVocable in DBaccess only returns a warning if the DB does not exist
                 this.Notification = "Couldn't save the entry. Check if Database exists or create a new one in the Settings";
@@ -410,7 +435,7 @@ namespace SmartVocabulary
                 return;
             }
 
-            if(saveResult.Status != Status.Success)
+            if (saveResult.Status != Status.Success)
             {
                 this.Notification = "Couldn't save the entry. Check LogFiles for more information";
                 this.Vocables.RemoveAt(this.Vocables.IndexOf(this.Vocables.Last()));
@@ -428,7 +453,7 @@ namespace SmartVocabulary
         private void Edit()
         {
             Result updateResult = this._logic.UpdateVocable(this.SelectedVocable, this.SelectedLanguage);
-            if(updateResult.Status != Status.Success)
+            if (updateResult.Status != Status.Success)
             {
                 this.Notification = "Couldn't update the entry. Check LogFiles for more information";
                 return;
@@ -440,9 +465,9 @@ namespace SmartVocabulary
 
         private async void Search()
         {
-            if(!String.IsNullOrEmpty(SearchText))
+            if (!String.IsNullOrEmpty(SearchText))
             {
-                switch(SearchFilter)
+                switch (SearchFilter)
                 {
                     case VocableSearchFilterEnumeration.ID:
                         await Task.Run(() =>
@@ -508,6 +533,18 @@ namespace SmartVocabulary
             {
                 this.Vocables = new ObservableCollection<Vocable>(this.AllVocablesCollection);
             }
+        }
+
+        private void InitializeTextToSpeech()
+        {
+            Result<Settings> settings = SettingsLogic.Instance.LoadSettings();
+           
+            _speechSynthesizer = new SpeechSynthesizer();
+            _speechSynthesizer.Rate = 1;
+            _speechSynthesizer.Volume = 100;
+
+            var culture = CultureHandler.ConvertStringToCultureInfo(this.SelectedLanguage);
+            _speechSynthesizer.SelectVoiceByHints(settings.Data.VoiceGender, settings.Data.VoiceAge, 0, culture);
         }
         #endregion Private Methods
     }

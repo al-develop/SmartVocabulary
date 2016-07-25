@@ -72,6 +72,7 @@
             <pages:LanguageAddingView Visibility="{Binding LanguagePageVisibility, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <pages:RowAlternationView Visibility="{Binding RowPageVisibility, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <pages:DatabaseSettingsView Visibility="{Binding DatabaseSettingsVisibility, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <pages:TextToSpeechSettingsView VerticalAlignment="Top" HorizontalAlignment="Stretch" Visibility="{Binding TextToSpeechVisibility, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>
 
 

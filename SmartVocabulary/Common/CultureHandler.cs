@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -13,11 +14,8 @@ namespace SmartVocabulary.Common
         /// Loads all NeutralCultures
         /// </summary>
         /// <returns>A List of CultureInfo</returns>
-        public static List<CultureInfo> GetCultures()
-        {
-            return CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                              .ToList();
-        }
+        public static List<CultureInfo> GetCultures() => CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                                                                    .ToList();
 
         /// <summary>
         /// Distincts a List of CultureInfo
@@ -46,6 +44,20 @@ namespace SmartVocabulary.Common
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Converts a System.String with an Language Name to the correspondive CultureInfo
+        /// </summary>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public static CultureInfo ConvertStringToCultureInfo(string culture)
+        {
+            if (String.IsNullOrEmpty(culture))
+                return CultureInfo.GetCultureInfo("en-EN");
+
+            List<CultureInfo> cultures = GetCultures();
+            return cultures.FirstOrDefault(f => f.NativeName.ToLower() == culture.ToLower());
         }
     }
 }

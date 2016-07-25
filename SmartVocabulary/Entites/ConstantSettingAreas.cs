@@ -11,13 +11,10 @@ namespace SmartVocabulary.Entites
         public const string RowAppearance = "Row Appearance";
         public const string Languages = "Languages";
         public const string DatabaseSettings = "Database Settings";
-
-        public static List<string> GetAllSettingAreas()
-        {
-            return new List<string>()
+        public const string TextToSpeechSettings = "Text To Speech";
+        public static List<string> GetAllSettingAreas() => new List<string>()
             {
-                RowAppearance, Languages, DatabaseSettings
+                RowAppearance, Languages, DatabaseSettings, TextToSpeechSettings
             };
-        }
     }
 }
