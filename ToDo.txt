@@ -2,9 +2,9 @@
 	- Drag&Drop für Sprachauswahl
 	- Neuer Unterpunkt "Database":
 		- DB bereinigen
-		- DB neu erstellen -->  mit Progress Bar. Dafür wird im Konstruktor von DB_Access keine DB merh 		  erstellt
+		- DB neu erstellen -->  mit Progress Bar. Dafür wird im Konstruktor von DB_Access keine DB mehr erstellt
 		- Warnung, dass der name nicht verändert werden darf
-		- 
+		
 
 * DataAccess:
 	- CreateDatabase erstellen
@@ -14,4 +14,6 @@
 	- Suche anhand gegebener Filter erstellen
 
 * Entities:
-	- AutoIncrement ID testen dun gegebenenfalls korregieren
+	- AutoIncrement ID testen udn gegebenenfalls korregieren
+
+* Drucken einfügen

@@ -7,15 +7,15 @@
         xmlns:converter="clr-namespace:SmartVocabulary.Common"
         Icon="pack://application:,,,/Resources/Icons/Export.png"
         Title="Smart Vocabulary - Export"
-        ResizeMode="CanResizeWithGrip"
-        MinHeight="430"
-        MinWidth="600"
-        Height="430"
-        Width="600">
+        Height="400"
+        Width="500"
+        MinHeight="400"
+        MinWidth="500"
+        ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <ObjectDataProvider MethodName="GetValues"
-                ObjectType="{x:Type sys:Enum}"
-                x:Key="ExportKinds">
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="ExportKinds">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="exportKinds:ExportKinds" />
             </ObjectDataProvider.MethodParameters>
@@ -25,11 +25,10 @@
         <converter:InvertBooleanToVisibilityConverter x:Key="InvertBoolToVisibilityConverter" />
     </Window.Resources>
 
-<Grid>
+    <Grid>
         <GroupBox Margin="10,10,10,40"
                   Header="Export"
-                  VerticalAlignment="Stretch"
-                  Height="351">
+                  VerticalAlignment="Stretch">
             <Grid>
                 <TextBlock HorizontalAlignment="Left"
                            Margin="10,14,0,0"
@@ -41,7 +40,7 @@
                          TextWrapping="Wrap"
                          Text="{Binding SavePath, UpdateSourceTrigger=PropertyChanged}"
                          VerticalAlignment="Top"
-                         HorizontalAlignment="Stretch"/>
+                         HorizontalAlignment="Stretch" />
                 <Button Content="..."
                         Command="{Binding SelectPathCommand}"
                         HorizontalAlignment="Right"
@@ -56,7 +55,7 @@
                            Text="Export Kind"
                            VerticalAlignment="Top" />
                 <ComboBox HorizontalAlignment="Stretch"
-                          VerticalAlignment="Top"           
+                          VerticalAlignment="Top"
                           Margin="80,38,10,0"
                           SelectedItem="{Binding SelectedExportKind, UpdateSourceTrigger=PropertyChanged}"
                           ItemsSource="{Binding Source={StaticResource ExportKinds}}">
@@ -67,47 +66,47 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="10,85,0,0"
-                           TextWrapping="Wrap"
-                           Text="Languages"
-                           VerticalAlignment="Top" />
-                <ListBox ItemsSource="{Binding AvailableLanguages}"
-                         Margin="10,106,0,10"
-                         VerticalAlignment="Stretch"
-                         HorizontalAlignment="Left"
-                         Width="185">
-                    <!--<ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Command="{Binding AddLanguageCommand}" IsChecked="{Binding IsLanguageSelected, UpdateSourceTrigger=PropertyChanged}" Content="{Binding}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>-->
-                </ListBox>
+                <Separator Margin="10,76,10,247" />
 
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="213,85,0,0"
-                           TextWrapping="Wrap"
-                           Text="Preview"
-                           VerticalAlignment="Top" />
-                <Border HorizontalAlignment="Stretch"
-                            Margin="213,106,10,10"
-                            VerticalAlignment="Stretch"
-                            BorderBrush="Black"
-                            BorderThickness="1">
-                    <Image />
-                </Border>
+                <CheckBox Content="Languages"
+                          HorizontalAlignment="Left"
+                          Margin="10,85,0,0"
+                          VerticalAlignment="Top" IsChecked="{Binding IsLanguageListSelected}" />
+                <xctk:CheckListBox ItemsSource="{Binding AvailableLanguages}"
+                                   SelectedItemsOverride="{Binding SelectedLanguages}"
+                                   Margin="10,106,10,10"
+                                   VerticalAlignment="Stretch">
+                    <xctk:CheckListBox.ContextMenu>
+                        <ContextMenu>
+                            <Menu>
+                                <MenuItem Header="Select all"
+                                          Command="{Binding SelectAllLanguagesCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/Resources/Icons/check.26.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Select none"
+                                          Command="{Binding SelectNoneLanguagesCommand}">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/Resources/Icons/Delete.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </Menu>
+                        </ContextMenu>
+                    </xctk:CheckListBox.ContextMenu>
+                </xctk:CheckListBox>
             </Grid>
         </GroupBox>
 
-        <Button Content="Begin Export" 
+        <Button Content="Begin Export"
                 Height="23"
-        	    Command="{Binding BeginExportCommand}"
-        	    IsEnabled="{Binding CanExportBegin, UpdateSourceTrigger=PropertyChanged}"
-        	    IsDefault="True"
-        	    HorizontalAlignment="Right"
-        	    Margin="0,0,100,10"
-        	    VerticalAlignment="Bottom"
-                Width="80"/>
+                Command="{Binding BeginExportCommand}"
+                IsEnabled="{Binding CanExportBegin, UpdateSourceTrigger=PropertyChanged}"
+                IsDefault="True"
+                HorizontalAlignment="Right"
+                Margin="0,0,100,10"
+                VerticalAlignment="Bottom"
+                Width="80" />
         <Button Content="Cancel"
                 IsCancel="True"
                 Height="23"
@@ -116,5 +115,5 @@
                 VerticalAlignment="Bottom"
                 Command="{Binding CancelCommand}"
                 Width="80" />
-    </Grid>    
+    </Grid>
 </Window>

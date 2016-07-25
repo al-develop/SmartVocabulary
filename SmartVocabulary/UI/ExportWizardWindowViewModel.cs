@@ -45,7 +45,26 @@ namespace SmartVocabulary.UI
         private ObservableCollection<string> _availableLanguages;
         private bool _canExportBegin;
         private string _selectedLanguage;
+        private ObservableCollection<string> _selectedLanguages;
+        private bool _isLanguageListSelected;
 
+        public bool IsLanguageListSelected
+        {
+            get { return _isLanguageListSelected; }
+            set
+            {
+                SetProperty(ref _isLanguageListSelected, value, () => IsLanguageListSelected);
+                if (IsLanguageListSelected)
+                    this.SelectAllLanguagesCommand.Execute(null);
+                else
+                    this.SelectNoneLanguagesCommand.Execute(null);
+            }
+        }
+        public ObservableCollection<string> SelectedLanguages
+        {
+            get { return _selectedLanguages; }
+            set { SetProperty(ref _selectedLanguages, value, () => SelectedLanguages); }
+        }
         public string SelectedLanguage
         {
             get { return _selectedLanguage; }
@@ -89,6 +108,8 @@ namespace SmartVocabulary.UI
         {
             Result<Settings> settings = SettingsLogic.Instance.LoadSettings();
             this.AvailableLanguages = new ObservableCollection<string>(settings.Data?.AddedLanguages);
+            this.SelectedLanguages = new ObservableCollection<string>();
+
             this.CanExportBegin = false;
 
             this.CommandRegistration();
@@ -100,11 +121,29 @@ namespace SmartVocabulary.UI
             CancelCommand = new DelegateCommand(Cancel);
             SelectPathCommand = new DelegateCommand(SelectPath);
             BeginExportCommand = new DelegateCommand(BeginExport);
+            SelectNoneLanguagesCommand = new DelegateCommand(SelectNoneLanguages);
+            SelectAllLanguagesCommand = new DelegateCommand(SelectAllLanguages);
         }
 
-        public ICommand SelectPathCommand { get; set; }
-        public ICommand BeginExportCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
+        public DelegateCommand SelectPathCommand { get; set; }
+        public DelegateCommand BeginExportCommand { get; set; }
+        public DelegateCommand CancelCommand { get; set; }
+        public DelegateCommand SelectNoneLanguagesCommand { get; set; }
+        public DelegateCommand SelectAllLanguagesCommand { get; set; }
+        
+        private void SelectAllLanguages()
+        {
+            SelectedLanguages.Clear();
+            foreach(var lang in AvailableLanguages)
+            {
+                SelectedLanguages.Add(lang);
+            }
+        }
+
+        private void SelectNoneLanguages()
+        {
+            this.SelectedLanguages.Clear();
+        }
 
         private void BeginExport()
         {
@@ -134,7 +173,7 @@ namespace SmartVocabulary.UI
                 return;
             }
 
-            string messageBoxResult = this.ShowMessageBox.Invoke("Export successful. Do you want to open the exported file?", "Success", "YesNo", "Success");
+            string messageBoxResult = this.ShowMessageBox.Invoke("Export successful. Do you want to open the exported file?", "Success", "YesNo", "Information");
             if(messageBoxResult.ToLower() == "yes")
             {
                 Process.Start(this.SavePath);
@@ -182,11 +221,11 @@ namespace SmartVocabulary.UI
                 return new Result("save path was null or empty", Status.Error);
             }
 
-            //if(this.SelectedLanguages == null
-            //    || this.SelectedLanguages.Count == 0)
-            //{
-            //    return new Result("no languages for export selected", Status.Error);
-            //}
+            if (this.SelectedLanguages == null
+                || this.SelectedLanguages.Count == 0)
+            {
+                return new Result("no languages for export selected", Status.Error);
+            }
 
             return new Result("", Status.Success);
         }
@@ -206,7 +245,7 @@ namespace SmartVocabulary.UI
             var exportList = new List<VocableLanguageWrapper>();
             var dataLogic = new VocableLogic();
 
-            foreach(string language in this.AvailableLanguages)
+            foreach(string language in this.SelectedLanguages)
             {
                 exportList.Add(new VocableLanguageWrapper()
                 {

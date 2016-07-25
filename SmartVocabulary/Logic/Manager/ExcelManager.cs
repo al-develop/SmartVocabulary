@@ -5,6 +5,7 @@ using SmartVocabulary.Entites;
 using SmartVocabulary.Logic.Factory;
 using SpreadsheetLight;
 using System.IO;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace SmartVocabulary.Logic.Manager
 {
@@ -13,10 +14,12 @@ namespace SmartVocabulary.Logic.Manager
         #region IManager Member
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
-            using(var stream = new FileStream(savePath, FileMode.OpenOrCreate))
-            using(SLDocument document = new SLDocument(stream))
+            if (!File.Exists(savePath))
+                File.Create(savePath);
+
+            using (SLDocument document = new SLDocument())
             {
-                foreach(VocableLanguageWrapper collectionMember in vocableCollection)
+                foreach (VocableLanguageWrapper collectionMember in vocableCollection)
                 {
                     document.AddWorksheet(collectionMember.Language);
 
@@ -29,8 +32,32 @@ namespace SmartVocabulary.Logic.Manager
                     document.SetCellValue("G1", "OPPOSITE");
                     document.SetCellValue("H1", "EXAMPLE");
 
+                    document.SetColumnWidth("A", 10);
+                    document.SetColumnWidth("B", 90);
+                    document.SetColumnWidth("C", 90);
+                    document.SetColumnWidth("D", 90);
+                    document.SetColumnWidth("E", 10);
+                    document.SetColumnWidth("F", 90);
+                    document.SetColumnWidth("G", 90);
+                    document.SetColumnWidth("H", 90);
+
+
+                    SLStyle headerStyle = new SLStyle();
+                    headerStyle.Border.SetBottomBorder(BorderStyleValues.Thick, System.Drawing.Color.Black);
+                    headerStyle.SetHorizontalAlignment(HorizontalAlignmentValues.Center);
+
+
+                    document.SetCellStyle("A1", headerStyle);
+                    document.SetCellStyle("B1", headerStyle);
+                    document.SetCellStyle("C1", headerStyle);
+                    document.SetCellStyle("D1", headerStyle);
+                    document.SetCellStyle("E1", headerStyle);
+                    document.SetCellStyle("F1", headerStyle);
+                    document.SetCellStyle("G1", headerStyle);
+                    document.SetCellStyle("H1", headerStyle);
+
                     int row = 2;
-                    foreach(Vocable currentVocable in collectionMember.Vocables)
+                    foreach (Vocable currentVocable in collectionMember.Vocables)
                     {
                         document.SetCellValue("A" + row, currentVocable.ID);
                         document.SetCellValue("B" + row, currentVocable.Native);
@@ -40,12 +67,13 @@ namespace SmartVocabulary.Logic.Manager
                         document.SetCellValue("F" + row, currentVocable.Synonym);
                         document.SetCellValue("G" + row, currentVocable.Opposite);
                         document.SetCellValue("H" + row, currentVocable.Example);
+                        row++;
                     }
                 }
 
                 document.SaveAs(savePath);
             }
-            
+
             return new Result("Export successfull", Status.Success);
         }
 
@@ -53,7 +81,6 @@ namespace SmartVocabulary.Logic.Manager
         {
             throw new NotImplementedException();
         }
-
-        #endregion 
+        #endregion
     }
 }

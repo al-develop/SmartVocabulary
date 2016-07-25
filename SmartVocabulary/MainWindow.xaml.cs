@@ -38,8 +38,14 @@ namespace SmartVocabulary
             viewModel.ShowExportWindowAction = new Action(this.ShowExportWindow);
             viewModel.ShowSettingsWindowAction = new Action(this.ShowSettingsWindow);
             viewModel.ShowAboutWindowAction = new Action(this.ShowAboutWindow);
+            viewModel.ShowPrintWindowAction = new Action(this.ShowPrintWindow);
         }
 
+        private void ShowPrintWindow()
+        {
+            var window = new PrintWizardWindow();
+            window.ShowDialog();
+        }
 
         private void ShowExportWindow()
         {

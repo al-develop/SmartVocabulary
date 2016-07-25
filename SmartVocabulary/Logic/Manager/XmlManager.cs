@@ -23,9 +23,12 @@ namespace SmartVocabulary.Logic.Manager
                 LogWriter.Instance.WriteLine("Xml Export: Vocable Collection is empty");
                 return new Result("Xml Export: Vocable Collection is empty", "", Status.Error);
             }
+
+            if (!File.Exists(savePath))
+                File.Create(savePath);
             
             XDocument document = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("SmartVocabulary"));
-            using (var saveStream = new FileStream(savePath, FileMode.OpenOrCreate))
+            using (var saveStream = new FileStream(savePath, FileMode.Create))
             {
                 foreach (var collection in vocableCollection)
                 {

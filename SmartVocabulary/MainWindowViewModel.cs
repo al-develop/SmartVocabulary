@@ -23,6 +23,7 @@ namespace SmartVocabulary
         internal Action ShowExportWindowAction { get; set; }
         internal Action ShowSettingsWindowAction { get; set; }
         internal Action ShowAboutWindowAction { get; set; }
+        internal Action ShowPrintWindowAction { get; set; }
         #endregion Actions
 
         #region Data
@@ -156,6 +157,7 @@ namespace SmartVocabulary
             this.RibbonRefreshCommand = new DelegateCommand(this.RibbonRefresh);
             this.RibbonAddNewCommand = new DelegateCommand(this.RibbonAddNew);
             this.RibbonEditCommand = new DelegateCommand(this.RibbonEdit);
+            this.RibbonOpenPrintCommand = new DelegateCommand(this.RibbonOpenPrint);
 
             this.ExportCommand = new DelegateCommand(this.Export);
             this.ImportCommand = new DelegateCommand(this.Import);
@@ -173,6 +175,8 @@ namespace SmartVocabulary
         public ICommand RibbonEditCommand { get; set; }
         public ICommand RibbonRemoveCommand { get; set; }
         public ICommand RibbonRefreshCommand { get; set; }
+
+        public ICommand RibbonOpenPrintCommand { get; set; }
 
         public ICommand ExportCommand { get; set; }
         public ICommand ImportCommand { get; set; }
@@ -225,6 +229,11 @@ namespace SmartVocabulary
             var editWindow = new EntryDetailWindow();
             editWindow.Initialize(this._logic, this.SelectedLanguage, this);
             editWindow.Show();
+        }
+
+        private void RibbonOpenPrint()
+        {
+            ShowPrintWindowAction.Invoke();
         }
 
         private void Remove()

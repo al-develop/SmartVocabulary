@@ -1,0 +1,76 @@
+﻿<Window x:Class="SmartVocabulary.UI.PrintWizardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmartVocabulary.UI"
+        mc:Ignorable="d"
+        Title="PrintWizardWindow"
+        Icon="pack://application:,,,/Resources/icons/print-32.png"
+        Height="430"
+        Width="433"
+        MinHeight="430"
+        MinWidth="433"        
+        ResizeMode="CanResizeWithGrip">
+    <Grid>
+        <TextBlock x:Name="textBlock"
+                   HorizontalAlignment="Left"
+                   Margin="10,13,0,0"
+                   TextWrapping="Wrap"
+                   Text="Printer:"
+                   VerticalAlignment="Top" />
+
+        <ComboBox x:Name="comboBox"
+                  Margin="59,10,10,0"
+                  ItemsSource="{Binding PrinterList}"
+                  SelectedItem="{Binding SelectedPrinter}"
+                  VerticalAlignment="Top" />
+
+        <GroupBox x:Name="groupBox"
+                  Header="Languages"
+                  Margin="10,37,10,41">
+            <ListBox x:Name="listView"
+                     ItemsSource="{Binding AvailableLanguages}"
+                     Margin="5">
+                <!--<ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <CheckBox Content="{Binding}"
+                                      IsChecked="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>-->
+            </ListBox>
+        </GroupBox>
+
+
+        <Button x:Name="btnPrint"
+                Command="{Binding PrintCommand}"
+                Margin="0,0,93,14"
+                HorizontalAlignment="Right"
+                Width="75"
+                Height="20"
+                VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="pack://application:,,,/Resources/icons/print-32.png"
+                       Height="16"
+                       Width="16" />
+                <TextBlock Text="  Print" />
+            </StackPanel>
+        </Button>
+
+        <Button x:Name="btnCancel"
+                HorizontalAlignment="Right"
+                Margin="0,0,13,14"
+                Command="{Binding CancelCommand}"
+                VerticalAlignment="Bottom"
+                Width="75">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="pack://application:,,,/Resources/icons/Delete.png"
+                       Height="16"
+                       Width="16" />
+                <TextBlock Text="  Cancel" />
+            </StackPanel>
+        </Button>
+    </Grid>
+</Window>

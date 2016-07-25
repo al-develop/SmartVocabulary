@@ -41,6 +41,9 @@
                         <RibbonApplicationMenuItem Header="Settings"
                                                    Command="{Binding RibbonOpenSettingsCommand}"
                                                    ImageSource="pack://application:,,,/Resources/Icons/Settings.png" />
+                        <RibbonApplicationMenuItem Header="Print"
+                                                   Command="{Binding RibbonOpenPrintCommand}"
+                                                   ImageSource="pack://application:,,,/Resources/Icons/print-32.png" />
                         <RibbonApplicationMenuItem Header="About &amp; Help"
                                                    Command="{Binding OpenAboutCommand}"
                                                    ImageSource="pack://application:,,,/Resources/Icons/About.png" />
@@ -68,7 +71,7 @@
                                       Command="{Binding RibbonRefreshCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Restart.png" />
                     </RibbonGroup>
-                    <RibbonGroup Header="EXPORT / IMPORT"
+                    <RibbonGroup Header="EXPORT / IMPORT" 
                                  IsEnabled="{Binding IsUiEnabled}">
                         <RibbonButton Label="Export"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Export.png"
@@ -76,6 +79,11 @@
                         <RibbonButton Label="Import"
                                       Command="{Binding ImportCommand}"
                                       LargeImageSource="pack://application:,,,/Resources/Icons/Import.png" />
+                    </RibbonGroup>
+                    <RibbonGroup Header="PRINT">
+                        <RibbonButton Label="Print"
+                                      LargeImageSource="pack://application:,,,/Resources/Icons/print-32.png"
+                                      Command="{Binding RibbonOpenPrintCommand}" />
                     </RibbonGroup>
                     <RibbonGroup Header="SETTINGS">
                         <RibbonButton Label="Open Settings"

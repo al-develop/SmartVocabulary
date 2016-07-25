@@ -14,10 +14,6 @@ namespace SmartVocabulary.Logic.Manager
     {
         #region IManager Member
 
-
-        #endregion
-        #region IManager Member
-
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
             using (PdfDocument document = new PdfDocument())
