@@ -95,6 +95,8 @@
                         </ContextMenu>
                     </xctk:CheckListBox.ContextMenu>
                 </xctk:CheckListBox>
+
+                <xctk:BusyIndicator IsBusy="{Binding IsExportBusy}" BusyContent="Exporting..."/>
             </Grid>
         </GroupBox>
 

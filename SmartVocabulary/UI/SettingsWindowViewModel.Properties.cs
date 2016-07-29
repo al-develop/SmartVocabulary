@@ -20,6 +20,8 @@ namespace SmartVocabulary.UI
         #region Data
         private readonly DatabaseLogic _databaseLogic;
         public Action CloseAction { get; set; }
+        public Func<string> SelectImportPathAction { get; set; }
+        public Action<string, string> ShowMessageBoxAction { get; set; }
         #endregion
 
         #region Properties
@@ -150,7 +152,13 @@ namespace SmartVocabulary.UI
         private bool _areDatabaseOperationsEnabled;
         private string _databaseProgressInPercent;
         private bool _isDatabaseExisting;
+        private bool _isImporting;
 
+        public bool IsImporting
+        {
+            get { return _isImporting; }
+            set { SetProperty(ref _isImporting, value, () => IsImporting); }
+        }
         public bool IsDatabaseExisting
         {
             get { return _isDatabaseExisting; }

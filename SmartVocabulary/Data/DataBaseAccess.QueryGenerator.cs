@@ -125,19 +125,16 @@ namespace SmartVocabulary.Data
         }
 
         #region Static methods to Generate table names
-        private static string GenerateTableName(CultureInfo culture)
-        {
-            return culture.NativeName.Replace('(', '_')
-                          .Replace(')', '_')
-                          .Replace(' ', '_');
-        }
+        private static string GenerateTableName(CultureInfo culture) 
+            => culture.NativeName.Replace('(', '_')
+            .Replace(')', '_')
+            .Replace(' ', '_');
 
         private static string GenerateTableName(string tableName)
-        {
-            return tableName.Replace('(', '_')
-                            .Replace(')', '_')
-                            .Replace(' ', '_');
-        }
+            => tableName.Replace('(', '_')
+            .Replace(')', '_')
+            .Replace(' ', '_');
+
         #endregion Static methods to Generate table names
     }
 }

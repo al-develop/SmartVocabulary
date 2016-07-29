@@ -18,7 +18,6 @@ namespace SmartVocabulary.UI
 {
     public class ExportWizardWindowViewModel : ViewModelBase
     {
-
         #region Data
         /// <summary>
         /// Action to show MessageBoxes
@@ -47,7 +46,13 @@ namespace SmartVocabulary.UI
         private string _selectedLanguage;
         private ObservableCollection<string> _selectedLanguages;
         private bool _isLanguageListSelected;
+        private bool _isExportBusy;
 
+        public bool IsExportBusy
+        {
+            get { return _isExportBusy; }
+            set { SetProperty(ref _isExportBusy, value, () => IsExportBusy); }
+        }
         public bool IsLanguageListSelected
         {
             get { return _isLanguageListSelected; }
@@ -147,30 +152,38 @@ namespace SmartVocabulary.UI
 
         private void BeginExport()
         {
-            var validationResult = this.ValidateBeforeExport();
-            if(validationResult.Status != Status.Success)
+            try
             {
-                this.ShowMessageBox.Invoke(validationResult.Message, "Error while validation", "OK", "Error");
-                return;
+                IsExportBusy = true;
+                var validationResult = this.ValidateBeforeExport();
+                if (validationResult.Status != Status.Success)
+                {
+                    this.ShowMessageBox.Invoke(validationResult.Message, "Error while validation", "OK", "Error");
+                    return;
+                }
+
+                this.ExportManager = ManagerFactory.GetManager(this.SelectedExportKind);
+                List<VocableLanguageWrapper> exportList = this.GenerateExportList();
+                //string savePath = $"{this.SavePath}SmartVocabulary{ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind)}";
+                if (!File.Exists(this.SavePath))
+                    File.Create(this.SavePath);
+
+                var result = (ExportManager.Export(exportList, this.SavePath));
+                if (result.Status != Status.Success)
+                {
+                    StringBuilder builder = new StringBuilder();
+                    builder.AppendLine($"Message\t\t:{result.Message}");
+                    builder.AppendLine($"InnerMessage:\t{result.InnerMessage ?? string.Empty}");
+                    builder.AppendLine($"Exception:\t\t{result.Exception ?? null}");
+
+                    LogWriter.Instance.WriteLine(builder.ToString());
+                    this.ShowMessageBox.Invoke(result.Message, "Error while exporting", "OK", "Error");
+                    return;
+                }
             }
-
-            this.ExportManager = ManagerFactory.GetManager(this.SelectedExportKind);
-            List<VocableLanguageWrapper> exportList = this.GenerateExportList();
-            //string savePath = $"{this.SavePath}SmartVocabulary{ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind)}";
-            if(!File.Exists(this.SavePath))
-                File.Create(this.SavePath);
-
-            var result = (ExportManager.Export(exportList, this.SavePath));
-            if(result.Status != Status.Success)
+            finally
             {
-                StringBuilder builder = new StringBuilder();
-                builder.AppendLine($"Message\t\t:{result.Message}");
-                builder.AppendLine($"InnerMessage:\t{result.InnerMessage ?? string.Empty}");
-                builder.AppendLine($"Exception:\t\t{result.Exception ?? null}");
-
-                LogWriter.Instance.WriteLine(builder.ToString());
-                this.ShowMessageBox.Invoke(result.Message, "Error while exporting", "OK", "Error");
-                return;
+                IsExportBusy = false;
             }
 
             string messageBoxResult = this.ShowMessageBox.Invoke("Export successful. Do you want to open the exported file?", "Success", "YesNo", "Information");

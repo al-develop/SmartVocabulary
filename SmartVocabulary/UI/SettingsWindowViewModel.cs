@@ -66,6 +66,7 @@ namespace SmartVocabulary.UI
             this.CreateNewDatabaseCommand = new DelegateCommand(this.CreateNewDatabase);
             this.ResetDatabaseCommand = new DelegateCommand(this.ResetDatabase);
             this.DeleteDatabaseCommand = new DelegateCommand(this.DeleteDatabase);
+            this.ImportDatabaseCommand = new DelegateCommand(this.ImportDatabase);
         }
 
         // Common
@@ -82,6 +83,7 @@ namespace SmartVocabulary.UI
         public ICommand CreateNewDatabaseCommand { get; set; }
         public ICommand ResetDatabaseCommand { get; set; }
         public ICommand DeleteDatabaseCommand { get; set; }
+        public ICommand ImportDatabaseCommand { get; set; }
 
         #region Common Commands
         private void Close()
@@ -263,6 +265,30 @@ namespace SmartVocabulary.UI
             finally
             {
                 this.AreDatabaseOperationsEnabled = true;
+            }
+        }
+
+        private void ImportDatabase()
+        {
+            string file = SelectImportPathAction.Invoke();
+            if (!File.Exists(file))
+            {
+                this.ShowMessageBoxAction.Invoke("selected file does not exists", "Error");
+                LogWriter.Instance.WriteLine($"Error on importing Database: class:SeetingsWindowViewModel{Environment.NewLine}\tmethod:ImportDatabase");
+                return;
+            }
+
+            try
+            {
+                this.AreDatabaseOperationsEnabled = false;
+                IsImporting = true;
+
+
+            }
+            finally
+            {
+                this.AreDatabaseOperationsEnabled = true;
+                IsImporting = false;
             }
         }
         #endregion Database Commands

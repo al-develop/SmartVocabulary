@@ -15,14 +15,14 @@ namespace SmartVocabulary.Entites
         [Description("MS Excel (*.xlsx)")]
         MsExcel,
 
-        [Description("Open Office/Libre Office (*.odt)")]
-        ApacheOffice,
+        //[Description("Open Office/Libre Office (*.odt)")]
+        //ApacheOffice,
 
-        [Description("UTF-8 Unicode Text (.txt)")]
-        Text,
+        //[Description("UTF-8 Unicode Text (.txt)")]
+        //Text,
 
-        [Description("PDF (*.pdf)")]
-        PDF
+        //[Description("PDF (*.pdf)")]
+        //PDF
     }
 
     public static class ExportKindsExtrahator
@@ -37,14 +37,14 @@ namespace SmartVocabulary.Entites
                 case ExportKinds.MsExcel:
                     return ".xlsx";
 
-                case ExportKinds.ApacheOffice:
-                    return ".odt";
+                //case ExportKinds.ApacheOffice:
+                //    return ".odt";
 
-                case ExportKinds.Text:
-                    return ".txt";
+                //case ExportKinds.Text:
+                //    return ".txt";
 
-                case ExportKinds.PDF:
-                    return ".pdf";
+                //case ExportKinds.PDF:
+                //    return ".pdf";
 
                 default:
                     return null;

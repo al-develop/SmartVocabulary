@@ -26,7 +26,7 @@ namespace SmartVocabulary.Data
 
         public DatabaseAccess()
         {
-            this._connectionString = String.Format("Data Source={0};Version=3", _savePath);
+            this._connectionString = $"Data Source={_savePath};Version=3";
             _connection = new SQLiteConnection(_connectionString);
 
             //if (!Directory.Exists(_saveDir))
@@ -43,7 +43,6 @@ namespace SmartVocabulary.Data
             // The "Create" - SQL Command checks already, if the table exists or not. (Query: CREATE IF NOT EXISTS)
             //this.CreateTables();
         }
-
 
         public async Task<Result> CreateNewDatabaseAsync()
         {
@@ -297,6 +296,28 @@ namespace SmartVocabulary.Data
             return new Result<List<Vocable>>(result, "", Status.Success);
         }
         #endregion Vocable
+
+        #region Importing
+        public  Task<Result> Import(string savePath)
+        {
+            string importConnectionString = $"Data Source={savePath};Version=3";
+            using (var importConnection = new SQLiteConnection(importConnectionString))
+            using (var command = new SQLiteCommand(importConnection))
+            {
+                /*
+             TODO: 
+             1) get all tables
+             2) check which do not exist in local db yet
+                2.1) create missing tables    
+             3) go through every table and select * from table
+             4 - 1) save the selected data temporary until everything is loaded
+             4 - 2) select 1 and insert it at once to the local db (requires a new SQLiteConnection to the local DB)
+             */
+            }
+            return null;
+            
+        }
+        #endregion Importing
 
         #region IDisposable Member
         public void Dispose()

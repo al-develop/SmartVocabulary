@@ -41,6 +41,12 @@
   <PropertyGroup>
     <ApplicationIcon>Book32x32.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>smartvoc.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Mvvm, Version=16.1.0.0, Culture=neutral, PublicKeyToken=382ad28f6ae31f30, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpressMvvm.16.1.4.0\lib\net40-client\DevExpress.Mvvm.dll</HintPath>
@@ -256,6 +262,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="smartvoc.snk" />
+    <Resource Include="Resources\Icons\DBdelete.26.png" />
+    <Resource Include="Resources\Icons\DBimport.26.png" />
+    <Resource Include="Resources\Icons\DBnew.26.png" />
+    <Resource Include="Resources\Icons\DBreset.26.png" />
     <Resource Include="Resources\Icons\play.26.png" />
     <Resource Include="Resources\Icons\megafone.26.png" />
     <Resource Include="Resources\Icons\check.26.png" />
@@ -279,10 +290,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Book32x32.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\excelpreview.png" />
-    <Resource Include="Resources\Icons\xmlPreview.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\About.png" />
