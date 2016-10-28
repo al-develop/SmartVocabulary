@@ -18,6 +18,7 @@ namespace SmartVocabulary.Logic
         }
 
         public async Task<Result> PrintAsync(string selectedPrinter, List<VocableLanguageWrapper> printItems)
+        //public async Task<Result> /*PrintAsync*/(string selectedPrinter, VocableLanguageWrapper printItems)
         {
             try
             {

@@ -14,8 +14,7 @@ namespace SmartVocabulary.Logic.Manager
         #region IManager Member
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
-            if (!File.Exists(savePath))
-                File.Create(savePath);
+           // don't check with File.Exists and don't create with File.Create here, because it locks the file so it won't be possible to save data in it.
 
             using (SLDocument document = new SLDocument())
             {

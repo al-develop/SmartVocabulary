@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartVocabulary.UI"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="PrintWizardWindow"
         Icon="pack://application:,,,/Resources/icons/print-32.png"
@@ -29,9 +30,10 @@
         <GroupBox x:Name="groupBox"
                   Header="Languages"
                   Margin="10,37,10,41">
-            <ListBox x:Name="listView"
+            <xctk:CheckListBox x:Name="listView"
                      ItemsSource="{Binding AvailableLanguages}"
-                     Margin="5">
+                               SelectedItemsOverride="{Binding SelectedLanguages}"
+                               Margin="5">
                 <!--<ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -40,7 +42,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>-->
-            </ListBox>
+            </xctk:CheckListBox>
         </GroupBox>
 
 

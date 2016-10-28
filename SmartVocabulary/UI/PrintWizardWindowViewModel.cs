@@ -24,7 +24,13 @@ namespace SmartVocabulary.UI
         private string _selectedPrinter;
         private ObservableCollection<string> _availableLanguages;
         private ObservableCollection<string> _selectedLanguages;
+        private string _selectedLanguage;
 
+        public string SelectedLanguage
+        {
+            get { return _selectedLanguage; }
+            set { SetProperty(ref _selectedLanguage, value, () => SelectedLanguage); }
+        }
         public ObservableCollection<string> SelectedLanguages
         {
             get { return _selectedLanguages; }
@@ -62,6 +68,13 @@ namespace SmartVocabulary.UI
         private async Task Print()
         {
             List<VocableLanguageWrapper> selecetPrintItems = this.GeneretaPrintItems();
+
+            //var dataLogic = new VocableLogic();
+            //VocableLanguageWrapper selection = new VocableLanguageWrapper()
+            //{
+            //    Language = this.SelectedLanguage,
+            //    Vocables = dataLogic.GetAllVocables(SelectedLanguage).Data
+            //};
 
             await _logic.PrintAsync(this.SelectedPrinter, selecetPrintItems);
         }
