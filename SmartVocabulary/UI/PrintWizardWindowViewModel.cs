@@ -57,10 +57,13 @@ namespace SmartVocabulary.UI
         public PrintWizardWindowViewModel()
         {
             _logic = new PrintLogic();
+
             this.PrintCommand = new AsyncCommand(this.Print);
             Result<Settings> settings = SettingsLogic.Instance.LoadSettings();
+
             this.AvailableLanguages = new ObservableCollection<string>(settings.Data?.AddedLanguages);
             this.PrinterList = new ObservableCollection<string>(this._logic.GetPrinterCollection());
+            this.SelectedLanguages = new ObservableCollection<string>();
         }
 
         public AsyncCommand PrintCommand { get; set; }
@@ -68,14 +71,7 @@ namespace SmartVocabulary.UI
         private async Task Print()
         {
             List<VocableLanguageWrapper> selecetPrintItems = this.GeneretaPrintItems();
-
-            //var dataLogic = new VocableLogic();
-            //VocableLanguageWrapper selection = new VocableLanguageWrapper()
-            //{
-            //    Language = this.SelectedLanguage,
-            //    Vocables = dataLogic.GetAllVocables(SelectedLanguage).Data
-            //};
-
+            
             await _logic.PrintAsync(this.SelectedPrinter, selecetPrintItems);
         }
 
