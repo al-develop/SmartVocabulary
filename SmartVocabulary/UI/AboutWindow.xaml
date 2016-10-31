@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="About/Help"
         Icon="pack://application:,,,/Resources/Icons/About.png"
-        Height="480"
-        Width="500">
-    <GroupBox Header="Help"
+        Height="515"
+        Width="510">
+    <GroupBox Header="About"
               Margin="5"
               Padding="10">
         <StackPanel>
@@ -34,8 +34,7 @@
             <TextBlock Text="Please don't forget to add a detailed description about your problem. If possible, please add a screenshort, or a guideline how I could reconstruct the error to your mail."
                        TextWrapping="Wrap" />
             <TextBlock Text="" />
-            <TextBlock Text="" />
-            <TextBlock Text="About the program:" />
+            <TextBlock Text="About the program:" TextDecorations="Underline" />
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="The icons are free of charge, from " />
                 <TextBlock>                
@@ -47,13 +46,13 @@
                 </TextBlock>
             </StackPanel>
             <TextBlock Text="Used 3rd party libraries are:" />
-            <!--<TextBlock Text="        - Spreadsheet Light" />
-            <TextBlock Text="        - OpenXML 2.0" />-->
+            <TextBlock Text="        - Spreadsheet Light" />
+            <TextBlock Text="        - OpenXML 2.5" />
             <TextBlock Text="        - WPF Toolkit" />
-            <!--<TextBlock Text="        - PDF Sharp" />-->
+            <TextBlock Text="        - PDF Sharp &amp; MigraDoc" />
             <TextBlock Text="" />
             <TextBlock Text="Everything else is comepletely programmed by Al Pankratz" />
-            <TextBlock Text="Donations are accepted gratefully" />
+            <TextBlock Text="Donations are accepted gratefully (For more information: send me an e-mail)" />
             <Grid Margin="0,5,0,0">
                 <Button Height="25"
                         x:Name="btnViewLicense"

@@ -29,7 +29,7 @@ namespace SmartVocabulary.Logic.Manager
             //    File.Create(savePath);
             
             XDocument document = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("SmartVocabulary"));
-            using (var saveStream = new FileStream(savePath, FileMode.Create))
+            using (var saveStream = new FileStream(file, FileMode.Create))
             {
                 foreach (var collection in vocableCollection)
                 {
