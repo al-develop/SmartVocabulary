@@ -41,9 +41,9 @@
                         <RibbonApplicationMenuItem Header="Settings"
                                                    Command="{Binding RibbonOpenSettingsCommand}"
                                                    ImageSource="pack://application:,,,/Resources/Icons/Settings.png" />
-                        <RibbonApplicationMenuItem Header="Print"
+                        <!--<RibbonApplicationMenuItem Header="Print"
                                                    Command="{Binding RibbonOpenPrintCommand}"
-                                                   ImageSource="pack://application:,,,/Resources/Icons/print-32.png" />
+                                                   ImageSource="pack://application:,,,/Resources/Icons/print-32.png" />-->
                         <RibbonApplicationMenuItem Header="About &amp; Help"
                                                    Command="{Binding OpenAboutCommand}"
                                                    ImageSource="pack://application:,,,/Resources/Icons/About.png" />

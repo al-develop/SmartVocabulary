@@ -26,22 +26,36 @@
                   ItemsSource="{Binding PrinterList}"
                   SelectedItem="{Binding SelectedPrinter}"
                   VerticalAlignment="Top" />
-
+        <CheckBox Content="Languages"
+                  HorizontalAlignment="Left"
+                  Margin="10,41,0,0"
+                  VerticalAlignment="Top"
+                  IsChecked="{Binding IsLanguageListSelected}" />
         <GroupBox x:Name="groupBox"
                   Header="Languages"
-                  Margin="10,37,10,41">
+                  Margin="10,61,10,41">
             <xctk:CheckListBox x:Name="listView"
                      ItemsSource="{Binding AvailableLanguages}"
                                SelectedItemsOverride="{Binding SelectedLanguages}"
                                Margin="5">
-                <!--<ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <CheckBox Content="{Binding}"
-                                      IsChecked="{Binding}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>-->
+                <xctk:CheckListBox.ContextMenu>
+                    <ContextMenu>
+                        <Menu>
+                            <MenuItem Header="Select all"
+                                      Command="{Binding SelectAllLanguagesCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/Resources/Icons/check.26.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Select none"
+                                      Command="{Binding SelectNoneLanguagesCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/Resources/Icons/Delete.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </Menu>
+                    </ContextMenu>
+                </xctk:CheckListBox.ContextMenu>
             </xctk:CheckListBox>
         </GroupBox>
 

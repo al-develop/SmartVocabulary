@@ -25,6 +25,7 @@ namespace SmartVocabulary.UI
             InitializeComponent();
             vm = new PrintWizardWindowViewModel();
             this.DataContext = vm;
+            vm.CloseAction = new Action(this.Close);
         }
     }
 }

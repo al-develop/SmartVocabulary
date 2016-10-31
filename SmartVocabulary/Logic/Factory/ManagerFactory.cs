@@ -18,10 +18,10 @@ namespace SmartVocabulary.Logic.Factory
                 case ExportKinds.XML:
                     LogWriter.Instance.WriteLine("Create new XML Manager");
                     return new XmlManager();
-                    
-                //case ExportKinds.PDF:
-                //    LogWriter.Instance.WriteLine("Create new PDF Manager");
-                //    return new PdfManager();
+
+                case ExportKinds.PDF:
+                    LogWriter.Instance.WriteLine("Create new PDF Manager");
+                    return new PdfManager();
 
                 //case ExportKinds.Text:
                 //    LogWriter.Instance.WriteLine("Create new Text Manager");

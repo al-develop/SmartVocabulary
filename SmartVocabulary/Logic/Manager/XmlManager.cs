@@ -18,14 +18,15 @@ namespace SmartVocabulary.Logic.Manager
 
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
+            string file = $"{savePath}\\SmartVocabulary_{DateTime.Now.ToShortDateString()}.xml";
             if (vocableCollection == null)
             {
                 LogWriter.Instance.WriteLine("Xml Export: Vocable Collection is empty");
                 return new Result("Xml Export: Vocable Collection is empty", "", Status.Error);
             }
 
-            if (!File.Exists(savePath))
-                File.Create(savePath);
+            //if (!File.Exists(savePath))
+            //    File.Create(savePath);
             
             XDocument document = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("SmartVocabulary"));
             using (var saveStream = new FileStream(savePath, FileMode.Create))
@@ -88,9 +89,9 @@ namespace SmartVocabulary.Logic.Manager
                     }
                 }
 
-                document.Save(saveStream);
+                document.Save(saveStream);                
             };
-
+            
             return new Result("Xml Export: Export successfull", "", Status.Success);
         }
 

@@ -14,8 +14,8 @@ namespace SmartVocabulary.Logic.Manager
         #region IManager Member
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
         {
-           // don't check with File.Exists and don't create with File.Create here, because it locks the file so it won't be possible to save data in it.
-
+            // don't check with File.Exists and don't create with File.Create here, because it locks the file so it won't be possible to save data in it.
+            string file = $"{savePath}\\SmartVocabulary_{DateTime.Now.ToShortDateString()}.xlsx";
             using (SLDocument document = new SLDocument())
             {
                 foreach (VocableLanguageWrapper collectionMember in vocableCollection)
@@ -31,14 +31,14 @@ namespace SmartVocabulary.Logic.Manager
                     document.SetCellValue("G1", "OPPOSITE");
                     document.SetCellValue("H1", "EXAMPLE");
 
-                    document.SetColumnWidth("A", 10);
-                    document.SetColumnWidth("B", 90);
-                    document.SetColumnWidth("C", 90);
-                    document.SetColumnWidth("D", 90);
+                    document.SetColumnWidth("A", 5);
+                    document.SetColumnWidth("B", 20);
+                    document.SetColumnWidth("C", 20);
+                    document.SetColumnWidth("D", 20);
                     document.SetColumnWidth("E", 10);
-                    document.SetColumnWidth("F", 90);
-                    document.SetColumnWidth("G", 90);
-                    document.SetColumnWidth("H", 90);
+                    document.SetColumnWidth("F", 20);
+                    document.SetColumnWidth("G", 20);
+                    document.SetColumnWidth("H", 40);
 
 
                     SLStyle headerStyle = new SLStyle();
@@ -70,7 +70,7 @@ namespace SmartVocabulary.Logic.Manager
                     }
                 }
 
-                document.SaveAs(savePath);
+                document.SaveAs(file);
             }
 
             return new Result("Export successfull", Status.Success);

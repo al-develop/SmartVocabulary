@@ -104,7 +104,7 @@ namespace SmartVocabulary.UI
             set
             {
                 SetProperty(ref _selectedExportKind, value, () => SelectedExportKind);
-                this.UpdateSavePathExtension();
+                //this.UpdateSavePathExtension();
             }
         }
         #endregion
@@ -165,8 +165,8 @@ namespace SmartVocabulary.UI
                 this.ExportManager = ManagerFactory.GetManager(this.SelectedExportKind);
                 List<VocableLanguageWrapper> exportList = this.GenerateExportList();
                 //string savePath = $"{this.SavePath}SmartVocabulary{ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind)}";
-                if (!File.Exists(this.SavePath))
-                    File.Create(this.SavePath);
+                //if (!File.Exists(this.SavePath))
+                //    File.Create(this.SavePath);
 
                 var result = (ExportManager.Export(exportList, this.SavePath));
                 if (result.Status != Status.Success)
@@ -199,8 +199,10 @@ namespace SmartVocabulary.UI
             if(String.IsNullOrEmpty(result))
                 return;
 
-            string extension = ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind);
-            this.SavePath = $"{result}SmartVocabulary_{DateTime.Now.ToShortDateString()}{extension}";
+            //string extension = ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind);
+            //this.SavePath = $"{result}SmartVocabulary_{DateTime.Now.ToShortDateString()}{extension}";
+            this.SavePath = $"{result}";
+
         }
 
         private void Cancel()
@@ -244,13 +246,13 @@ namespace SmartVocabulary.UI
         }
 
         private void UpdateSavePathExtension()
-        {
+        {            
             if(String.IsNullOrEmpty(this.SavePath))
                 return;
 
             string extension = ExportKindsExtrahator.GetExportKindExtension(this.SelectedExportKind);
             this.SavePath = SavePath.Remove(SavePath.LastIndexOf('.'));
-            this.SavePath += extension;
+            this.SavePath += extension;            
         }
 
         private List<VocableLanguageWrapper> GenerateExportList()

@@ -17,3 +17,5 @@
 	- AutoIncrement ID testen udn gegebenenfalls korregieren
 
 * Drucken einfügen
+
+* Gruppierung von Vokabeln (Themenbezogen)
