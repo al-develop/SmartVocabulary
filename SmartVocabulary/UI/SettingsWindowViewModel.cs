@@ -25,18 +25,19 @@ namespace SmartVocabulary.UI
     {
         public SettingsWindowViewModel()
         {
+            LogWriter.Instance.WriteLine("Constructor of Settings");
             this._databaseLogic = new DatabaseLogic();
 
             this.Added = new ObservableCollection<string>();
             this.AvailableLanguages = new ObservableCollection<string>();
             this.SettingsAreas = new ObservableCollection<string>();
-            this.AreDatabaseOperationsEnabled = true;            
+            this.AreDatabaseOperationsEnabled = true;
             this.IsDatabaseProgressVisible = false;
             this.DatabaseProgress = 0;
             this.GenerateDatabaseProgressMax();
             this.GenerateDatabasePath();
-            
-            if(File.Exists(this.DatabasePath))
+
+            if (File.Exists(this.DatabasePath))
                 this.IsDatabaseExisting = true;
             else
                 this.IsDatabaseExisting = false;
@@ -93,19 +94,36 @@ namespace SmartVocabulary.UI
 
         private void Save()
         {
-            Settings settings = new Settings()
+            try
             {
-                AlternationColor = this.SelectedAlternationColor,
-                AddedLanguages = this.Added.ToList(),
-                VoiceGender = this.SelectedVoiceGender,
-                VoiceAge = this.SelectedVoiceAge
-            };
+                LogWriter.Instance.WriteLine("Saving Settings begins");
 
-            if (File.Exists(settings.SettingsPath))
-                SettingsLogic.Instance.UpdateSettings(settings);
-            else
-                SettingsLogic.Instance.SaveSettings(settings);
+                Settings settings = new Settings()
+                {
+                    AlternationColor = this.SelectedAlternationColor,
+                    AddedLanguages = this.Added.ToList(),
+                    VoiceGender = this.SelectedVoiceGender,
+                    VoiceAge = this.SelectedVoiceAge
+                };
 
+                if (File.Exists(settings.SettingsPath))
+                    SettingsLogic.Instance.UpdateSettings(settings);
+                else
+                    SettingsLogic.Instance.SaveSettings(settings);
+
+                LogWriter.Instance.WriteLine("Saving Settings ends");
+
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = new StringBuilder();
+                errorMessage.AppendLine("Error occured in savnig settings - SettingsWindowViewModel;Save()");
+                errorMessage.AppendLine(ex.Message);
+                if (ex.InnerException != null)
+                    errorMessage.AppendLine(ex.InnerException.Message);
+
+                LogWriter.Instance.WriteLine(errorMessage.ToString());
+            }
             this.CloseAction.Invoke();
         }
 
@@ -146,7 +164,8 @@ namespace SmartVocabulary.UI
         private async void CreateNewDatabase()
         {
             try
-            {                
+            {
+                LogWriter.Instance.WriteLine("Creating new DB begins");
                 this.IsDatabaseProgressVisible = true;
                 this.AreDatabaseOperationsEnabled = false;
                 this._databaseLogic.CreateDatabaseFile();
@@ -169,15 +188,26 @@ namespace SmartVocabulary.UI
                     }
                 }
 
-                for (int i = this.DatabaseProgressMax; i != 0; )
+                for (int i = this.DatabaseProgressMax; i != 0;)
                 {
                     this.DatabaseProgress = i;
                     i = i - 10;
-                    await Task.Delay(5);
+                    //await Task.Delay(5);
                 }
+
                 this.DatabaseProgressInPercent = "Creating done";
                 this.GenerateDatabasePath();
                 this.IsDatabaseExisting = true;
+            }
+            catch (Exception ex)
+            {
+                StringBuilder errorBuilder = new StringBuilder();
+                errorBuilder.AppendLine("Error occured in creating new DB");
+                errorBuilder.AppendLine("Exception: " + ex.Message);
+                if (ex.InnerException != null)
+                    errorBuilder.AppendLine("Inner Exception:" + ex.InnerException.Message);
+
+                LogWriter.Instance.WriteLine(errorBuilder.ToString());
             }
             finally
             {
@@ -223,7 +253,7 @@ namespace SmartVocabulary.UI
                         }
                     }
 
-                    for (int i = this.DatabaseProgressMax; i != 0; )
+                    for (int i = this.DatabaseProgressMax; i != 0;)
                     {
                         this.DatabaseProgress = i;
                         i = i - 10;
@@ -310,10 +340,24 @@ namespace SmartVocabulary.UI
 
         private void LoadCultures()
         {
-            List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
-            foreach (CultureInfo culture in cultures)
+            LogWriter.Instance.WriteLine("Loading cultures - SettingsWindowViewModel;LoadCultures()");
+            try
             {
-                this.AvailableLanguages.Add(culture.NativeName);
+                List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
+                foreach (CultureInfo culture in cultures)
+                {
+                    this.AvailableLanguages.Add(culture.NativeName);
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = new StringBuilder();
+                errorMessage.AppendLine("Error occured in loading cultures - SettingsWindowViewModel;LoadCultures()");
+                errorMessage.AppendLine(ex.Message);
+                if (ex.InnerException != null)
+                    errorMessage.AppendLine(ex.InnerException.Message);
+
+                LogWriter.Instance.WriteLine(errorMessage.ToString());
             }
         }
 
@@ -321,7 +365,7 @@ namespace SmartVocabulary.UI
         {
             this.SettingsAreas = new ObservableCollection<string>(ConstantSettingAreas.GetAllSettingAreas());
         }
-         
+
         private void AreaSelectionChanged()
         {
             if (String.IsNullOrEmpty(SelectedArea))
@@ -364,8 +408,9 @@ namespace SmartVocabulary.UI
 
         private void GenerateDatabasePath()
         {
+            LogWriter.Instance.WriteLine("Generating DB path");
             string saveDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-            string savePath = String.Format("{0}\\{1}", saveDir, "smartVocDb.sqlite");
+            string savePath = $"{saveDir}\\{"smartVocDb.sqlite"}";
 
             if (Directory.Exists(saveDir))
             {
@@ -384,26 +429,40 @@ namespace SmartVocabulary.UI
 
         private void FilterLanguages()
         {
-            this.AvailableLanguages.Clear();
-            if (!String.IsNullOrWhiteSpace(this.LanguageSearchText))
+            LogWriter.Instance.WriteLine("Filtering Languages - SettingsWindowViewModel;FilterLanguages()");
+            try
             {
-                var temp = CultureHandler.GetCulturesAsLowerCaseStringCollectionByFilter();
-                var filtered = new ObservableCollection<string>(temp.Where(w => w.StartsWith(this.LanguageSearchText.ToLower())));                
-                foreach (var f in filtered)
+                this.AvailableLanguages.Clear();
+                if (!String.IsNullOrWhiteSpace(this.LanguageSearchText))
                 {
-                    this.AvailableLanguages.Add(f.First().ToString().ToUpper() + String.Join("", f.Skip(1)));
+                    var temp = CultureHandler.GetCulturesAsLowerCaseStringCollectionByFilter();
+                    var filtered = new ObservableCollection<string>(temp.Where(w => w.StartsWith(this.LanguageSearchText.ToLower())));
+                    foreach (var f in filtered)
+                    {
+                        this.AvailableLanguages.Add(f.First().ToString().ToUpper() + String.Join("", f.Skip(1)));
+                    }
+                }
+                else
+                {
+                    this.LoadCultures();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                this.LoadCultures();
+                var errorMessage = new StringBuilder();
+                errorMessage.AppendLine("Error occured in filtering cultures - SettingsWindowViewModel;FilterLanguages()");
+                errorMessage.AppendLine(ex.Message);
+                if (ex.InnerException != null)
+                    errorMessage.AppendLine(ex.InnerException.Message);
+
+                LogWriter.Instance.WriteLine(errorMessage.ToString());
             }
         }
 
         private void FilterSettings()
         {
             this.SettingsAreas.Clear();
-            if(!String.IsNullOrEmpty(this.SearchString))
+            if (!String.IsNullOrEmpty(this.SearchString))
             {
                 var temp = ConstantSettingAreas.GetAllSettingAreas().Select(s => s.ToLower());
                 var filtered = new ObservableCollection<string>(temp.Where(w => w.StartsWith(this.SearchString.ToLower())));

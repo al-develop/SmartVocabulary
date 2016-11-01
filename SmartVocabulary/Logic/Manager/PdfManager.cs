@@ -16,8 +16,6 @@ namespace SmartVocabulary.Logic.Manager
 {
     public class PdfManager : IManager
     {
-        public static Document PdfDocument { get; private set; }
-
         #region IManager Member
 
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)

@@ -25,7 +25,7 @@ namespace SmartVocabulary.UI
         {
             InitializeComponent();
             SettingsWindowViewModel viewmodel;
-            viewmodel = new SettingsWindowViewModel();            
+            viewmodel = new SettingsWindowViewModel();
             this.DataContext = viewmodel;
             if (viewmodel.CloseAction == null)
                 viewmodel.CloseAction = new Action(this.Close);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace SmartVocabulary.Common
 {
@@ -14,8 +15,27 @@ namespace SmartVocabulary.Common
         /// Loads all NeutralCultures
         /// </summary>
         /// <returns>A List of CultureInfo</returns>
-        public static List<CultureInfo> GetCultures() => CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                                                                    .ToList();
+        public static List<CultureInfo> GetCultures()
+        {
+            LogWriter.Instance.WriteLine("Loading cultures - CultureHandler;GetCultures()");
+            try
+            {
+                return CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                               .ToList();
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = new StringBuilder();
+                errorMessage.AppendLine("Error occured in loading cultures - CultureHandler;GetCultures()");
+                errorMessage.AppendLine(ex.Message);
+                if (ex.InnerException != null)
+                    errorMessage.AppendLine(ex.InnerException.Message);
+
+                LogWriter.Instance.WriteLine(errorMessage.ToString());
+
+                return CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures).ToList();
+            }
+        }
 
         /// <summary>
         /// Distincts a List of CultureInfo
@@ -23,10 +43,30 @@ namespace SmartVocabulary.Common
         /// <returns>A List of CultureInfo</returns>
         public static List<CultureInfo> GetDistinctedCultures()
         {
-            List<CultureInfo> cultures = GetCultures();
-            return cultures.GroupBy(d => d.NativeName)
-                           .Select(g => g.First())
-                           .ToList();
+            LogWriter.Instance.WriteLine("CultureHandler;GetDistinctedCultures()");
+            try
+            {
+
+                List<CultureInfo> cultures = GetCultures();
+                return cultures.GroupBy(d => d.NativeName)
+                               .Select(g => g.First())
+                               .ToList();
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = new StringBuilder();
+                errorMessage.AppendLine("Error occured in distincting cultures - CultureHandler;GetDistinctedCultures()");
+                errorMessage.AppendLine(ex.Message);
+                if (ex.InnerException != null)
+                    errorMessage.AppendLine(ex.InnerException.Message);
+
+                LogWriter.Instance.WriteLine(errorMessage.ToString());
+
+                return CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures)
+                                  .GroupBy(d => d.NativeName)
+                                  .Select(g => g.First())
+                                  .ToList();
+            }
         }
 
 

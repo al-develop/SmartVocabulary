@@ -26,7 +26,10 @@ namespace SmartVocabulary.Logic.Database
             this._access.CreateNewDatabaseFile();
         }
 
-        public async Task<Result> CreateTable(string tableName) => await this._access.CreateTableAsync(tableName);
+        public async Task<Result> CreateTable(string tableName)
+        {
+            return await this._access.CreateTableAsync(tableName);
+        }
 
         public async Task<Result> CreateNewDatabaseAsync()
         {
@@ -80,6 +83,7 @@ namespace SmartVocabulary.Logic.Database
         public void Dispose()
         {
             this._access.Dispose();
+            GC.Collect();
         }
         #endregion
     }

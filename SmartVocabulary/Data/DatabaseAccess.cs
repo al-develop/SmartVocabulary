@@ -21,7 +21,7 @@ namespace SmartVocabulary.Data
     {
         private readonly string _connectionString;
         private readonly static string _saveDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-        private readonly string _savePath = String.Format("{0}\\{1}", _saveDir, "smartVocDb.sqlite");
+        private readonly string _savePath = $"{_saveDir}\\{"smartVocDb.sqlite"}";
         private SQLiteConnection _connection;
 
         public DatabaseAccess()
@@ -46,12 +46,14 @@ namespace SmartVocabulary.Data
 
         public async Task<Result> CreateNewDatabaseAsync()
         {
+            LogWriter.Instance.WriteLine("Generating Database");
             await Task.Run(() => this.CreateNewDatabaseFile());
             return await this.CreateTablesAsync();
         }
 
         public async Task<Result> CreateTableAsync(string tableName)
         {
+            LogWriter.Instance.WriteLine("Creating new table begins");
             try
             {
                 string query = this.GenerateCreateTableQuery(tableName);
@@ -75,7 +77,9 @@ namespace SmartVocabulary.Data
                 errorBuilder.Append(Environment.NewLine);
                 errorBuilder.Append(tableName);
                 errorBuilder.Append(Environment.NewLine);
-                errorBuilder.Append(ex.Message);
+                errorBuilder.AppendLine("Exception: " + ex.Message);
+                if (ex.InnerException != null)
+                    errorBuilder.AppendLine("Inner Exception: " + ex.InnerException.Message);
 
                 LogWriter.Instance.WriteLine(errorBuilder.ToString());
                 return new Result(errorBuilder.ToString(), Status.Error, ex);
@@ -95,6 +99,7 @@ namespace SmartVocabulary.Data
         /// <returns></returns>
         public async Task<Result> CreateTablesAsync()
         {
+            LogWriter.Instance.WriteLine("Beginning creating Tables");
             List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
             int counterForFailure = 0;  // if an error occures, it's easier to find the object which causes the error with a counter
             try
@@ -116,6 +121,7 @@ namespace SmartVocabulary.Data
                     counterForFailure++;
                 }
 
+                LogWriter.Instance.WriteLine("Database tables created");
                 return new Result("", Status.Success);
             }
             catch (Exception ex)
@@ -144,8 +150,11 @@ namespace SmartVocabulary.Data
         {
             if (!Directory.Exists(_saveDir))
                 Directory.CreateDirectory(_saveDir);
+
             if (!File.Exists(_savePath))
                 SQLiteConnection.CreateFile(_savePath);
+
+            LogWriter.Instance.WriteLine("Database file created");
         }
 
         #region Vocable

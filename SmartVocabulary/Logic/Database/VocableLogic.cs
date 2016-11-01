@@ -74,6 +74,7 @@ namespace SmartVocabulary.Logic.Database
         public void Dispose()
         {
             this._access.Dispose();
+            GC.Collect();
         }
 
         #endregion

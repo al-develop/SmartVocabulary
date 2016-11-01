@@ -123,7 +123,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            Margin="10,13,0,0" />
-                <TextBox Text="{Binding DatabasePath}"
+                <TextBox Text="{Binding DatabasePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          IsReadOnly="True"
                          Margin="100,10,10,0"
                          Height="20"

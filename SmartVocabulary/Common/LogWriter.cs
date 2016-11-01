@@ -27,7 +27,7 @@ namespace SmartVocabulary.Common
                 try
                 {
                     if (string.IsNullOrEmpty(logfilename))
-                        logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + ".Log." + fileCount + ".txt";
+                        logfilename = logpath + "\\" + DateTime.Now.ToString("yyyy_MM_dd") + ".Log." + fileCount + ".txt";
 
                     if (!(Directory.Exists(logpath)))
                         Directory.CreateDirectory(logpath);
