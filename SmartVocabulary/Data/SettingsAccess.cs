@@ -84,9 +84,10 @@ namespace SmartVocabulary.Data
                 }
 
                 return new Result<Settings>(settings, "Loading successful", "", Status.Success);
-            }
+            }            
             catch (Exception ex)
             {
+                LogWriter.Instance.WriteLine("Error occured on loading settings: " + ex.GetType() + Environment.NewLine + ex.Message);
                 return new Result<Settings>(null, "Error occured on loading settings", Status.Error, ex);
             }
         }

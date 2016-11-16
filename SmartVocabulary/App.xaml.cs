@@ -35,23 +35,13 @@ namespace SmartVocabulary
             var error = new StringBuilder();
             error.AppendLine("An Unhandled Exception occured");
             error.AppendLine("Exception Type: " + e.ExceptionObject.GetType().ToString());
-            error.AppendLine("" + e.ExceptionObject.GetType().GetMember("Message").ToString());
+            error.AppendLine("Message:        " + e.ExceptionObject.GetType().GetMember("Message").ToString());
+            error.AppendLine("Assembly:       " + e.ExceptionObject.GetType().Assembly);
+            error.AppendLine("FullName:       " + e.ExceptionObject.GetType().FullName);
+            //error.AppendLine("" + e.ExceptionObject.GetType())
             LogWriter.Instance.WriteLine(error.ToString());
-
-            //string crashPath = String.Format("{0}//LOGS//CrashLog {1} .txt", AppDomain.CurrentDomain.BaseDirectory, DateTime.Now.ToShortDateString());
-            //StringBuilder builder = new StringBuilder();
-            //builder.Append(String.Concat(DateTime.Now.ToString("g"), ":\t"));
-            //builder.Append(m);
-
-            //using (System.IO.StreamWriter file = new System.IO.StreamWriter(crashPath, true))
-            //{
-            //    file.WriteLine(builder.ToString());
-            //}
-
-            //string error = String.Format("An Error occured: {0}. More Information in \"{1}\"", e.GetType().ToString(), crashPath);
-            //MessageBox.Show(error, e.GetType().ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
-
-            Application.Current.Shutdown();
+                        
+            //Application.Current.Shutdown();
         }
     }
 }

@@ -47,12 +47,20 @@ namespace SmartVocabulary.Common
                             if (fi.Length > LogFileSize)
                             {
                                 fileCount++;
-                                logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + "_" + fileCount + ".txt";
+                                logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + "_" + fileCount++ + ".txt";
                                 continue;
                             }
                             else
                             {
-                                logWriter = File.AppendText(logfilename);
+                                //try
+                                //{
+                                    logWriter = File.AppendText(logfilename);
+                                //}
+                                //catch(Exception ex)
+                                //{
+                                //    //logfilename = logpath + "\\" + DateTime.Now.ToString("yyyyMMdd") + "_" + fileCount++ + ".txt";
+                                //    logWriter = File.AppendText(logfilename);
+                                //}
                                 break;
                             }
                         }

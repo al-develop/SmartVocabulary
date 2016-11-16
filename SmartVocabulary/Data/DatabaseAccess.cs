@@ -53,7 +53,6 @@ namespace SmartVocabulary.Data
 
         public async Task<Result> CreateTableAsync(string tableName)
         {
-            LogWriter.Instance.WriteLine("Creating new table begins");
             try
             {
                 string query = this.GenerateCreateTableQuery(tableName);
@@ -99,7 +98,6 @@ namespace SmartVocabulary.Data
         /// <returns></returns>
         public async Task<Result> CreateTablesAsync()
         {
-            LogWriter.Instance.WriteLine("Beginning creating Tables");
             List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
             int counterForFailure = 0;  // if an error occures, it's easier to find the object which causes the error with a counter
             try

@@ -21,7 +21,7 @@ namespace SmartVocabulary.Common
             try
             {
                 return CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                               .ToList();
+                                  .ToList();
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace SmartVocabulary.Common
 
                 LogWriter.Instance.WriteLine(errorMessage.ToString());
 
-                return CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures).ToList();
+                return CultureInfo.GetCultures(CultureTypes.NeutralCultures).ToList();
             }
         }
 
@@ -48,7 +48,7 @@ namespace SmartVocabulary.Common
             {
 
                 List<CultureInfo> cultures = GetCultures();
-                return cultures.GroupBy(d => d.NativeName)
+                return cultures.GroupBy(d => d.EnglishName)
                                .Select(g => g.First())
                                .ToList();
             }
@@ -63,7 +63,7 @@ namespace SmartVocabulary.Common
                 LogWriter.Instance.WriteLine(errorMessage.ToString());
 
                 return CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures)
-                                  .GroupBy(d => d.NativeName)
+                                  .GroupBy(d => d.EnglishName)
                                   .Select(g => g.First())
                                   .ToList();
             }
@@ -71,16 +71,16 @@ namespace SmartVocabulary.Common
 
 
         /// <summary>
-        /// Loads a List of System.String, containing NativeNames of all CultureInfos in lower case
+        /// Loads a List of System.String, containing EnglishNames of all CultureInfos in lower case
         /// </summary>
-        /// <returns>A List of System.String, containing NativeNames of all CultureInfos in lower case</returns>
+        /// <returns>A List of System.String, containing EnglishNames of all CultureInfos in lower case</returns>
         public static List<string> GetCulturesAsLowerCaseStringCollectionByFilter()
         {
             List<CultureInfo> cultures = GetCultures();
             List<string> result = new List<string>();
             foreach (var culture in cultures)
             {
-                result.Add(culture.NativeName.ToLower());
+                result.Add(culture.EnglishName.ToLower());
             }
 
             return result;
@@ -97,7 +97,7 @@ namespace SmartVocabulary.Common
                 return CultureInfo.GetCultureInfo("en-EN");
 
             List<CultureInfo> cultures = GetCultures();
-            return cultures.FirstOrDefault(f => f.NativeName.ToLower() == culture.ToLower());
+            return cultures.FirstOrDefault(f => f.EnglishName.ToLower() == culture.ToLower());
         }
     }
 }

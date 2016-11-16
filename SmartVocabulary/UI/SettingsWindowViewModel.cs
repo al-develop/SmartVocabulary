@@ -173,7 +173,7 @@ namespace SmartVocabulary.UI
 
                 foreach (CultureInfo culture in cultures)
                 {
-                    var createResult = await this._databaseLogic.CreateTable(culture.NativeName);
+                    var createResult = await this._databaseLogic.CreateTable(culture.EnglishName);
                     if (createResult.Status != Status.Success)
                     {
                         MessageBox.Show("Error occured while creating a new database. Check log file for more information", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -232,7 +232,7 @@ namespace SmartVocabulary.UI
 
                     foreach (CultureInfo culture in cultures)
                     {
-                        var createResult = await this._databaseLogic.CreateTable(culture.NativeName);
+                        var createResult = await this._databaseLogic.CreateTable(culture.EnglishName);
                         if (createResult.Status != Status.Success)
                         {
                             StringBuilder log = new StringBuilder();
@@ -346,7 +346,7 @@ namespace SmartVocabulary.UI
                 List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
                 foreach (CultureInfo culture in cultures)
                 {
-                    this.AvailableLanguages.Add(culture.NativeName);
+                    this.AvailableLanguages.Add(culture.EnglishName);
                 }
             }
             catch (Exception ex)
