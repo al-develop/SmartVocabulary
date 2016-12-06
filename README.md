@@ -11,8 +11,8 @@ The storage is realized through SQLite.
 It uses the .NET Framework 4.6 and C# 6.0 (Roslyn). 
 3rd Party Libraries are:
 - DevExpress.Mvvm
-- Spreasheet Light with OpenXML 2.0
-- PdfSharp
+- Spreadsheet Light & OpenXML 2.5 (DocumentFormat.OpenXml)
+- PdfSharp & MigraDoc
 - Extended WPF Toolkit
 - System.Data.SQLite
 
