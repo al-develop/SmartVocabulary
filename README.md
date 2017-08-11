@@ -1,7 +1,7 @@
 # SmartVocabulary
 This C# project is a vocabulary storage, where a user can enter all words he wants to memorize in any language he wants.
 It is like a self builiding vocabulary, where you can store for example, new words you learned in a language you are about to master.
-You can add Synonyms, Opposites and Examples to the words, as well as let your PC speak the words out)
+You can add Synonyms, Opposites and Examples to the words, and a simple text-to-speech mechanism let you listen to how to speak out the word.
 You have some limited possibilities to cusomize the Interface. 
 And a simple Search Mchenism helps you to find words in your list.
 
