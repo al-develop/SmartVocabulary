@@ -93,52 +93,73 @@ namespace SmartVocabulary.Data
 
 
         /// <summary>
-        /// Creates tables if they don't exist yet asynchronously
+        /// Creates tables asynchronously if they don't exist yet
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Result object with information about the creation of tables</returns>
         public async Task<Result> CreateTablesAsync()
         {
-            List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
-            int counterForFailure = 0;  // if an error occures, it's easier to find the object which causes the error with a counter
+            CultureInfo errorOccurence = null;
             try
             {
-                foreach (CultureInfo culture in cultures)
-                {
-                    string query = this.GenerateCreateTableQuery(culture);
-                    await Task.Run(() =>
-                    {
-                        using (SQLiteCommand createCommand = new SQLiteCommand(query, this._connection))
-                        {
-                            if (this._connection.State != ConnectionState.Open)
-                                this._connection.Open();
-
-                            createCommand.ExecuteNonQuery();
-                        }
-                    });
-
-                    counterForFailure++;
-                }
-
+                errorOccurence = await GenerateCultureTables();
                 LogWriter.Instance.WriteLine("Database tables created");
                 return new Result("", Status.Success);
             }
             catch (Exception ex)
             {
-                StringBuilder errorBuilder = new StringBuilder();
-                errorBuilder.Append("Error occured on creating the Database Tables");
-                errorBuilder.Append(Environment.NewLine);
-                errorBuilder.Append(cultures.ElementAt(counterForFailure));
-                errorBuilder.Append(Environment.NewLine);
-                errorBuilder.Append(ex.Message);
-
-                LogWriter.Instance.WriteLine(errorBuilder.ToString());
-                return new Result(errorBuilder.ToString(), Status.Error, ex);
+                return Handle(errorOccurence, ex);
             }
             finally
             {
                 if (this._connection.State != ConnectionState.Closed)
                     this._connection.Close();
             }
+        }
+
+        private static Result Handle(CultureInfo errorOccurence, Exception ex)
+        {
+            StringBuilder errorBuilder = new StringBuilder();
+            errorBuilder.Append("Error occured on creating the Database Tables");
+            errorBuilder.Append(Environment.NewLine);
+            errorBuilder.Append(errorOccurence.Name);
+            errorBuilder.Append(Environment.NewLine);
+            errorBuilder.Append(ex.Message);
+
+            LogWriter.Instance.WriteLine(errorBuilder.ToString());
+            return new Result(errorBuilder.ToString(), Status.Error, ex);
+        }
+
+        private async Task<CultureInfo> GenerateCultureTables()
+        {
+            CultureInfo errorOccurence = null;
+            List<CultureInfo> cultures = CultureHandler.GetDistinctedCultures();
+            foreach (CultureInfo culture in cultures)
+            {
+                errorOccurence = await GenerateTableForGivenCulture(culture);
+            }
+
+            return errorOccurence;
+        }
+
+        private async Task<CultureInfo> GenerateTableForGivenCulture(CultureInfo culture)
+        {
+            string query = this.GenerateCreateTableQuery(culture);
+            await ExecuteSQLQuery(query);
+            return culture;
+        }
+
+        private async Task ExecuteSQLQuery(string query)
+        {
+            await Task.Run(() =>
+            {
+                using (SQLiteCommand sqlCommand = new SQLiteCommand(query, this._connection))
+                {
+                    if (this._connection.State != ConnectionState.Open)
+                        this._connection.Open();
+
+                    sqlCommand.ExecuteNonQuery();
+                }
+            });
         }
 
         /// <summary>

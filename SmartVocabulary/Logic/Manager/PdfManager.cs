@@ -11,11 +11,14 @@ using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using System.IO;
+using System.Windows.Markup;
+using static System.Net.WebRequestMethods;
 
 namespace SmartVocabulary.Logic.Manager
 {
     public class PdfManager : IManager
     {
+        private const string HEADER_HEADING = "Heading2";
         #region IManager Member
 
         public Result Export(List<VocableLanguageWrapper> vocableCollection, string savePath)
@@ -35,29 +38,41 @@ namespace SmartVocabulary.Logic.Manager
         {
             foreach (var toPrint in printItems)
             {
-                string file = $"{savePath}\\{toPrint.Language}_{DateTime.Now.ToShortDateString()}.pdf";
+                string language = toPrint.Language;
+                string filePath = $"{savePath}\\{language}_{DateTime.Now.ToShortDateString()}.pdf";
                 Document document = new Document();
-                document.Info.Title = $"{toPrint.Language}_{DateTime.Now.ToShortDateString()}";
+                document.Info.Title = filePath.TrimEnd('.');
 
                 this.DefineStyle(document);
                 this.DefineContentSection(document);
 
-                // Create Big header with Language name and count of vocables
-                Paragraph paragraph = document.LastSection.AddParagraph($"{toPrint.Language} ({toPrint.Vocables.Count})", "Heading2");
+                this.CreateHeader(toPrint, document);
+                this.CreateTables(document, toPrint.Vocables);
 
-                // create table
-                this.DefineTables(document, toPrint.Vocables);
-
-                PdfDocumentRenderer renderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
-                renderer.Document = document;
-                renderer.RenderDocument();
-                renderer.PdfDocument.Save(file);                
+                this.RenderDocument(filePath, document);
             }
 
             return new Result("", Status.Success);
         }
 
-        private void DefineTables(Document document, List<Vocable> vocables)
+        private void CreateHeader(VocableLanguageWrapper toPrint, Document document)
+        {
+            string language = $"{toPrint.Language}";
+            string vocableCount = $"({toPrint.Vocables.Count})";
+            string paragraphContent = $"{language} {vocableCount}";
+
+            Paragraph paragraph = document.LastSection.AddParagraph(paragraphContent, HEADER_HEADING);
+        }
+
+        private void RenderDocument(string file, Document document)
+        {
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
+            renderer.Document = document;
+            renderer.RenderDocument();
+            renderer.PdfDocument.Save(file);
+        }
+
+        private void CreateTables(Document document, List<Vocable> vocables)
         {
             Table table = new Table();
             table.Borders.Width = 0.75;
