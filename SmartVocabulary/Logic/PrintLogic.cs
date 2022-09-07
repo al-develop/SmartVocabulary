@@ -11,8 +11,6 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using System.IO;
-using PdfSharp.Pdf.Printing;
-using MigraDoc.Rendering.Printing;
 
 namespace SmartVocabulary.Logic
 {
@@ -22,6 +20,7 @@ namespace SmartVocabulary.Logic
 
         public async Task<Result> PrintAsync(string selectedPrinter, List<VocableLanguageWrapper> printItems)
         {
+            throw new NotImplementedException("MigraDoc not supported anymore. Therefore no new implementation of printing yet.");
             try
             {
                 foreach (var voc in printItems)
@@ -33,10 +32,11 @@ namespace SmartVocabulary.Logic
 
                     await Task.Run(() =>
                     {
-                        var doc = new MigraDocPrintDocument();
-                        //doc.Renderer = new DocumentRenderer(document);
-                        doc.Renderer.PrepareDocument();
-                        doc.Print();
+                        
+                        //var doc = new Printer();
+                        ////doc.Renderer = new DocumentRenderer(document);
+                        //doc.Renderer.PrepareDocument();
+                        //doc.Print();
                     });
 
                     if (File.Exists(tempPath))

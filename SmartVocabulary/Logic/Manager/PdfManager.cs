@@ -66,7 +66,7 @@ namespace SmartVocabulary.Logic.Manager
 
         private void RenderDocument(string file, Document document)
         {
-            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true, PdfSharp.Pdf.PdfFontEmbedding.Always);
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
             renderer.Document = document;
             renderer.RenderDocument();
             renderer.PdfDocument.Save(file);

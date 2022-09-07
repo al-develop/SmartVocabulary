@@ -56,13 +56,13 @@
     <Compile Include="XmlExport.Test.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SmartVocabulary\SmartVocabulary.csproj">
       <Project>{d3abba9e-f6d7-4d0b-881d-8a1ccdd72f4e}</Project>
       <Name>SmartVocabulary</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
